@@ -19,7 +19,7 @@ const actions = {
                         state: res.data.state,
                         stateInfo: res.data.stateInfo
                         })
-                } els e{
+                } else {
                     reject({
                         state: false,
                         info: res.data.stateInfo}
