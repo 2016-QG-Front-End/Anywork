@@ -51,7 +51,7 @@ const actions = {
                 url: 'user/forget',
                 data: user
             }).then(function(res){
-                if(res.data.state == 200){
+                if(res.data.state == 1){
                     resolve({
                         state: true,
                         })

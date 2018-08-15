@@ -15,10 +15,10 @@ const actions = {
         return new Promise((resolve, reject) => {
             myAxios({
                 method: 'POST',
-                url: 'user/login',
+                url: 'user/forget/new',
                 data: data
             }).then(function(res){
-                if(res.data.state == 200){
+                if(res.data.state == 1){
                     // context.commit(types.mutations.setInfo,res.data.data)
                     resolve({
                         state: true,
@@ -60,7 +60,7 @@ const actions = {
 
 const mutations = {
     [types.mutations.setInfo]: (state, datas) => {
-        Object.assign(state,datas)
+        // Object.assign(state,datas)
     },
 }
 

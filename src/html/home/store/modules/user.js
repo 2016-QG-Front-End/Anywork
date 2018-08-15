@@ -9,12 +9,15 @@ const state = {
     mark: 0,
     userId: undefined,
     refresh: new Date().getTime(),
-    photo: 'undefined.jpg'
+    photo: '/undefined.jpg',
+    imagePath: '',
+    imagePP: ''
 }
 
 const getters = {
     userPhoto (state) {
-        return IP + 'picture/' + state.photo +'?'+ + state.refresh
+        return state.imagePP ? state.imagePP : '/anywork' + state.imagePath
+        // return state.imagePP ? state.imagePP : '' + state.imagePath
     }
 }
 
@@ -37,7 +40,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             myAxios({
                 method: 'POST',
-                url: '/user/myinfo',
+                url: '/user/info',
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
                     context.commit(types.mutations.setInfo,res.data.data)
@@ -86,7 +89,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             myAxios({
                 method: 'POST',
-                url: '/user/change',
+                url: '/user/password/change',
                 data: data
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
@@ -129,9 +132,11 @@ const actions = {
             })
         })
     },
-    [types.actions.refresh]: (context) => {
+    [types.actions.refresh]: (context, imageP) => {
         let time = new Date().getTime()
-        context.commit(types.mutations.refresh, time)
+        context.commit(types.mutations.refresh, {
+            time: time, 
+            imageP: imageP})
     },
     [types.actions.exit]: (context) => {
          return new Promise((resolve, reject) => {
@@ -162,7 +167,9 @@ const mutations = {
         Object.assign(state,datas)
     },
     [types.mutations.refresh]: (state, data) => {
-        state.refresh = data
+        console.log(arguments)
+        state.refresh = data.time
+        state.imagePP = URL.createObjectURL(data.imageP)
     }
 }
 

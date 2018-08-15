@@ -672,9 +672,10 @@ export default {
               var data = JSON.parse(xhr.responseText)
             /*  this.$emit('change', data.data.img[0].savepath)
               this.$emit('input', data.data.img[0].savepath)*/
-              this.$emit('success')
+              this.$emit('success', blob)
               if (this.files.length === 0) {
                 console.log('uploadDone')
+                // location.reload()
               }
             } else {
               console.log('uploadError', data)

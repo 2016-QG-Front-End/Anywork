@@ -3,10 +3,10 @@
 		<img class="logo" src="../../assets/images/logo.png">
 		<div class="form" @keyup.enter="toLogin">
 			<Mytip content="密码" :info="emailInfo">
-				<Input class="input" type="text" v-model="email" placeholder="密码" icon="ios-email-outline"></Input>
+				<Input class="input" type="password" v-model="email" placeholder="密码" icon="ios-email-outline"></Input>
 			</Mytip>
 			<Mytip content="确认密码" :info="passwordInfo">
-				<Input class="input" type="password" v-model="password" placeholder="密码" icon="ios-locked-outline"></Input>
+				<Input class="input" type="password" v-model="password" placeholder="确认密码" icon="ios-locked-outline"></Input>
 			</Mytip>
 			<Button class="login-bt" type="primary" long @click="comfirm" :loading="loadStatu">确定</Button>
 		</div>
@@ -50,14 +50,17 @@
 			comfirm: function () {
 				if (this.email !== this.password) {
 					this.$Message.warning('密码不比配');
+					return 
 				}
 				let that = this
 				this.newPassword({
-
+					password: this.email,
+					repeatPassword: this.password 
 				}).then(data => {
 					that.$Notice.success({
 						title: '修改成功',
 					});
+					window.location = '../html/login.html'
 				}).catch(err => {
                 	that.$Notice.error({
 						title: '修改失败',

@@ -51,6 +51,7 @@
 						name: 'organizationPage',
 					})
 				}else{
+					let that = this
 					this.$Modal.confirm({
 	                    render: (h) => {
 	                        return h('div', {
@@ -58,23 +59,41 @@
 	                        	h('span',{
                         			style: {
                         				marginBottom: '5px',
-    									display: 'inline-block'
+										display: 'inline-block'
                         			}
 	                        	},['请输入加入组织的密钥']),
 	                        	h('Input', {
 		                            props: {
 		                                value: this.token,
-		                                autofocus: true,
+										autofocus: true,
+										
 		                            },
 		                            on: {
 		                                input: (val) => {
-		                                    this.token = val;
+											this.token = val
+											
 		                                }
 		                            }
 		                        })
 	                        ])
 	                    },
 	                    onOk: ()=>{
+							if (this.token.length < 6) {
+								this.$Notice.error({
+									title: '密钥格式不对',
+									desc: '请输入大于等于6个数字'
+								});
+								return
+							}
+							var re = /^\d*$/;   //^匹配字符串开始位置   \d 匹配任意一个十进制数字，等价于[0-9]  * 匹配0次 1次或者多次前面的字符  $匹配字符串的结束位置
+							if (!re.test(this.token)) {
+									
+								this.$Notice.error({
+									title: '密钥只可能是整数',
+								});
+								this.token = ''
+								return 	
+							}
 	                    	this.joinOrganization({
 	                    		organizationId: this.organizationId.toString(),
   								token: this.token
@@ -91,7 +110,8 @@
 								this.$Message.error(err)
 							})
 	                    }
-	                })
+					})
+					
 				}
 			},
 			toExitOrganization () {

@@ -2,7 +2,7 @@
 	<section class="person-page">
 		<div class="left-section">
 			<center class="person-info">
-				<img class="photo" :src="userPhoto">
+				<img class="photo" :src="imageP ? imageP : this.userPhoto">
 				<p class="name">{{this.user.userName}}</p>
 				<div>
 					<Button type="success" @click="goBackHomepage">返回首页</Button>
@@ -15,7 +15,7 @@
 					<Button type="success" @click="updateBaseInfo" >修改信息</Button>
 				</div>
 				<p class="email">
-					<Icon class="icon" type="person" color="#00BC9B" size="20"></Icon> {{user.email}}
+					<Icon class="icon" type="person" color="#00BC9B" size="20"></Icon> {{user.userName}}
 				</p> 
 				<p class="mark">
 					<Icon class="icon" type="android-contact" color="#00BC9B"  size="20"></Icon> {{user.mark===0?'学生':'老师'}}</p>
@@ -66,7 +66,8 @@
 			        ok: '裁剪',
 			        filename: 'file',
 			        auto: true,
-		       	},
+				   },
+				imageP: '',
 		       	avataredit: true,
 			}
 		},
@@ -109,9 +110,14 @@
 					name: name
 				})
 			},
-			upsuccess () {
-				this.refresh()
+			upsuccess (image) {
+			
+				this.imageP = URL.createObjectURL(image)
+				this.refresh(image)
 		    },
+		},
+		mounted () {
+			console.log('/anywork' + this.user.imagePath)
 		},
 	}
 </script>

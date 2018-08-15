@@ -6,8 +6,12 @@
 		</div>
 		<div class="info">
 		 	<div>
-		 		<span class="text">我的密码</span>
-				<Input class="input" type="text" v-model="newPassword"></Input> 
+		 		<span class="text">旧密码</span>
+				<Input class="input" type="password" v-model="oldPassword"></Input> 
+		 	</div>
+			<div>
+		 		<span class="text">新密码</span>
+				<Input class="input" type="password" v-model="newPassword"></Input> 
 		 	</div>
 		</div>
 	</section>
@@ -19,18 +23,25 @@
 	export default {
 		data () {
 			return {
-				newPassword: ''
+				newPassword: '',
+				oldPassword: ''
 			}
 		},
 		methods: {
 			...mapActions(user.actions),
 
 			changePassword () {
+				if (!this.newPassword.length || !this.oldPassword.length) {
+					this.$Message.error('请填写完整的信息进行修改密码')
+					return 
+				}
 				this.updatePassword({
-					password: this.newPassword
+					newPassword: this.newPassword,
+					oldPassword: this.oldPassword
 				}).then((data) => {
 					if(data.state){
-						this.$Message.success(data.info)		
+						this.$Message.success(data.info)
+						window.location = '../../../html/login.html'		
 					}else{
 						this.$Message.error(data.info + ",请稍后重试！")
 					}

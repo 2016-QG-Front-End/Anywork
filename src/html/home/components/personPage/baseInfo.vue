@@ -6,12 +6,12 @@
 		</div>
 		<div class="info">
 		 	<div>
-		 		<span class="text">我的账号</span>
-				<Input class="input" type="text" disabled :value="user.email"></Input>
+		 		<span class="text">我的邮箱</span>
+				<Input class="input" type="text"   v-model="email"></Input>
 		 	</div>
 		 	<div>
 		 		<span class="text">我的昵称</span>
-				<Input class="input" type="text" v-model="newUserName"></Input>
+				<Input class="input" type="text" disabled v-model="newUserName"></Input>
 		 	</div>
 		 	<div>
 		 		<span class="text">我的电话</span>
@@ -28,7 +28,8 @@
 		data () {
 			return {
 				newUserName: '',
-				newPhone: ''
+				newPhone: '',
+				email: ''
 			}
 		},
 		computed: {
@@ -43,9 +44,9 @@
 
 			saveInfo () {
 				this.updateInfo({
-					userName: this.newUserName,
+
 					phone: this.newPhone,
-					email: ''
+					email: this.email
 				}).then((data) => {
 					if(data.state){
 						this.$Message.success(data.info)		
@@ -59,7 +60,8 @@
 		},
 		created () {
 			this.newUserName = this.user.userName;
-			this.newPhone = this.user.phone
+			this.newPhone = this.user.phone;
+			this.email = this.user.email
 		}
 	}
 </script>

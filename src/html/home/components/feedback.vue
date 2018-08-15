@@ -26,7 +26,7 @@
 
 			toSubmitSuggestion() {
 				this.submitSuggestion({
-					suggestion: this.suggestion
+					description: this.suggestion
 				}).then((data) => {
 					if(data.state){
 						this.$Message.success(data.info)
