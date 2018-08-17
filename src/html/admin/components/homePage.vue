@@ -51,7 +51,7 @@
     	data () {
             return {
                 activeName: 'students',
-                showSubmenu: false,
+                showSubmenu: true,
                 organName: '',
                 breadCrumbList: []
             }
@@ -108,11 +108,11 @@
                    name: to.matched[0].props.default.name[item]
                 }
             })
-            if(to.name !== 'organizations') {
-                this.showSubmenu = true
-            }else {
-                this.showSubmenu = false
-            }
+            // if(to.name !== 'organizations') {
+            //     this.showSubmenu = true
+            // }else {
+            //     this.showSubmenu = false
+            // }
             next()
     	},
     }

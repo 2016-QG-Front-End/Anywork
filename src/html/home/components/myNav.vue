@@ -20,7 +20,9 @@
 						<li @click="toExit">退出登录</li>
 					</ul>
 				</li>
+				
 			</ul>
+			<div class="people-number">在线人数：{{ poepleNumber }}人</div>
 		</div>
 	</section>
 </template>
@@ -36,7 +38,9 @@
 			return {
 				showSearch: false,
 				personNav: false,
-				searchInfo: ''
+				searchInfo: '',
+				poepleNumber: '',
+				websock: null
 			}
 		},
 		computed: {
@@ -52,6 +56,41 @@
 		methods: {
 			...mapActions(user.actions),
 
+			initWebSocket: function () {
+				const wsuri = 'ws://192.168.0.4:8080' + "/websocket/" + this.user.userId;//ws地址
+				// console.log(this.user)
+				// console.log(this.userId)
+	　　		this.websock = new WebSocket(wsuri); 
+				this.websock.onopen = this.websocketonopen;
+				this.websock.onerror = this.websocketonerror;
+				this.websock.onmessage = this.websocketonmessage;
+				this.websock.onclose = this.websocketclose;
+			},
+			websocketonopen: function () {
+　　　　　　　　console.log("WebSocket连接成功");
+　　　　　　 },
+　　　　　　 websocketonerror: function (e) { //错误
+ 　　　　　　 console.log("WebSocket连接发生错误");
+　　　　　　 },
+　　　　　　websocketonmessage: function (e){ //数据接收 
+　　　　　　　　const redata = JSON.parse(e.data);
+　　　　　　　　console.log(redata);
+				let that = this
+				if (redata.type == 1) {
+					this.poepleNumber = redata.onlineCount
+				} else {
+					this.$Modal.confirm({
+						title: redata.title,
+						content: '<p>' + redata.content + '</p><p>发布人：' + redata.publisher + '</p>',
+						onOk: () => {
+							that.sendNoticed(redata.messageId)
+						},
+						onCancel: () => {
+							that.$Message.info('点击了取消');
+						}
+					});
+				}
+　　　　　　}, 
 			toggleSearch (e) {
 				if(e.target.localName.toLocaleUpperCase()!=='LI'){
 					return
@@ -60,6 +99,18 @@
 			},
 			togglePersonNav () {
 				this.personNav = !this.personNav
+			},
+			sendNoticed: function (noticeId) {
+				this.noticed({
+					messageId: noticeId
+				}).then(data => {
+
+				}).catch(err => {
+					that.$Notice.warning({
+						title: '请求错误',
+						desc: 'err'
+					});
+				})
 			},
 			hideSearch () {
 				this.showSearch = false
@@ -107,12 +158,16 @@
 				this.$Message.info('该功能暂未开放')
 			}
 		},
-
+		mounted () {
+			
+		},
 		created () {
+			let that = this
 			this.getMyInfo().then((data) => {
 				if(data.state){
 					this.$router.push('homepage')
 					this.setPhoto()
+					that.initWebSocket()
 				}else{
 					this.$Message.error(data.info + ",请重新登陆！")
 				}
@@ -124,6 +179,12 @@
 </script>
 
 <style scoped>
+	.people-number {
+		position: absolute;
+		right: 8px;
+		top: 65px;
+		color: #000;
+	}
 	.nav {
 	    position: fixed;
 	    top: 0;

@@ -8,12 +8,16 @@ const state = {
    	phone: '',
     mark: 0,
     userId: undefined,
-    refresh: new Date().getTime()
+    refresh: new Date().getTime(),
+    imagePP: '',
+    imagePath: ''
 }
 
 const getters = {
     userPhoto (state) {
-        return   IP + 'picture/' + state.userId +'.jpg?' + state.refresh
+        // return   IP + 'picture/' + state.userId +'.jpg?' + state.refresh
+        return state.imagePP ? state.imagePP : '/anywork' + state.imagePath
+        // return state.imagePP ? state.imagePP : '' + state.imagePath
     }
 }
 
@@ -23,7 +27,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             myAxios({
                 method: 'POST',
-                url: '/user/myinfo',
+                url: '/user/info',
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
                     context.commit(types.mutations.setInfo,res.data.data)

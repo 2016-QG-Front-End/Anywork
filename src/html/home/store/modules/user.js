@@ -59,6 +59,26 @@ const actions = {
             })
         })
     },
+    
+    [types.actions.noticed]: (context, data) => {
+        //context: commit,dispatch,getters,state
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/message/change',
+                data: data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    // context.commit(types.mutations.setInfo,res.data.data)
+                    resolve()
+                }else{
+                    reject('出现错误')
+                }
+            }).catch(function(err){
+                reject('服务器出现错误' + err)
+            })
+        })
+    },
     [types.actions.updateInfo]: (context, data) => {
         //context: commit,dispatch,getters,state
         return new Promise((resolve, reject) => {

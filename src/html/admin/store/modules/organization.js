@@ -296,6 +296,66 @@ const actions = {
     [types.actions.setOrganizationInfo]: (context, data) => {
         context.commit(types.mutations.setInfo, data)
     },
+    [types.actions.sendNotice]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/message/publish',
+                data: data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    resolve({
+                        state: true,
+                        info: res.data.stateInfo}
+                    )
+                }else{
+                    reject({
+                        state: false,
+                        info: res.data.stateInfo}
+                    )
+                }
+            }).catch(function(err){
+                reject(err)
+            })
+        })
+    },
+    [types.actions.getNotice]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/message/list',
+                data: data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    resolve(
+                        res.data.data
+                    )
+                }else{
+                    reject('格式出现错误')
+                }
+            }).catch(function(err){
+                reject('服务器出现错误：' + err)
+            })
+        })
+    },
+    [types.actions.deleteNotice]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/message/delete',
+                data: data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    resolve(res.data.data)
+                }else{
+                    reject('格式出现错误'
+                    )
+                }
+            }).catch(function(err){
+                reject('服务器出现错误：' + err)
+            })
+        })
+    },
 }
 
 const mutations = {
