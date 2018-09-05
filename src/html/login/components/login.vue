@@ -1,11 +1,16 @@
 <template>
-	<center>
+	
 		<div class="form" @keyup.enter="toLogin">
+			<div class="login-title">Welcome To Anywork   	&nbsp;: )</div>
 			<Mytip content="学号" :info="emailInfo">
-				<Input class="input" type="text" v-model="email" placeholder="学号" icon="ios-email-outline"></Input>
+				<img class="input-img" src="../../../assets/images/account@2x.png"/>
+				<Input  class="input" type="text" v-model="email" placeholder="学号" prefix="ios-email-outline" ></Input>
 			</Mytip>
 			<Mytip content="密码" :info="passwordInfo">
-				<Input class="input" type="password" v-model="password" placeholder="密码" icon="ios-locked-outline"></Input>
+				<img class="input-img" src="../../../assets/images/account@2x.png"/>
+				<Input class="input" type="password" v-model="password" placeholder="密码"  prefix="ios-locked-outline">
+					
+				</Input>
 			</Mytip>
 			<Row :gutter="10">
 		        <Col span="12"><img :src="barcodeURL + '?' + refresh" class="barcode" @click="refreshBarcode"></Col>
@@ -15,15 +20,19 @@
 		        	</Mytip>
 		        </Col>
 		    </Row>
-			<Button class="login-bt" type="primary" long @click="toLogin" :loading="loadStatu">登陆</Button>
-			<a href="#" class="forget-psw" @click="forgetPasswork">忘记密码</a>
-			<a href="#" class="register" @click="toRegister">前往注册</a>
-			<Checkbox class="competence" v-model="admin">
-				<Icon type="ios-person-outline"></Icon>
-            	<span>教师端</span>
-			</Checkbox>
+			<div class="div-contain">
+				<Button  class="login-bt register" long @click="toRegister">注册</Button>
+				<Button class="login-bt"  long @click="toLogin" :loading="loadStatu">登陆</Button>
+			</div>
+			<div class="div-contain">
+				<a href="#" class="forget-psw" @click="forgetPasswork">忘记密码</a>
+				<Checkbox class="competence" v-model="admin">
+					<Icon type="ios-person-outline"></Icon>
+					<span>教师端</span>
+				</Checkbox>
+			</div>
 		</div>
-	</center>
+	
 </template>
 
 <script>
@@ -155,24 +164,75 @@
 	}
 </script>
 
-<style scoped>
+<style>
+body {
+	overflow: hidden;
+}
+.login-title {
+	text-align: center;
+	font-size: 1.67rem;
+	color: #548CFE;
+
+}
+.input-img {
+	position: absolute;
+	z-index: 99;
+	width: 22px;
+	top: 7px;
+
+}
 .form {
     position: relative;
-    top: 300px;
-
+    top: 23%;
+	left: 10%;
     box-sizing: border-box;
     border-radius: 10px;
     padding: 30px;
-    width: 25%;
+    width: 22%;
     min-width: 350px;
 
-    background-color: #585858;
+    /* background-color: #585858; */
 
-    box-shadow: 0 0 8px 2px #585858;
+    /* box-shadow: 0 0 8px 2px #585858; */
+}
+.div-contain {
+	display: flex;
+	justify-content: space-between;
 }
 .input,
 .login-bt {
     margin: 0 0 20px 0;
+}
+.login-bt {
+	width: 42%;
+	background: #548CFE;
+	font-size: 16px;
+	color: #FFFFFF;
+	/* letter-spacing: 0; */
+	font-family: PingFang-SC-Medium;
+}
+.register {
+	background: #7F3FFD !important;
+
+}
+/* .input {
+	padding: 0 0 0 26px;
+} */
+input,input:active{
+    border: none !important;
+    border-bottom: 1px solid #d2d2d2 !important;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+	transition: none;
+}
+input {
+	padding: 0 0 0 26px !important;
+}
+input:hover,
+input:focus {
+	transition: none !important;
+	box-shadow: none !important;
 }
 .forget-psw {
     margin-right: 10px;
@@ -180,16 +240,20 @@
     padding-right: 10px;
 
     color: #a0a0a0;
+
+	position: relative;
+	left: 275px;
+
+	color: #548CFE;
 }
-.register {
-    color: #a0a0a0;
-}
+
+
 .competence {
     position: absolute;
     bottom: 30px;
     left: 32px;
 
-    color: white;
+	color: #548CFE;
 }
 .barcode {
     border: .1px solid #797979;

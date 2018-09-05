@@ -6,8 +6,8 @@
 		<p class="teacher"><strong>教师：</strong>{{teacherName}}</p>
 		<p class="token"><strong>秘钥：</strong>{{token}}</p>
 		<div class="tip-wrap" @mouseenter="toggleTip" @mouseleave="toggleTip">
-			<p class="description" :class="{ellipsis : isEllipsis}"><strong>描述：</strong><span>{{description}}</span></p>
-			<p class="tip" :class="{'tip-ellipsis': isEllipsis}" v-show="showTip" >{{description}}</p>
+			<p class="description" ><strong>描述：</strong><span>{{description}}</span></p>
+			<p class="tip"  v-show="false" >{{description}}</p>
 		</div>	
 		<p class="count">人数: {{count}}</p>
 		<span class="exit-organ" @click.stop.prevent="toDeleteOrganization"><Icon type="ios-close-outline"></Icon></span>

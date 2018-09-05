@@ -29,6 +29,7 @@
 			        </div>
 		        </div>
 		        <div class="description-wrap"><p class="description-tip">组织描述</p><textarea v-model="description" class="description"></textarea></div>
+				<p>组织口令</p><Input type="text" v-model="token"></Input>
 		        <Button class="bt" type="primary" @click="modelOk">确定</Button>
 		        <Button class="bt" type="primary" @click="modelCancel">取消</Button>
 		    </div>
@@ -54,6 +55,7 @@
 				file: null,
 				imgSrc: '',
 				modalTitle: '',
+				token: '',
 				alterOrganId : undefined
 			}		
 		},
@@ -99,6 +101,7 @@
 				data.append('organizationName', this.organizationName)
 				data.append('description', this.description)
 				data.append('file', this.file)
+				data.append('token', this.token)
 
 				this.createOrganization(data).then((data) => {
 					if(data.state){
@@ -107,6 +110,7 @@
 						this.description = ''
 						this.file = null
 						this.imgSrc = ''
+						this.token = ''
 						this.$Message.success(data.info)
 					}else{
 						this.$Message.error(data.info)

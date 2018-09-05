@@ -21,14 +21,14 @@
 			<issue class="question" v-for="(item, index) in issueList" :questionItem="item" :index="index" :key="index" @issue-answer="answerHandel"/>
 			<center class="no-question-tip" v-if="issueList <= 0"> ~没有题目~ </center>
 		</ul>
-		<ul v-show = "showTab === 'integrated'" v-if="coundAnswer">
+		<!-- <ul v-show = "showTab === 'integrated'" v-if="coundAnswer">
 			<integrated class="question" v-for="(item, index) in integratedList" :questionItem="item" :index="index" :key="index" @integrate-answer="answerHandel"/>
 			<center class="no-question-tip" v-if="integratedList <= 0"> ~没有题目~ </center>
 		</ul>
 		<ul v-show = "showTab === 'program'" v-if="coundAnswer">
 			<program class="question" v-for="(item, index) in programList" :questionItem="item" :index="index" :key="index" @program-answer="answerHandel"/>
 			<center class="no-question-tip" v-if="programList <= 0"> ~没有题目~ </center>
-		</ul>
+		</ul> -->
 		<Button class="submit-bt" type="success" size="large" @click="toSubmitAnswer" :disabled="!coundAnswer">提交</Button>
 	</section>
 </template>
@@ -54,8 +54,8 @@
 					pad: "填空题",
 					judge: "判断题",
 					issue: "问答题",
-					integrated: "综合题",
-					program: "编程题",
+					// integrated: "综合题",
+					// program: "编程题",
 				},
 				showTab: 'choose',
 				paperAnswer: [],
