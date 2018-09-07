@@ -1,42 +1,51 @@
 <template>
-	<center>
+	<div>
 		<div class="form" @keyup.enter="toRegister">
+			<div class="login-title">Welcome To Anywork   	&nbsp;: )</div>
 			<Mytip content="学号" :info="nameInfo">
-			    <Input class="input" type="text" v-model="userName" placeholder="学号" icon="ios-person-outline"></Input>
+				<img class="input-img" src="../../../assets/images/account@2x.png"/>
+			    <Input class="input" type="text" v-model="userName" placeholder="学号" ></Input>
             </Mytip>
 
             <Mytip content="邮箱" :info="emailInfo">
-				<Input class="input" type="text" v-model="email" placeholder="邮箱" icon="ios-email-outline"></Input>
+				<img class="input-img" src="../../../assets/images/account@2x.png"/>
+				<Input class="input" type="text" v-model="email" placeholder="邮箱" ></Input>
             </Mytip>
 
 			<Mytip content="手机号码" :info="phoneInfo">
-				<Input class="input" type="text" v-model="phone" placeholder="手机号码" icon="iphone"></Input>
+				<img class="input-img" src="../../../assets/images/account@2x.png"/>
+				<Input class="input" type="text" v-model="phone" placeholder="手机号码" ></Input>
             </Mytip>
 			
 			<Mytip content="密码" :info="passwordInfo">	
-				<Input class="input" type="password" v-model="password" placeholder="密码" icon="ios-locked-outline"></Input>
+				<img class="input-img" src="../../../assets/images/account@2x.png"/>
+				<Input class="input" type="password" v-model="password" placeholder="密码" ></Input>
             </Mytip>
 			
 			<Mytip content="确认密码" :info="rePasswordInfo">
-				<Input class="input" type="password" v-model="rePassword" placeholder="确认密码" icon="ios-unlocked-outline"></Input>
+				<img class="input-img" src="../../../assets/images/account@2x.png"/>
+				<Input class="input" type="password" v-model="rePassword" placeholder="确认密码" ></Input>
             </Mytip>
           	<Row :gutter="10">
   		        <Col span="12"><img :src="barcodeURL + '?' + refresh" class="barcode" @click="refreshBarcode"></Col>
   		        <Col span="12">
   		        	<Mytip content="验证码" :info="barcodeInfo">
-  		        		<Input class="input" type="text" v-model="barcode"></Input>
+  		        		<Input class="input" type="text" v-model="barcode" placeholder="验证码"></Input>
   		        	</Mytip>
   		        </Col>
           	</Row> 
+			<div class="button-contain">
+				<Button class="login-bt"  @click="toLogin">前往登录</Button>
+				<Button class="login-bt register" type="primary" long @click="toRegister" :loading="loadStatu">注册</Button>
+				
+			</div>
 
-			<Button class="login-bt" type="primary" long @click="toRegister" :loading="loadStatu">注册</Button>
-			<a href="#" class="a-login" @click="toLogin">前往登录</a>
 			<!-- <Checkbox class="competence" v-model="mark">
 				<Icon type="ios-person-outline"></Icon>
             	<span>注册教师</span>
 			</Checkbox> -->
 		</div>
-	</center>
+	</div>
 </template>
 
 <script>
@@ -174,13 +183,36 @@
     width: 25%;
     min-width: 350px;
 
-    background-color: #585858;
+    /* background-color: #585858; */
 
-    box-shadow: 0 0 8px 2px #585858;
+    /* box-shadow: 0 0 8px 2px #585858; */
+}
+.button-contain {
+	display: flex;
+	justify-content: space-between;
+}
+.register {
+	background: #7F3FFD !important;
+}
+.input-img {
+	position: absolute;
+	z-index: 99;
+	width: 18px;
+	top: 7px;
+
+}
+.login-title {
+	text-align: center;
+	font-size: 1.67rem;
+	color: #548CFE;
+
 }
 .input,
 .login-bt {
     margin: 0 0 20px 0;
+}
+.input {
+	border-bottom: 1px solid #548CFE;
 }
 .forget-psw {
     margin-right: 10px;

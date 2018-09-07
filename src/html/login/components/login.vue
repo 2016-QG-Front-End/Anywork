@@ -177,9 +177,12 @@ body {
 .input-img {
 	position: absolute;
 	z-index: 99;
-	width: 22px;
+	width: 18px;
 	top: 7px;
 
+}
+.input {
+	border-bottom: 1px solid #548CFE;
 }
 .form {
     position: relative;
