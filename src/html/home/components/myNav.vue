@@ -1,6 +1,6 @@
 <template>
-	<section class="nav">
-		<div class="nav-wrap">
+	<section class="nav" >
+		<div class="nav-wrap" v-if=" false ">
 			<a class="logo" href="./home.html#/homepage">
 			</a>
 			<ul class="sub-nav">
@@ -23,6 +23,20 @@
 				
 			</ul>
 			<div class="people-number">在线人数：{{ poepleNumber }}人</div>
+		</div>
+		<div class="new-container">
+			<img src="../../../assets/images/anywork@1x.png" />
+			<div class="container-nav">
+				<img class="new-img" :src="userPhoto">
+				<li class="photo" :class="{select: personNav}" @click="togglePersonNav" @mouseleave="hidePersonNav">
+					<img src="../../../assets/images/anywork@1x.png">
+					<ul class="person-info" v-show="personNav">
+						<li @click="toPersonPage">个人主页</li>
+						<li @click="toFeedback">意见反馈</li>
+						<li @click="toExit">退出登录</li>
+					</ul>
+				</li>
+			</div>
 		</div>
 	</section>
 </template>
@@ -163,17 +177,17 @@
 		},
 		created () {
 			let that = this
-			this.getMyInfo().then((data) => {
-				if(data.state){
-					this.$router.push('homepage')
-					this.setPhoto()
-					that.initWebSocket()
-				}else{
-					this.$Message.error(data.info + ",请重新登陆！")
-				}
-			}).catch((err) => {
-				window.location.href = "./login.html"			
-			})
+			// this.getMyInfo().then((data) => {
+			// 	if(data.state){
+			// 		this.$router.push('homepage')
+			// 		this.setPhoto()
+			// 		that.initWebSocket()
+			// 	}else{
+			// 		this.$Message.error(data.info + ",请重新登陆！")
+			// 	}
+			// }).catch((err) => {
+			// 	window.location.href = "./login.html"			
+			// })
 		}
 	}
 </script>
@@ -185,13 +199,30 @@
 		top: 65px;
 		color: #000;
 	}
+	.new-img {
+		width: 30px;
+		height: 30px;
+	}
+	.new-container {
+		display: flex;
+		align-items: center;
+	}
+	.container-nav {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		left: 90%;
+		z-index: 9;
+	}
 	.nav {
-	    position: fixed;
+	    /* position: fixed; */
 	    top: 0;
-	    width: 100%;
-	    background-color: #3d444c;
-	    box-shadow: 0 1px 2px 2px rgba(73, 73, 73, 0.38);
+	    width: 70%;
+	    /* background-color: #3d444c; */
+	    /* box-shadow: 0 1px 2px 2px rgba(73, 73, 73, 0.38); */
 	    z-index: 1000;
+		margin: 96px  auto 0  auto;
 	}
 	.nav-wrap {
 		position: relative;
@@ -222,28 +253,29 @@
 	    top: 0;
 	}
 	.select {
-		background-color: #666666;
+		/* background-color: #666666; */
 	}
 	.photo img {
 		display: inline-block;
-		width: 40px;
-		height: 40px;
+		width: 30px;
+		height: 30px;
 		border-radius: 50%;
 		vertical-align: middle;
 	}
 	.person-info {
 		position: absolute;
-    	top: 48px;
-		background-color: #666666;
+    	top: 40px;
+		/* background-color: #666666; */
 		z-index: 1000;
 	}
 	.person-info li{
 		display: block;
 		padding: 10px 16px;;
 		line-height: 20px;
+		color:#000;
 	}
 	.person-info li:hover {
-		background-color: #484747;
+		/* background-color: #484747; */
 	}
 	.search-wrap {
 		position: absolute;
@@ -264,8 +296,8 @@
 	@media only screen and (max-width: 992px){
 		.nav {
 		    width: 100%;
-		    background-color: #3d444c;
-		    box-shadow: 0 1px 2px 2px rgba(73, 73, 73, 0.38);
+		    /* background-color: #3d444c; */
+		    /* box-shadow: 0 1px 2px 2px rgba(73, 73, 73, 0.38); */
 		    z-index: 1000;
 		}
 		.nav-wrap {

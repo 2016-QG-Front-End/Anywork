@@ -1,12 +1,14 @@
 <template>
-	<section class="container-b">
-		<div id="home">
-			<mynav/>
-	  	</div>
-	  	<Breadcrumb class="bread-crub">
+	<section class="container-b" style="overflow-x: hidden;">
+		
+		<mynav/>
+	  	
+	  	<!-- <Breadcrumb class="bread-crub">
             <Breadcrumb-item v-for="item in breadCrumbList" :href="item.path" :key="item.name">{{item.name}}</Breadcrumb-item>
-        </Breadcrumb>
+        </Breadcrumb> -->
+		
 	  	<router-view class="view"></router-view>
+		<img  class="background" src="../../assets/images/draw@2x.png">
 	</section>
 </template>
 
@@ -132,6 +134,19 @@ export default {
     min-width: 1150px;
     min-height: 800px;
 }
+.background {
+    position: absolute;
+
+/* right: 0px; */
+    top: 0;
+    right: -56px;
+    z-index: -1;
+
+    width: 60%;
+    height: 100%;
+
+    pointer-events: none;
+}
 .bread-crub {
     margin: auto;
     margin-bottom: 4px;
@@ -141,7 +156,9 @@ export default {
 
     background-color: white;
 }
-
+body {
+    background-color: #fff;
+}
 @media only screen and (max-width: 992px) {
     .bread-crub {
         width: 100%;
@@ -150,6 +167,8 @@ export default {
         font-size: 2rem;
     }
 }
+
+
 
 
 

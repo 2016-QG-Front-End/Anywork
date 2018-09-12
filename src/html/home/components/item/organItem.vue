@@ -3,13 +3,13 @@
 		<img class="organ-img" :src="organImg">
 		<span class="exit-organ" v-if="canExit" @click.stop.prevent="toExitOrganization"><Icon type="close-round" ></Icon></span>
 		<h2>{{organizationName}}</h2>
-		<p class="title" :class="[!showJoin ? 'dim' : '']">{{title}}</p>
-		<p class="teacher"><strong>教师：</strong>{{teacherName}}</p>
+		<!-- <p class="title" :class="[!showJoin ? 'dim' : '']">{{title}}</p> -->
+		<!-- <p class="teacher"><strong>教师：</strong>{{teacherName}}</p>
 		<div class="tip-wrap" @mouseenter="toggleTip" @mouseleave="toggleTip">
-			<p class="description" :class="{ellipsis : isEllipsis}"><strong>描述：</strong>{{description}}</p>
+			<p class="description" :class="{ellipsis : isEllipsis}"><strong>描述：</strong>{{description}}</p> -->
 			<!-- <p class="tip" v-show="showTip" >{{description}}</p> -->
-		</div>	
-		<p class="count">人数: {{studentCount}}</p>
+		<!-- </div>	
+		<p class="count">人数: {{studentCount}}</p> -->
 	</center>
 </template>
 
@@ -144,7 +144,7 @@
 
     padding: 0 0 25px;
     width: 242px;
-    height: 190px;
+    height: 72px;
     max-height: 190px;
 
     box-shadow: 0 0 1px .2px #a09e9e;
@@ -291,6 +291,8 @@ h2 {
         font-size: 4rem;
     }
 }
+
+
 
 
 

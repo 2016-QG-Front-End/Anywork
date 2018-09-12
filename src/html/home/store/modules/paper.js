@@ -26,7 +26,7 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			myAxios({
 				method: 'POST',
-				url: '/test/testList',
+				url: '/test/list',
 				data: data
 			}).then(function(res){
                  if(res.data.state.toString()==="1"){
@@ -80,7 +80,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             myAxios({
                 method: 'POST',
-                url: '/test/practiceListByChapter',
+                url: '/test/list',
                 data: data
             }).then(function(res){
                  if(res.data.state.toString()==="1"){

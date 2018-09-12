@@ -111,7 +111,7 @@
 			},
 			onSuccess (info) {
 				this.$Message.success(info);
-				window.location.href="./home.html"
+				window.location.href="./home.html#/homepage"
 			},
 			onAdminSuccess (info) {
 				this.$Message.success(info);
