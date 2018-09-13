@@ -78,7 +78,7 @@
 				this.getAllTestPapers({
 					organizationId: this.organizationId.toString(),
 					chapter: '0',
-					testPaperType: this.testPaperType
+					testPaperType: parseInt(this.testPaperType)
 				}).then((data) => {
 					if(data.state){
 						this.spinShow = false
@@ -97,6 +97,7 @@
 					organizationId: this.organizationId
 				}).then((data) => {
 					if(data.state){
+						
 					}else{
 						this.$Message.error(data.info)
 					}
@@ -109,8 +110,8 @@
 				this.spinShow = true
 				this.getPracticeListByChapter({
 					organizationId: this.organizationId,
-					chapterId: chapterId,
-					testPaperType: this.testPaperType
+					chapter: chapterId,
+					testPaperType: parseInt(this.testPaperType)
 				}).then((data) => {
 					if(data.state){
 						this.spinShow = false

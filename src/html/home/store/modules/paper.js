@@ -197,16 +197,16 @@ const actions = {
         return new Promise((resolve, reject) => {
             myAxios({
                 method: 'POST',
-                url: '/organization/studentTestDetail',
+                url: '/test/none/detail',
                 data: data
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
-                    context.commit(types.mutations.setInfo,{
+                    context.commit(types.mutations.setInfos,{
                         questionAnswerInfo: res.data.data,
                     })
                     resolve({
                         state: true,
-                        info: res.data.stateInfo}
+                        data: res.data.data}
                     )
                 }else{
                     resolve({
@@ -219,7 +219,33 @@ const actions = {
             })
         })
     },
-
+    [types.actions.getFinishedPaperAnswerById]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/test/done/detail',
+                data: data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    context.commit(types.mutations.setInfo,{
+                        questionAnswerInfo: res.data.data,
+                    })
+                    resolve({
+                        state: true,
+                        info: res.data.stateInfo,
+                        data: res.data.data}
+                    )
+                }else{
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo}
+                    )
+                }
+            }).catch(function(err){
+                reject(err)
+            })
+        })
+    },
     [types.actions.getMyTestPaper]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
@@ -233,7 +259,7 @@ const actions = {
                     })
                     resolve({
                         state: true,
-                        info: res.data.stateInfo}
+                        data: res.data.data}
                     )
                 }else{
                     resolve({
@@ -277,7 +303,19 @@ const actions = {
 
 const mutations = {
 	[types.mutations.setInfo]: (state, datas) => {
+        // console.log(datas)
         Object.assign(state,datas)
+        if (datas.questionAnswerInfo) {
+            this.state.paperQuestionList = datas.questionAnswerInfo
+        }
+
+    },
+    [types.mutations.setInfos]: (state, datas) => {
+        // console.log(datas)
+        if (datas.questionAnswerInfo) {
+            state.paperQuestionList = datas.questionAnswerInfo
+        }
+
 	}
 }
 

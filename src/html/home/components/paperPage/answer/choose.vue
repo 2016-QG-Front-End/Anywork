@@ -13,15 +13,19 @@
 			<div>
 				<span class="answer_option">
 					<label :class="{on: selectItem === 'A'}" @click.stop="selectAnswer">A</label>
+					{{questionItem.a}}
 				</span>
 	    		<span class="answer_option">
 					<label :class="{on: selectItem === 'B'}" @click.stop="selectAnswer">B</label>
+					{{questionItem.b}}
 				</span>
 	    		<span class="answer_option">
 					<label :class="{on: selectItem === 'C'}" @click.stop="selectAnswer">C</label>
+					{{questionItem.c}}
 				</span>
 	    		<span class="answer_option">
 					<label :class="{on: selectItem === 'D'}" @click.stop="selectAnswer">D</label>
+					{{questionItem.d}}
 				</span>
 			</div>
 		</section>

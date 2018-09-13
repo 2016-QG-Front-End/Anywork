@@ -92,9 +92,11 @@
 				</section>
 				<section class="rank-right">
 					<div class="rank-item"   v-for="item in rank" v-bind:key="item.number">
-						<img :src=item.imgPath />
-						<div>{{ item.name }}</div>
-						<div class="number-students">{{ item.number }}</div>
+						<img :src=item.imagePath />
+						<div>{{ item.username }}</div>
+						<div >{{ item.score }}</div>
+						<div >{{ item.studentId }}</div>
+						<div class="number-students">{{ item.studentId }}</div>
 					</div>
 				</section>
 			</section>
@@ -105,7 +107,7 @@
 <script>
 	import { mapState, mapActions} from 'vuex';
 	import organization from  '../store/types/organization'
-
+	import user from  '../store/types/user'
 	import organizations from './homePage/organizations'
 	import loading from './item/loading'
 
@@ -124,39 +126,39 @@
 				news:[
 					{
 						title: '第一张练习已经发布',
-						time: '2018-01-02 19:00',
+						time: '',
 						name: '古天乐'
 					},
 					{
 						title: '第一张练习已经发布',
-						time: '2018-01-02 19:00',
+						time: '',
 						name: '古天乐'
 					}
 				],
 				rank: [{
-					imgPath: '../../../assets/images/first@1x.png',
-					name: '黄海景',
-					number: "3116004777"
+					imagePath: '../../../assets/images/first@1x.png',
+					username: '黄海景',
+					studentId: "3116004777"
 				},{
-					imgPath: '../../../assets/images/first@1x.png',
-					name: '黄海景',
-					number: "3116004777"
+					imagePath: '../../../assets/images/first@1x.png',
+					username: '黄海景',
+					studentId: "3116004777"
 				},{
-					imgPath: '../../../assets/images/first@1x.png',
-					name: '黄海景',
-					number: "3116004777"
+					imagePath: '../../../assets/images/first@1x.png',
+					username: '黄海景',
+					studentId: "3116004777"
 				},{
-					imgPath: '../../../assets/images/first@1x.png',
-					name: '黄海景',
-					number: "3116004777"
+					imagePath: '../../../assets/images/first@1x.png',
+					username: '黄海景',
+					studentId: "3116004777"
 				},{
-					imgPath: '../../../assets/images/first@1x.png',
-					name: '黄海景',
-					number: "3116004777"
+					imagePath: '../../../assets/images/first@1x.png',
+					username: '黄海景',
+					studentId: "3116004777"
 				},{
-					imgPath: '../../../assets/images/first@1x.png',
-					name: '黄海景',
-					number: "3116004777"
+					imagePath: '../../../assets/images/first@1x.png',
+					username: '黄海景',
+					studentId: "3116004777"
 				}]
 			}
 		},
@@ -182,9 +184,9 @@
 		},
 		methods: {
 			...mapActions(organization.actions),
+			...mapActions(user.actions),
 			changeNews () {
 				this.showAll = !this.showAll
-
 			},
 			toPath (indexNumber) {
 				if (indexNumber == 1) {
@@ -297,6 +299,14 @@
 				let searchInfo = this.$route.params.searchInfo
 				this.toGetSearchResultList(searchInfo)
 			}
+			let that = this
+			this.getRank({
+				leaderboardType: 2
+			}).then(data => {
+				that.rank = data
+			}).catch(err => {
+				this.$Message.error("请重新刷新！")
+			})
 			this.$bus.$on('search-organ', this.toGetSearchResultList)
 		},
 		beforeDestroy () {

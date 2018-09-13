@@ -67,6 +67,7 @@
 					return state.paper
 				},
 				'user': state => {
+					console.log(state.user)
 					return state.user
 				}
 			}),
@@ -147,9 +148,8 @@
 		},
 		created () {
 			if(this.paper.hasDown && (this.$route.params.handel === undefined || this.$route.params.handel !== 'submit')){
-				this.getPaperAnswerById({
+				this.getFinishedPaperAnswerById({
 					testpaperId: this.paper.testpaperId,
-					userId: this.user.userId
 				}).then((data) => {
 					if(data.state){
 						this.questionList = this.chooseList

@@ -59,7 +59,28 @@ const actions = {
             })
         })
     },
-    
+    [types.actions.getRank]: (context, data) => {
+        //context: commit,dispatch,getters,state
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/leaderboard/show',
+                data: data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    // context.commit(types.mutations.setInfo,res.data.data)
+                    resolve(res.data.data)
+                }else{
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo}
+                    )
+                }
+            }).catch(function(err){
+                reject(err)
+            })
+        })
+    },
     [types.actions.noticed]: (context, data) => {
         //context: commit,dispatch,getters,state
         return new Promise((resolve, reject) => {

@@ -6,7 +6,7 @@
 			<p>{{this.type}}题目： {{this.testpaperTitle}}</p>
 			<p>开始时间： {{this.createTimeFormat}}</p>
 			<p>结束时间： {{this.endingTimeFormat}}</p>
-			<p>试卷总分： {{this.testpaperScore}}</p>
+			<p>试卷总分： {{this.testpaperAllScore}}</p>
 		</div>
 	</section>
 </template>
@@ -22,7 +22,7 @@
 				hasDown: 0
 			}
 		},
-		props: ['createTime', 'endingTime', 'testpaperId', 'testpaperTitle', 'testpaperScore', 'testpaperType','chapterId'],
+		props: ['createTime', 'endingTime', 'testpaperId', 'testpaperTitle', 'testpaperScore', 'testpaperType','chapterId', 'doneQuestions', 'testpaperAllScore', 'paperStatus'],
 		computed: {
 			createTimeFormat () {
 				return new Date(this.createTime).toLocaleString().slice(0, -3)
@@ -42,7 +42,11 @@
 					testpaperTitle: this.testpaperTitle,
 					testpaperScore: this.testpaperScore,
 					testpaperType: this.testpaperType,
-					hasDown: this.hasDown
+					hasDown: this.hasDown,
+					paperStatus: this.paperStatus,
+					testpaperAllScore: this.testpaperAllScore,
+					doneQuestions: this.doneQuestions
+
 				})
 				this.$router.push({
 					name: 'answerPaper',
@@ -51,7 +55,7 @@
 		},
 		created () {
 			this.testpaperType === 0 ? this.type = '练习' : this.type = '考试'
-			this.hasDown = Number(this.chapterId) === -1 ? 0 : 1    //因需求原因将 -1 表示未做过试卷，0表示做过试卷
+			this.hasDown = this.paperStatus    //因需求原因将 -1 表示未做过试卷，0表示做过试卷
 		}
 	}
 </script>

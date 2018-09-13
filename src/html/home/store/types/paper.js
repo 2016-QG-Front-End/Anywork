@@ -11,9 +11,11 @@ export default namespace('paper', {
         'submitPaper',
         'getPaperAnswerById',
         'getMyTestPaper',
-        'getMyPracticePaper'
+        'getMyPracticePaper',
+        'getFinishedPaperAnswerById'
     ],
     mutations: [
         'setInfo',
+        'setInfos'
     ]
 })

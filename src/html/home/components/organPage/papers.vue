@@ -6,10 +6,13 @@
 					:createTime = "paper.createTime"
 					:endingTime = "paper.endingTime"
 					:testpaperId = "paper.testpaperId"
-					:testpaperScore = "paper.testpaperScore"
+					:testpaperScore = "paper.score"
 					:testpaperTitle = "paper.testpaperTitle"
 					:testpaperType = "paper.testpaperType"
 					:chapterId = "paper.chapterId"
+					:doneQuestions = 'paper.doneQuestions'
+					:testpaperAllScore = 'paper.testpaperScore'
+					:paperStatus = 'paper.status'
 				/>
 			</li>
 		</ul>

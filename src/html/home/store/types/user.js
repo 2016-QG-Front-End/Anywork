@@ -8,7 +8,8 @@ export default namespace('user', {
         'submitSuggestion',
         'refresh',
         'setPhoto',
-        'exit'
+        'exit',
+        'getRank'
     ],
     mutations: [
         'setInfo',

@@ -30,8 +30,8 @@ module.exports = {
     proxyTable: {
         '/anywork': {
             // target: 'http://123.207.228.117:80',  
-            target: 'http://10.21.56.107:8080/',  
-            // target: 'http://192.168.0.4:8080',  
+            // target: 'http://10.21.56.107:8080/',  
+            target: 'http://192.168.199.55:8080',  
             // target: 'http://10.21.48.11:8080',
             changeOrigin: true,
             pathRewrite: {

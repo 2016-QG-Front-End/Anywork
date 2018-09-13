@@ -71,7 +71,7 @@
 			...mapActions(user.actions),
 
 			initWebSocket: function () {
-				const wsuri = 'ws://192.168.0.4:8080' + "/websocket/" + this.user.userId;//ws地址
+				const wsuri = 'ws://192.168.199.55:8080' + "/websocket/" + this.user.userId;//ws地址
 				// console.log(this.user)
 				// console.log(this.userId)
 	　　		this.websock = new WebSocket(wsuri); 
@@ -177,17 +177,17 @@
 		},
 		created () {
 			let that = this
-			// this.getMyInfo().then((data) => {
-			// 	if(data.state){
-			// 		this.$router.push('homepage')
-			// 		this.setPhoto()
-			// 		that.initWebSocket()
-			// 	}else{
-			// 		this.$Message.error(data.info + ",请重新登陆！")
-			// 	}
-			// }).catch((err) => {
-			// 	window.location.href = "./login.html"			
-			// })
+			this.getMyInfo().then((data) => {
+				if(data.state){
+					this.$router.push('homepage')
+					this.setPhoto()
+					that.initWebSocket()
+				}else{
+					this.$Message.error(data.info + ",请重新登陆！")
+				}
+			}).catch((err) => {
+				window.location.href = "./login.html"			
+			})
 		}
 	}
 </script>

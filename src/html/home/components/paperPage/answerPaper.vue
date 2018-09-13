@@ -1,9 +1,9 @@
 <template>
 	<section>
-		<typetab 
+		<!-- <typetab 
 			:tabs="tabs" 
 			@tab-select="tabSelect"
-		/>
+		/> -->
 		<ul v-show = "showTab === 'choose'" v-if="coundAnswer">
 			<choose class="question" v-for="(item, index) in chooseList" :questionItem="item" :index="index" :key="index" @choose-select="answerHandel"/>
 			<center class="no-question-tip" v-if="chooseList <= 0"> ~没有题目~ </center>
@@ -120,11 +120,12 @@
 
 				if(!this.paper.testpaperId) return
 
-				this.getPaperInfo({
-					testpaperId: this.paper.testpaperId.toString()
+				this.getPaperAnswerById({
+					testpaperId: this.paper.testpaperId,
+					choice: this.paper.hasDown == 2 ? 1 : 0
 				}).then((data) => {
 					if(data.state){
-						this.paperAnswer = this.paper.paperQuestionList.map(function(item){
+						this.paperAnswer = data.data.map(function(item){
 							if(item.type > 3){
 								return {
 									questionId: item.questionId.toString(),
@@ -151,6 +152,7 @@
 								}
 							}
 						})
+						console.log('this.paperAnswer' + this.paperAnswer)
 					}else{
 						this.coundAnswer = false
 						this.$Message.error(data.info)
@@ -212,14 +214,15 @@
 			console.log(this.$route.params.doAgain, this.paper.hasDown)
 			if(this.$route.params.doAgain === undefined || !this.$route.params.doAgain){
 				//说明不是回退回来
-				if(!this.paper.hasDown){
-					// 如果第一次做
-					this.toGetPaperInfo()
-				}else{
+				if(this.paper.hasDown == 1){
 					this.$router.push({
 						name: 'lookAnswer',
 					})
-					// 不是第一次做，请求该试卷答案信息，并跳转
+					// 已经提交答案，请求该试卷答案信息，并跳转
+				}else{
+					// 如果没有提交答案
+					this.toGetPaperInfo()
+
 				}
 			}else{
 				//在查看答案那里跳转回来的，直接开始做题
