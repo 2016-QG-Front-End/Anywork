@@ -1,31 +1,27 @@
 <template>
 	<li :key="questionItem.questionId" >
-		<center class="num">
-			题号 : {{this.index + 1}}
-			<span class="socre">{{questionItem.socre}}分</span>
-		</center> 
+		<div class="num">
+			{{this.index + 1}}&nbsp;/&nbsp;{{this.questionNumbers}}&nbsp;&nbsp;（单选题）
+			<!-- <span class="socre">{{questionItem.socre}}分</span> -->
+		</div> 
 		<section>
 			<div class="content">{{questionItem.content}}</div>
-			<p class="answer"> A : {{questionItem.a}} </p>
-			<p class="answer"> B : {{questionItem.b}} </p>
-			<p class="answer"> C : {{questionItem.c}} </p>
-			<p class="answer"> D : {{questionItem.d}} </p>
 			<div>
 				<span class="answer_option">
 					<label :class="{on: selectItem === 'A'}" @click.stop="selectAnswer">A</label>
-					{{questionItem.a}}
-				</span>
+					&nbsp;&nbsp;&nbsp;&nbsp;{{questionItem.a}}
+				</span><br/>
 	    		<span class="answer_option">
 					<label :class="{on: selectItem === 'B'}" @click.stop="selectAnswer">B</label>
-					{{questionItem.b}}
-				</span>
+					&nbsp;&nbsp;&nbsp;&nbsp;{{questionItem.b}}
+				</span><br/>
 	    		<span class="answer_option">
 					<label :class="{on: selectItem === 'C'}" @click.stop="selectAnswer">C</label>
-					{{questionItem.c}}
-				</span>
+					&nbsp;&nbsp;&nbsp;&nbsp;{{questionItem.c}}
+				</span><br/>
 	    		<span class="answer_option">
 					<label :class="{on: selectItem === 'D'}" @click.stop="selectAnswer">D</label>
-					{{questionItem.d}}
+					&nbsp;&nbsp;&nbsp;&nbsp;{{questionItem.d}}
 				</span>
 			</div>
 		</section>
@@ -33,49 +29,76 @@
 </template>
 
 <script>
+import { mapState, mapActions} from 'vuex';
+import paper from  '../../../store/types/paper'
 	export default {
 		data () {
 			return {
-				selectItem : ''
+				selectItem : '',
+				paperQuestionListL: 0
 			}
 		},
-		props: ['questionItem', 'index'],
+		computed: {
+			// 'paper': state => {
+			// 	console.log(state.paper)
+			// 	return state.paper
+			// },
+			// paperQuestionListL() {
+			// 	return this.paper.paperQuestionList.length
+			// }
+		},
+		props: ['questionItem', 'index', 'questionNumbers'],
 		methods : {
 			selectAnswer (e) {
-
+				// console.log(this.paper.paperQuestionList.length)
 				this.selectItem = e.target.innerHTML
 				this.$emit('choose-select', {
 					questionId: this.questionItem.questionId.toString(),
 					studentAnswer: this.selectItem
 				})
 			}	
+		},
+		mounted () {
+			// this.paperQuestionListL = this.paper.paperQuestionList.length
+			console.log(this.questionNumbers)
+			if (questionItem.key) {
+				this.selectItem = questionItem.key
+				this.$emit('choose-select', {
+					questionId: this.questionItem.questionId.toString(),
+					studentAnswer: this.selectItem
+				})
+			}
 		}
 	}
 </script>
 
 <style scoped>
-
+	.answer_option {
+		font-size: 1.3em;
+	}
 	section {
-	    border: 1px solid #dedede;
+	    /* border: 1px solid #dedede; */
 	}
 	.num {
 		position: relative;
-		background-color: rgb(0, 188, 155);
-		color: white;
+		/* background-color: #548CFE; */
+		color: #548CFE;
+		font-size: 1.6em;
+		padding: 10px 10px 0;
 	}
 	.num span {
 		position: absolute;
 		right: 0;
 		padding: 0 10px;
-		background-color: rgb(0, 149, 124);
+		background-color: #548CFE;
 	}
 	.content {
         width: 100%;
 	    padding: 10px 10px 0;
 	    margin-bottom: 10px;
-	    border: 0 rgba(255, 255, 255, 0);
-	    border-bottom: 1px solid #dedede;
-	    font-size: 22px;
+	    /* border: 0 rgba(255, 255, 255, 0); */
+	    /* border-bottom: 1px solid #dedede; */
+	    font-size: 20px;
        	white-space: pre-line;
 	    word-wrap: break-word;
 	    word-break: break-all;
@@ -85,17 +108,22 @@
 	    font-size: 16px;
 	}
 	.on {
-	    background-color: #19be6b;
+	    background-color: #548CFE;
 	    color: #fff;
 	}
 	label {
 		display: inline-block;
-	    padding: 0 2rem;
-	    margin: 1rem .5rem;
-       	font-size: 1.2rem;
-	    color: #19be6b;
-	    cursor: pointer;
-	    border: 1px solid #19be6b;
+		/* padding: 0.2rem 0.2rem; */
+		margin: .7rem .5rem;
+		font-size: 1.2rem;
+		color: #548CFE;
+		cursor: pointer;
+		width: 32px;
+		border: 1px solid #548CFE;
+		height: 32px;
+		text-align: center;
+		border-radius: 5em;
+		line-height: 32px;
 	}
 	@media only screen and (max-width: 992px) {
 		.content {

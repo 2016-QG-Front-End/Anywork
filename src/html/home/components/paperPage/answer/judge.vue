@@ -1,17 +1,18 @@
 <template>
 	<li :key="questionItem.questionId" >
-		<center class="num">
-			题号 : {{this.index + 1}}
-			<span class="socre">{{questionItem.socre}}分</span>
-		</center> 
+		<div class="num">
+			{{this.index + 1}}&nbsp;/&nbsp;{{this.questionNumbers}}&nbsp;&nbsp;（判断题）
+			<!-- <span class="socre">{{questionItem.socre}}分</span> -->
+		</div> 
 		<section>
 			<div class="content" >{{questionItem.content}}</div> 
 			<div class="judge-select">
 				<span class="answer_option">
-					<label @click="selectAnswer(1)"><Icon :type="'ios-checkmark'+ trueIcon" color="#19be6b"></Icon></label>
-				</span>
+					<label @click="selectAnswer(1)"><Icon :type="'ios-checkmark'+ trueIcon" color="#548CFE" class="icon"></Icon></label>
+					
+				</span><br/>
 				<span class="answer_option">
-					<label @click="selectAnswer(0)"><Icon :type="'ios-close'+ falseIcon" color="#19be6b"></Icon></label>
+					<label @click="selectAnswer(0)"><Icon :type="'ios-close'+ falseIcon" color="#548CFE"  class="icon"></Icon></label>
 				</span>
 			</div>
 		</section>
@@ -27,7 +28,7 @@
 				questionAnswer: undefined
 			}
 		},
-		props: ['questionItem', 'index'],
+		props: ['questionItem', 'index', 'questionNumbers'],
 		methods : {
 			selectAnswer (result) {
 				if(result){
@@ -44,41 +45,63 @@
 					studentAnswer: this.questionAnswer
 				})
 			}	
+		},
+		mounted () {
+			// this.paperQuestionListL = this.paper.paperQuestionList.length
+			// console.log(this.questionNumbers)
+			if (questionItem.key) {
+				this.questionAnswer = questionItem.key
+				// this.$emit('choose-select', {
+				// 	questionId: this.questionItem.questionId.toString(),
+				// 	studentAnswer: this.questionAnswer
+				// })
+				this.selectAnswer(parseInt(questionItem.key))
+			}
 		}
 	}
 </script>
 
 <style scoped>
+	.icon {
+		height: 30px;
+		width: 30px;
+		margin: .7rem 0;
+	}
 	section {
-	    border: 1px solid #dedede;
+	    /* border: 1px solid #dedede; */
 	    padding: 0.1px;
 	}
 	.num {
 		position: relative;
-		background-color: rgb(0, 188, 155);
-		color: white;
+		/* background-color: #548CFE; */
+		color: #548CFE;
+		font-size: 1.6em;
+		padding: 10px 10px 0;
 	}
 	.num span {
 		position: absolute;
 		right: 0;
 		padding: 0 10px;
-		background-color: rgb(0, 149, 124);
+		background-color: #548CFE;
 	}
+
 	.content {
         width: 100%;
 	    padding: 10px 10px 0;
-	    border: 0 rgba(255, 255, 255, 0);
-	    border-bottom: 1px solid #dedede;
-	    font-size: 22px;
+	    margin-bottom: 10px;
+	    /* border: 0 rgba(255, 255, 255, 0); */
+	    /* border-bottom: 1px solid #dedede; */
+	    font-size: 20px;
        	white-space: pre-line;
 	    word-wrap: break-word;
 	    word-break: break-all;
 	}
+	
 	input[type='radio'] {
 		display: none;
 	}
 	.judge-select {
-		margin: 10px 0 10px 15px;
+		margin: 10px 0 10px 0;
 	}
 	.answer_option {
 		margin: 5px;

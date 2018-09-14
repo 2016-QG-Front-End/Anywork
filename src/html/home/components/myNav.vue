@@ -71,7 +71,7 @@
 			...mapActions(user.actions),
 
 			initWebSocket: function () {
-				const wsuri = 'ws://192.168.199.55:8080' + "/websocket/" + this.user.userId;//ws地址
+				const wsuri = 'ws://10.21.56.107:8080' + "/websocket/" + this.user.userId;//ws地址
 				// console.log(this.user)
 				// console.log(this.userId)
 	　　		this.websock = new WebSocket(wsuri); 

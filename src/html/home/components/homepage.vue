@@ -7,6 +7,7 @@
            	 	<Menu-item name="noJoinOrganization" >未加入组织</Menu-item>
             </div>
         </Menu> -->
+		<img  class="background" src="../../../assets/images/draw@2x.png">
 		<div class="login-title">Welcome To Anywork   	&nbsp;: )</div>
 		<div class="login-title margin-chinese">日拱一猝无有尽</div>
 		<Button disabled="isAble" v-on:click="chooseOrgination" class="choose-orgination" :style=buttonStyle >{{this.orginationName ? this.orginationName : '选择你的组织'}} > </Button>
@@ -316,6 +317,16 @@
 </script>
 
 <style scoped>
+.background {
+	position: absolute;
+    /* right: 0px; */
+    top: -340px;
+    right: -327px;
+    z-index: -1;
+    width: 1010px;
+    height: 891px;
+    pointer-events: none;
+}
 .show-all {
     padding: 10px 20px;
 

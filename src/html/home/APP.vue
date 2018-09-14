@@ -8,7 +8,7 @@
         </Breadcrumb> -->
 		
 	  	<router-view class="view"></router-view>
-		<img  class="background" src="../../assets/images/draw@2x.png">
+		
 	</section>
 </template>
 

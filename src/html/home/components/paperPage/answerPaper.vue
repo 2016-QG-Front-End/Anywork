@@ -4,22 +4,22 @@
 			:tabs="tabs" 
 			@tab-select="tabSelect"
 		/> -->
-		<ul v-show = "showTab === 'choose'" v-if="coundAnswer">
-			<choose class="question" v-for="(item, index) in chooseList" :questionItem="item" :index="index" :key="index" @choose-select="answerHandel"/>
-			<center class="no-question-tip" v-if="chooseList <= 0"> ~没有题目~ </center>
+		<ul  v-if="coundAnswer">
+			<choose class="question"  v-for="(item, index) in chooseList" :questionItem="item" :index="index"  :questionNumbers="questionNumbers" :key="index" @choose-select="answerHandel"/>
+			<!-- <center class="no-question-tip" v-if="chooseList <= 0"> ~没有题目~ </center> -->
 		</ul>
 
-		<ul v-show = "showTab === 'pad'" v-if="coundAnswer">
-			<pad class="question" v-for="(item, index) in padList" :questionItem="item" :index="index" :key="index" @pad-enter="answerHandel"/>
-			<center class="no-question-tip" v-if="padList <= 0"> ~没有题目~ </center>
+		<ul  v-if="coundAnswer">
+			<pad class="question"  v-for="(item, index) in padList" :questionItem="item" :index="index + chooseList.length" :questionNumbers="questionNumbers" :key="index" @pad-enter="answerHandel"/>
+			<!-- <center class="no-question-tip" v-if="padList <= 0"> ~没有题目~ </center> -->
 		</ul>
-		<ul v-show = "showTab === 'judge'" v-if="coundAnswer">
-			<judge class="question" v-for="(item, index) in judgeList" :questionItem="item" :index="index" :key="index" @judge-select="answerHandel"/>
-			<center class="no-question-tip" v-if="judgeList <= 0"> ~没有题目~ </center>
+		<ul  v-if="coundAnswer">
+			<judge class="question"  v-for="(item, index) in judgeList" :questionItem="item" :index="index + chooseList.length + padList.length" :questionNumbers="questionNumbers"  :key="index" @judge-select="answerHandel"/>
+			<!-- <center class="no-question-tip" v-if="judgeList <= 0"> ~没有题目~ </center> -->
 		</ul>
-		<ul v-show = "showTab === 'issue'" v-if="coundAnswer">
-			<issue class="question" v-for="(item, index) in issueList" :questionItem="item" :index="index" :key="index" @issue-answer="answerHandel"/>
-			<center class="no-question-tip" v-if="issueList <= 0"> ~没有题目~ </center>
+		<ul  v-if="coundAnswer">
+			<issue class="question"  v-for="(item, index) in issueList" :questionItem="item" :index="index + chooseList.length + padList.length + judgeList.length" :questionNumbers="questionNumbers" :key="index" @issue-answer="answerHandel"/>
+			<!-- <center class="no-question-tip" v-if="issueList <= 0"> ~没有题目~ </center> -->
 		</ul>
 		<!-- <ul v-show = "showTab === 'integrated'" v-if="coundAnswer">
 			<integrated class="question" v-for="(item, index) in integratedList" :questionItem="item" :index="index" :key="index" @integrate-answer="answerHandel"/>
@@ -29,6 +29,7 @@
 			<program class="question" v-for="(item, index) in programList" :questionItem="item" :index="index" :key="index" @program-answer="answerHandel"/>
 			<center class="no-question-tip" v-if="programList <= 0"> ~没有题目~ </center>
 		</ul> -->
+		<div>{{time}}</div>
 		<Button class="submit-bt" type="success" size="large" @click="toSubmitAnswer" :disabled="!coundAnswer">提交</Button>
 	</section>
 </template>
@@ -80,7 +81,11 @@
 					return state.user
 				}
 			}),
+			// time () {
+			// 	let time = new Date()
 
+			// 	return 
+			// }
 			chooseList () {	
 				return this.paper.paperQuestionList.filter(function(question){
 					return question.type === 1
@@ -110,6 +115,9 @@
 				return this.paper.paperQuestionList.filter(function(question){
 					return question.type === 6
 				})
+			},
+			questionNumbers () {
+				return this.paper.paperQuestionList.length
 			}
 
 		},
@@ -258,6 +266,7 @@ ul {
     float: right;
 
     margin: 20px 10px 10px;
+	width: 104px;
 }
 .no-question-tip {
     margin: 10px 0;
