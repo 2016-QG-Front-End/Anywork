@@ -12,10 +12,14 @@ export default namespace('paper', {
         'getPaperAnswerById',
         'getMyTestPaper',
         'getMyPracticePaper',
-        'getFinishedPaperAnswerById'
+        'getFinishedPaperAnswerById',
+        'changePaperShows',
+        'getCollections'
     ],
     mutations: [
         'setInfo',
-        'setInfos'
+        'setInfos',
+        'setPaperList',
+        'showPaper'
     ]
 })

@@ -4,6 +4,7 @@
 			<h2>{{title}}</h2>
 		</div> 
 		<ul key="organization" class="organ-container">
+			<Icon type="ios-close" class="icon-ora" color="#548cfe" v-on:click="disap"/>
 			<li class="organ-item" v-for="organ in organizations"  :key="organ.organizationId">
 				<organitem 
 					:organizationId = "organ.organizationId" 
@@ -33,6 +34,11 @@
 		components: {
 			organitem
 		},
+		methods: {
+			disap () {
+				this.$emit('disappear')
+			}
+		}
 	}
 </script>
 
@@ -44,6 +50,12 @@
     border-bottom: 1px solid #b4b4b4;
     padding: 10px 20px 5px;
 }
+.icon-ora {
+    font-size: 2em;
+    position: absolute;
+    right: 10px;
+	cursor:pointer;
+}
 .organ-container {
     display: flex;
 
@@ -51,6 +63,7 @@
 
     flex-wrap: wrap;
     justify-content: flex-start;
+	position: relative;
 }
 .organ-item {
     /* display: inline-block; */

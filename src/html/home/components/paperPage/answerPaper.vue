@@ -181,13 +181,28 @@
 				paperAnswer.push(data)
 				this.paperAnswer = paperAnswer
 			},
-			submitAnswer () {
-				var data = {
+			submitAnswer (data) {
+				let time = new Date()
+				let timeStr = ''
+				timeStr += time.getFullYear()
+				timeStr += '-'
+				timeStr += (time.getMonth() + 1) < 10 ? ('0' + ((time.getMonth() + 1))) : ((time.getMonth() + 1))
+				timeStr += '-'
+				timeStr += ((time.getDate()) < 10) ? ('0' + time.getDate()) : time.getDate()
+				timeStr += ' '
+				timeStr += ((time.getHours()) < 10) ? ('0' + time.getHours()) : time.getHours()
+				timeStr += ':'
+				timeStr += ((time.getMinutes()) < 10) ? ('0' + time.getMinutes()) : time.getMinutes()
+				timeStr += ':'
+				timeStr += ((time.getSeconds()) < 10) ? ('0' + time.getSeconds()) : time.getSeconds()
+				var datas = {
 					studentId: this.user.userId,
 					testpaperId: this.paper.testpaperId,
-					studentAnswer: this.paperAnswer
+					studentAnswer: this.paperAnswer,
+					temporarySave: data,
+					endTime: timeStr
 				}
-				this.submitPaper(data).then((data) => {
+				this.submitPaper(datas).then((data) => {
 					if(data.state){
 						this.$Message.success(data.info)
 						this.$router.push({
@@ -205,15 +220,15 @@
 				})
 			},
 			toSubmitAnswer() {
-				if(this.paper.testpaperType === 1){
+				if(this.paper.hasDown === 1){
 					var r=confirm("提交试卷后将不能再提交，是否继续？");
 					if (r==true){
-					  	this.submitAnswer()
+					  	this.submitAnswer(0)
 					}else {
 					  	// alert("You pressed Cancel!");
 					}
 				}else {
-					this.submitAnswer()
+					this.submitAnswer(0)
 				}
 			}
 		},
@@ -225,6 +240,7 @@
 				if(this.paper.hasDown == 1){
 					this.$router.push({
 						name: 'lookAnswer',
+						params: { testPaperType: this.$route.params.testPaperType }
 					})
 					// 已经提交答案，请求该试卷答案信息，并跳转
 				}else{

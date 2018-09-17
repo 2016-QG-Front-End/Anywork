@@ -87,6 +87,10 @@ const actions = {
                     context.commit(types.mutations.setInfo,{
                         allPracticePaperList: res.data.data,
                     })
+                    context.commit(types.mutations.setPaperList,{
+                        allPracticePaperList: res.data.data,
+                        data: data
+                    })
                     resolve({
                         state: true,
                         info: res.data.stateInfo}
@@ -111,6 +115,10 @@ const actions = {
                 data: data
             }).then(function(res){
                 if(res.data.state.toString()==="1"){
+                    for (let i = 0; i < res.data.data.length; i++) {
+                        res.data.data[i].paperList = []
+                        res.data.data[i].isShow = false
+                    }
                     context.commit(types.mutations.setInfo,{
                         testChapterList: res.data.data,
                     })
@@ -129,7 +137,11 @@ const actions = {
             })
         })
     },
-
+    [types.actions.changePaperShows]: (context, data) => {
+        context.commit(types.mutations.showPaper,{
+            index: data,
+        })
+    },
     [types.actions.getPaperInfo]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
@@ -272,7 +284,58 @@ const actions = {
             })
         })
     },
-
+    [types.actions.getCollections]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/quest/collect/list',
+                // data: data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    // context.commit(types.mutations.setInfo,{
+                    //     myTestList: res.data.data,
+                    // })
+                    resolve({
+                        state: true,
+                        data: res.data.data}
+                    )
+                }else{
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo}
+                    )
+                }
+            }).catch(function(err){
+                reject(err)
+            })
+        })
+    },
+    [types.actions.detailCollection]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/test/detail',
+                data: data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    // context.commit(types.mutations.setInfo,{
+                    //     myTestList: res.data.data,
+                    // })
+                    resolve({
+                        state: true,
+                        data: res.data.data}
+                    )
+                }else{
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo}
+                    )
+                }
+            }).catch(function(err){
+                reject(err)
+            })
+        })
+    },
     [types.actions.getMyPracticePaper]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
@@ -306,7 +369,7 @@ const mutations = {
         // console.log(datas)
         Object.assign(state,datas)
         if (datas.questionAnswerInfo) {
-            this.state.paperQuestionList = datas.questionAnswerInfo
+            state.paperQuestionList = datas.questionAnswerInfo
         }
 
     },
@@ -316,7 +379,24 @@ const mutations = {
             state.paperQuestionList = datas.questionAnswerInfo
         }
 
-	}
+    },
+    [types.mutations.setPaperList]: (state, datas) => {
+        // console.log(datas)
+        
+        for (let i = 0; i < state.testChapterList.length; i++) {
+            if (state.testChapterList[i].chapterId == datas.data.chapter) {
+                state.testChapterList[i].paperList = datas.allPracticePaperList
+            }
+        }
+        
+        
+
+    },
+    [types.mutations.showPaper]: (state, datas) => {
+        // console.log(datas)
+        console.log (state.testChapterList[datas.index].paperList)
+        state.testChapterList[datas.index].isShow = !state.testChapterList[datas.index].isShow
+    },
 }
 
 export default {

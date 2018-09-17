@@ -1,22 +1,25 @@
 <template>
 	<div :key="questionItem.question.questionId" >
-		<center class="num">
-			题号 : {{this.index + 1}}
-			<span class="socre">{{questionItem.question.socre}}分</span>
-		</center> 
+		<div class="num">
+			{{this.index + 1}}&nbsp;/&nbsp;{{this.answerlength}}&nbsp;&nbsp;（简答题）
+			<!-- <span class="socre">{{questionItem.question.socre}}分</span> -->
+		</div> 
 		<section>
 			<div class="content" >{{questionItem.question.content}}</div> 
-			<dir class="answer-wrap">
+			<!-- <dir class="answer-wrap">
 				<div class="issue-answer" @input="selectAnswer"></div>
-			</dir>
+			</dir> -->
 		</section>
 		<div class="true-answer">
 			正确答案: 
-			<p>{{this.questionItem.question.key}}</p>
+			{{this.questionItem.question.key}}
 		</div>
 		<div class="your-answer">你的答案:</span>
-			<p>{{this.questionItem.studentAnswer}}</p> 
+			{{this.questionItem.studentAnswer}}
 		</div>
+		<p class="true-analysis">
+				{{this.questionItem.analysis ? this.questionItem.analysis : '此答案暂时没有解析'}}
+		</p>
 	</div>
 </template>
 
@@ -27,7 +30,7 @@
 				questionAnswer: ''
 			}
 		},
-		props: ['questionItem', 'index'],
+		props: ['questionItem', 'index', 'answerlength'],
 		methods : {
 			selectAnswer (e) {
 				this.questionAnswer = e.target.innerText
@@ -42,29 +45,38 @@
 
 <style scoped>
 	section {
-	    border: 1px solid #dedede;
+	    /* border: 1px solid #dedede; */
 	    padding: 0.1px;
 	}
 	.num {
 		position: relative;
-		background-color: rgb(0, 188, 155);
-		color: white;
+		/* background-color: #548CFE; */
+		color: #548CFE;
+		font-size: 1.6em;
+		padding: 10px 10px 0;
 	}
 	.num span {
 		position: absolute;
 		right: 0;
 		padding: 0 10px;
-		background-color: rgb(0, 149, 124);
+		background-color: #548CFE;
 	}
 	.content {
         width: 100%;
 	    padding: 10px 10px 0;
-	    border: 0 rgba(255, 255, 255, 0);
-	    border-bottom: 1px solid #dedede;
-	    font-size: 22px;
-       	white-space: pre-wrap;
+	    margin-bottom: 10px;
+	    /* border: 0 rgba(255, 255, 255, 0); */
+	    /* border-bottom: 1px solid #dedede; */
+	    font-size: 20px;
+       	white-space: pre-line;
 	    word-wrap: break-word;
 	    word-break: break-all;
+	}
+	.true-analysis {
+		padding: 10px 10px 51px 10px;
+		font-size: 16px;
+		margin: 0 0 16px 0;
+		border-bottom: 1px solid #e4dddd;
 	}
 	.answer-wrap {
 		padding: 0 8px;
@@ -82,10 +94,12 @@
 	}
 	.true-answer {
 		margin-top: 20px;
+		color:#FF431E;
 	}
 	.true-answer, .your-answer {
 		font-size: 16px;
 		margin-bottom: 10px;
+		padding: 10px 10px 0 10px;
 	}
 	.your-answer {
 		margin-bottom: 10px;

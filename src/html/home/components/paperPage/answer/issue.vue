@@ -34,8 +34,8 @@
 		mounted () {
 			// this.paperQuestionListL = this.paper.paperQuestionList.length
 			// console.log(this.questionNumbers)
-			if (questionItem.key) {
-				this.questionAnswer = questionItem.key
+			if (this.questionItem.key) {
+				this.questionAnswer = this.questionItem.key
 				this.$emit('choose-select', {
 					questionId: this.questionItem.questionId.toString(),
 					studentAnswer: this.questionAnswer

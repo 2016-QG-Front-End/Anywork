@@ -1,7 +1,8 @@
 <template>
 	<li :key="questionItem.questionId" >
 		<center class="num">
-			题号 : {{this.index + 1}}
+			<!-- 题号 : {{this.index + 1}} -->
+			<!-- {{this.index + 1}}&nbsp;/&nbsp;{{this.questionNumbers}}&nbsp;&nbsp;（判断题） -->
 			<span class="socre">{{questionItem.socre}}分</span>
 		</center> 
 		<section>

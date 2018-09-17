@@ -9,7 +9,9 @@ export default namespace('user', {
         'refresh',
         'setPhoto',
         'exit',
-        'getRank'
+        'getRank',
+        'getNews',
+        'detailCollection'
     ],
     mutations: [
         'setInfo',

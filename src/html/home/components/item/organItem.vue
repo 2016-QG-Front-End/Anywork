@@ -1,6 +1,6 @@
 <template>
 	<center class="organ-item" @click="handel" v-if="!hasExit">
-		<img class="organ-img" :src="organImg">
+		<!-- <img class="organ-img" :src="organImg"> -->
 		<span class="exit-organ" v-if="canExit" @click.stop.prevent="toExitOrganization"><Icon type="close-round" ></Icon></span>
 		<h2>{{organizationName}}</h2>
 		<!-- <p class="title" :class="[!showJoin ? 'dim' : '']">{{title}}</p> -->
@@ -141,30 +141,32 @@
 <style scoped>
 .organ-item {
     position: relative;
-
-    padding: 0 0 25px;
+	border-radius: 4em;
+    padding: 0 0 0;
     width: 242px;
-    height: 72px;
+    height: 39px;
     max-height: 190px;
 
-    box-shadow: 0 0 1px .2px #a09e9e;
+    box-shadow: 0 0 1px .2px #548cfe;
 
     cursor: pointer;
+
+	color:#548cfe;
 }
 .organ-item:hover {
-    box-shadow: 0 0 1px .7px #60c793;
+    box-shadow: 0 0 4px 3.2px #548cfe;
 }
 h2 {
-    padding-left: 70px;
+    /* padding-left: 70px; */
 
-    line-height: 70px;
-    ;
+    line-height: 39px;
+    
 }
 .title {
     padding: 5px 0;
 
     color: white;
-    background-color: rgb(0, 188, 155);
+    background-color: #548cfe;
 }
 .dim {
     background-color: #9b9b9b;

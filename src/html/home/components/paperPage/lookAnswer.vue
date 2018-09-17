@@ -1,15 +1,23 @@
 <template>
 	<section>
-		<typetab 
+		<!-- <typetab 
 			:tabs="tabs" 
 			@tab-select="tabSelect"
-		/>
+		/> -->
 		<span class="socre">
 			客观题得分：<span>{{this.questionAnswerInfo.socre}}</span>
 		</span>
-		<Button class="do-again" type="success" v-if="this.paper.testpaperType===0" @click="doAgain">再做一次</Button>
-		<question-nav :questionList="questionList" @current-question="showCurrentQuestion"/>
-		<component v-show="hasQuestion" class="question-wrap" :is="questionType" :questionItem="currentQuestion" :index="currentQuestionIndex" :key="currentQuestionIndex"/>
+		<!-- <Button class="do-again" type="success" v-if="this.paper.hasDown===1" @click="doAgain">再做一次</Button> -->
+		<!-- <question-nav :questionList="questionList" @current-question="showCurrentQuestion"/> -->
+
+		<!-- <component    class="question-wrap" :is="questionType" :questionItem="currentQuestion" :index="currentQuestionIndex" :key="currentQuestionIndex"/> -->
+
+		<div v-for="(item, index) in answerAnalysisList" v-bind:key="item.question.questionId">
+			<choose v-if="item.question.type == 1" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></choose>
+			<judge v-if="item.question.type == 2" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></judge>
+			<pad v-if="item.question.type == 3" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></pad>
+			<issue v-if="item.question.type == 4" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></issue>
+		</div>
 	</section>
 </template>
 
@@ -42,7 +50,11 @@
 				questionType: 'choose',
 				currentQuestion: undefined,
 				currentQuestionIndex: 0,
-				hasQuestion: true
+				hasQuestion: true,
+				isCollect: false,
+				allCollections: null,
+				detailCs: [],
+				questions: []
 			}
 		},
 		components: {
@@ -143,8 +155,43 @@
 						doAgain: true,
 					}
 				})
+			},
+			getQueryStringArgs(url){
+				url = url == null ? window.location.href : url;
+				var qs = url.substring(url.lastIndexOf("?") + 1);
+				var args = {};
+				var items = qs.length > 0 ? qs.split('&') : [];
+				var item = null;
+				var name = null;
+				var value = null;
+				for(var i=0; i<items.length; i++){
+					item = items[i].split("=");
+					//用decodeURIComponent()分别解码name 和value（因为查询字符串应该是被编码过的）。
+					name = decodeURIComponent(item[0]);
+					value = decodeURIComponent(item[1]);
+		
+					if(name.length){
+						args[name] = value;
+					}
+				}
+				if (args.isCollect) {
+					this.isCollect =  args.isCollect;
+				}
+				
+			},
+			getAllCollections () {
+				let len = this.allCollections.length
+				let cData = this.allCollections
+				for (let i = 0; i < len; i++) {
+					this.detailCollection({
+						questionId: cData[i].questionId
+					}).then(data => {
+						detailCs.push(data.data)
+					}).catch(err => {
+						this.$Message.error(err)
+					})
+				}
 			}
-
 		},
 		created () {
 			if(this.paper.hasDown && (this.$route.params.handel === undefined || this.$route.params.handel !== 'submit')){
@@ -153,6 +200,7 @@
 				}).then((data) => {
 					if(data.state){
 						this.questionList = this.chooseList
+						this.questions = data.data.studentAnswerAnalysis
 						this.showCurrentQuestion({
 							index: 0,
 							questionId: this.questionList[0].question.questionId,
@@ -163,7 +211,14 @@
 				}).catch((err) => {
 					this.$Message.error(err)
 				})
-			}else{
+			} else if (this.isCollect) {
+				let that = this
+				this.getCollections().then(data => {
+					that.allCollections = data.data
+				}).catch(err => {
+					this.$Message.error(err)
+				})
+			} else {
 				this.questionList = this.chooseList
 				this.showCurrentQuestion({
 					index: 0,
@@ -189,7 +244,7 @@
 		float: right;
 		margin: 0 10px;
 		font-size: 20px;
-		color: #19be6b;
+		color: #548CFE;
 		border-bottom: 1px solid
 	}
 	.socre span {

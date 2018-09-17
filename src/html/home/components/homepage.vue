@@ -7,13 +7,15 @@
            	 	<Menu-item name="noJoinOrganization" >未加入组织</Menu-item>
             </div>
         </Menu> -->
+		<mynav/> 
 		<img  class="background" src="../../../assets/images/draw@2x.png">
-		<div class="login-title">Welcome To Anywork   	&nbsp;: )</div>
+		<div class="login-title margin-top">Welcome To Anywork   	&nbsp;: )</div>
 		<div class="login-title margin-chinese">日拱一猝无有尽</div>
-		<Button disabled="isAble" v-on:click="chooseOrgination" class="choose-orgination" :style=buttonStyle >{{this.orginationName ? this.orginationName : '选择你的组织'}} > </Button>
+		<Button  v-on:click="chooseOrgination" v-if="!this.orginationName" class="choose-orgination" :style=buttonStyle >{{this.orginationName ? this.orginationName : '选择你的组织'}} > </Button>
+		<Button disabled="false" v-on:click="chooseOrgination" v-if="this.orginationName" class="choose-orgination" :style=buttonStyle >{{this.orginationName ? this.orginationName : '选择你的组织'}} > </Button>
 		<div class="main" :style=origanitionStyle>
         	<loading :spinShow="spinShow" />
-			<organizations v-show="!spinShow" :organizations="organizationList" :title="title" />
+			<organizations v-show="!spinShow" :organizations="organizationList" :title="title" v-on:disappear="noShow" />
         </div>
 		<div class="choose-container">
 			<div v-on:click="toPath(1)">
@@ -34,46 +36,46 @@
 			</div>
 
 		</div>
-		<div class="news-container">
+		<div class="news-container" v-if="allnews.length > 0">
 			<h2>公告</h2>
 			<section class="news-all-container"  v-if="!showAll">
-				<div class="news-item-container"  v-for="item in news" v-bind:key="item.time">
+				<div class="news-item-container"  v-for="item in news" v-bind:key="item.messageId">
 					<div  class="news-img">
 						<img src="../../../assets/images/read@1x.png" />
 					</div>
 
-					<div class="news-title">{{item.title}}</div>
+					<div class="news-title">{{item.content}}</div>
 					<div class="news-context">
 						<div>
 							<Icon type="ios-person-outline" />&nbsp;
-							{{item.name}}
+							{{item.publisher}}
 						</div>
 						<div class="news-time">
 							<Icon type="ios-clock-outline" />&nbsp;
-							{{item.time}}
+							{{item.createTime}}
 						</div>
 					</div>
 				</div>
 			</section>
-			<section class="news-all-container"  v-if="showAll">
-				<div class="news-item-container"  v-for="item in news" v-bind:key="item.time">
+			<section class="news-all-container"  v-if="showAll || news.length <= 0">
+				<div class="news-item-container"  v-for="item in pagenews[pageNum - 1]" v-bind:key="item.messageId">
 					<div  class="news-img">
 						<img src="../../../assets/images/read@1x.png" />
 					</div>
 
-					<div class="news-title">{{item.title}}</div>
+					<div class="news-title">{{item.content}}</div>
 					<div class="news-context">
 						<div>
 							<Icon type="ios-person-outline" />&nbsp;
-							{{item.name}}
+							{{item.publisher}}
 						</div>
 						<div class="news-time">
 							<Icon type="ios-clock-outline" />&nbsp;
-							{{item.time}}
+							{{item.createTime}}
 						</div>
 					</div>
 				</div>
-				<Page :total="100" class="page-news"/>
+				<Page :total="allnews.length" :current="pageNum" page-size="10" @on-change="handlePage" class="page-news"/>
 			</section>
 			<section class="show-all">
 				<div v-if="!showAll" v-on:click="changeNews">展开<Icon type="ios-arrow-down" /></div>
@@ -83,20 +85,23 @@
 		<div class="news-container">
 			<h2>排行榜</h2>
 			<section class="rank-container">
-				<section class="rank-left">
+				<!-- <section class="rank-left">
 					<img src="../../../assets/images/first@1x.png"/>
 					<img src="../../../assets/images/second@1x.png"/>
 					<img src="../../../assets/images/third@1x.png"/>
 					<img src="../../../assets/images/first@1x.png"/>
 					<img src="../../../assets/images/first@1x.png"/>
 					<img src="../../../assets/images/first@1x.png"/>
-				</section>
+				</section> -->
 				<section class="rank-right">
-					<div class="rank-item"   v-for="item in rank" v-bind:key="item.number">
+					<div class="rank-item"   v-for="(item, index) in rank" v-bind:key="item.number">
+						<i>
+							NO.{{index + 1}}
+						</i>
 						<img :src=item.imagePath />
-						<div>{{ item.username }}</div>
-						<div >{{ item.score }}</div>
-						<div >{{ item.studentId }}</div>
+						<div class="number-name">{{ item.username }}</div>
+						<div class="number-score">{{ item.score }}</div>
+						<!-- <div >{{ item.studentId }}</div> -->
 						<div class="number-students">{{ item.studentId }}</div>
 					</div>
 				</section>
@@ -111,7 +116,7 @@
 	import user from  '../store/types/user'
 	import organizations from './homePage/organizations'
 	import loading from './item/loading'
-
+	import mynav from './myNav'
 	export default {
 		data () {
 			return {
@@ -119,22 +124,28 @@
 				origanitionStyle: '',
 				organizationList: [],
 				title: '',
-				isAble: true,
+				isAble: false,
 				activeName: 'allOrganization',
 				spinShow: false,
 				showAll: false,
 				orginationName: '',
+				websock: null,
+				pageNum: 1,
+				pagenews: [],
 				news:[
-					{
-						title: '第一张练习已经发布',
-						time: '',
-						name: '古天乐'
-					},
-					{
-						title: '第一张练习已经发布',
-						time: '',
-						name: '古天乐'
-					}
+					// {
+					// 	title: '第一张练习已经发布',
+					// 	time: '',
+					// 	name: '古天乐'
+					// },
+					// {
+					// 	title: '第一张练习已经发布',
+					// 	time: '',
+					// 	name: '古天乐'
+					// }
+				],
+				allnews: [
+
 				],
 				rank: [{
 					imagePath: '../../../assets/images/first@1x.png',
@@ -165,7 +176,8 @@
 		},
 		components: {
 			organizations,
-			loading
+			loading,
+			mynav
 		},
 		computed: {
 			...mapState({
@@ -189,6 +201,60 @@
 			changeNews () {
 				this.showAll = !this.showAll
 			},
+			initWebSocket: function () {
+				const wsuri = 'ws://10.21.56.107:8080' + "/websocket/" + this.user.userId;//ws地址
+				// console.log(this.user)
+				// console.log(this.userId)
+	　　		this.websock = new WebSocket(wsuri); 
+				this.websock.onopen = this.websocketonopen;
+				this.websock.onerror = this.websocketonerror;
+				this.websock.onmessage = this.websocketonmessage;
+				this.websock.onclose = this.websocketclose;
+			},
+			websocketonopen: function () {
+　　　　　　　　console.log("WebSocket连接成功");
+　　　　　　 },
+　　　　　　 websocketonerror: function (e) { //错误
+ 　　　　　　 console.log("WebSocket连接发生错误");
+　　　　　　 },
+	　　　　websocketonmessage: function (e){ //数据接收 
+	　　　　　　const redata = JSON.parse(e.data);
+	　　　　　　console.log(redata);
+				let that = this
+				if (redata.type == 1) {
+					this.poepleNumber = redata.onlineCount
+				} else {
+					// this.$Modal.confirm({
+					// 	title: redata.title,
+					// 	content: '<p>' + redata.content + '</p><p>发布人：' + redata.publisher + '</p>',
+					// onOk: () => {
+					// 			that.sendNoticed(redata.messageId)
+					// 		},
+					// 		onCancel: () => {
+					// 			that.$Message.info('点击了取消');
+					// 		}
+					// 	});
+					let obj = {
+						content: redata.content,
+						title: redata.title,
+						publisher: redata.publisher,
+						messageId: redata.messageId,
+						createTime: redata.createTime
+					}
+					that.news.splice(0, 0,obj)
+				}
+	　　　　}, 
+			websocketclose () {
+				console.log("WebSocket连接关闭");
+			},
+	　　　　 websocketcloses () {
+				// this.websock.close()
+			},
+			noShow () {
+				
+				this.origanitionStyle = 'animation:endorag 1s both 1 linear'
+				this.buttonStyle = 'animation:start 0.5s both 1 linear'
+			},
 			toPath (indexNumber) {
 				if (indexNumber == 1) {
 					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=2'
@@ -197,7 +263,7 @@
 				} else if (indexNumber == 3) {
 					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=1'
 				} else {
-					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=1'
+					location.href = 'http://localhost:8080/html/home.html#/'
 				}
 			},
 			chooseOrgination () {
@@ -291,6 +357,87 @@
 				}).catch((err) => {
 					this.$Message.error(err)
 				})
+			},
+			getAllNews () {
+				let page = 0
+				// this.getNews({
+				// 	status: 1,
+				// 	pageNum: page,
+				// 	pageSize: 10
+				// }).then(data => {
+				// 	for (let i = 0; i < data.list.length; i++) {
+				// 		this.news.push(data.list)
+				// 	}
+				// 	if (!data.isLastPage) {
+
+				// 	}
+				// 	// this.news = data.list
+				// }).catch(err => {
+				// 	this.$Message.error("请重新刷新！")
+				// })
+				while (true) {
+					if (this.getUnkonwnNews(page++)) {
+						break
+					}
+				}
+				page = 0
+				while (true) {
+					if (this.getkonwnNews(page++)) {
+						break
+					}
+				}
+				// this.getNews({
+				// 	status: 0,
+				// 	pageNum: 0,
+				// 	pageSize: 10
+				// }).then(data => {
+				// 	this.news = data.list
+				// }).catch(err => {
+				// 	this.$Message.error("请重新刷新！")
+				// })
+				// 将所有消息进行分组
+				for (let j = 0; j < this.allnews.length; j += 10) {
+					let arr = []
+					for(let i = j; i < j + 10; i++) {
+						arr.push(this.allnews)
+					}
+					this.pagenews.push(arr)
+				}
+			},
+			getUnkonwnNews (page) {
+				this.getNews({
+					status: 1,
+					pageNum: page,
+					pageSize: 10
+				}).then(data => {
+					for (let i = 0; i < data.list.length; i++) {
+						this.news.push(data.list)
+						this.allnews.push(data.list)
+					}
+					return data.isLastPage
+					// this.news = data.list
+				}).catch(err => {
+					this.$Message.error("请重新刷新！")
+				})
+			},
+			getkonwnNews (page) {
+				this.getNews({
+					status: 0,
+					pageNum: page,
+					pageSize: 10
+				}).then(data => {
+					for (let i = 0; i < data.list.length; i++) {
+						// this.news.push(data.list)
+						this.allnews.push(data.list)
+					}
+					return data.isLastPage
+					// this.news = data.list
+				}).catch(err => {
+					this.$Message.error("请重新刷新！")
+				})
+			},
+			handlePage (value) {
+				this.pageNum = value
 			}
 		},
 		created () {
@@ -309,9 +456,11 @@
 				this.$Message.error("请重新刷新！")
 			})
 			this.$bus.$on('search-organ', this.toGetSearchResultList)
+			this.initWebSocket()
 		},
 		beforeDestroy () {
-		  	this.$bus.$off('search-organ', this.toGetSearchResultList)
+			  this.$bus.$off('search-organ', this.toGetSearchResultList)
+			  this.websocketcloses()
 		},
 	}
 </script>
@@ -320,12 +469,23 @@
 .background {
 	position: absolute;
     /* right: 0px; */
-    top: -340px;
+    top: -114px;
     right: -327px;
     z-index: -1;
     width: 1010px;
     height: 891px;
     pointer-events: none;
+}
+.margin-top {
+	margin-top: 212px;
+}
+.number-score {
+	margin: 0 70px;
+	min-width: 54px;
+    max-width: 54px;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
 }
 .show-all {
     padding: 10px 20px;
@@ -343,7 +503,7 @@
 .home-page {
     position: relative;
 
-    margin: 176px auto 0 auto;
+    margin: 100px auto 0 auto;
     width: 70%;
     min-width: 1000px;
     height: 100%;
@@ -408,17 +568,33 @@
     font-size: 18px;
 
     align-items: center;
+	margin: 10px 0;
+	justify-content: space-between;
+	    border-radius: 4em !important;
+}
+.number-name {
+	max-width:150px;
+	min-width: 150px;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
 }
 .number-students {
     /* position: relative; */
     /* right: 0; */
-    margin: 0 0 0 60%;
+    margin: 0 0 0 545px;
+	overflow: hidden;
+	max-width:150px;
+	min-width: 150px;
+	text-overflow:ellipsis;
+	white-space: nowrap;
 }
 .rank-item img {
-    margin: 0 50px 0 0;
+    /* margin: 0 50px 0 0; */
     border-radius: 4em;
     width: 60px;
     height: 60px;
+	margin: 0 50px 0 88px;
 }
 .rank-left {
     display: flex;
@@ -434,10 +610,11 @@
 .rank-right {
     display: flex;
 
-    padding: 0 88px;
+    padding: 0  88px 0 22px;
 
     flex-direction: column;
-    flex-grow: 1;
+    /* flex-grow: 1; */
+	width: 100%;
     justify-content: space-between;
 }
 .choose-container {
@@ -449,7 +626,7 @@
 
 /* width: 126%; */
 
-    justify-content: center;
+    justify-content: space-between;
 }
 .choose-container img {
     z-index: 8;
@@ -502,7 +679,7 @@
 .main {
     position: relative;
     position: absolute;
-    top: 166px;
+	top: 280px;
     left: -2324px;
 
     margin: 20px 0;
@@ -547,6 +724,17 @@
     }100% {
         left: 2324px;
 
+        opacity: 0;
+    }
+}
+@keyframes endorag {
+    0% {
+        opacity: 1;
+    }
+	70% {
+		opacity: 0.7;
+	}
+	100% {
         opacity: 0;
     }
 }

@@ -1,17 +1,22 @@
 <template>
 	<div :key="questionItem.question.questionId" >
-		<p class="true-answer">正确答案: {{this.trueAnswer}}</p>
-		<p class="your-answer">你的答案: {{this.yourAnswer}} <span :class="[this.questionItem.isTrue?'true':'false']">{{this.questionItem.isTrue ? '(正确)' : '(错误)'}}</span></p>
-		<center class="num">
-			题号 : {{this.index + 1}}
-			<span class="socre">{{questionItem.question.socre}}分</span>
-		</center> 
+		<!-- <p class="true-answer">正确答案: {{this.trueAnswer}}</p> -->
+		<!-- <p class="your-answer">你的答案: {{this.yourAnswer}} <span :class="[this.questionItem.isTrue?'true':'false']">{{this.questionItem.isTrue ? '(正确)' : '(错误)'}}</span></p> -->
+		<div class="num">
+			{{this.index + 1}}&nbsp;/&nbsp;{{this.answerlength}}&nbsp;&nbsp;（填空题）
+			<!-- <span class="socre">{{questionItem.question.socre}}分</span> -->
+		</div> 
 		<section>
 			<pre class="content">{{questionItem.question.content}}</pre>
 			<span class="pad-item" v-for="index in questionItem.question.other" :key="index">
 				<span>{{index}}. </span>
 				<Input class="pad-input" type="text"  disabled/>
 			</span>
+			<p class="true-answer">解析：正确答案为 {{this.questionItem.question.key}}， 你的答案为 {{this.yourAnswe}} <span :class="[this.questionItem.isTrue?'true':'false']">{{this.questionItem.isTrue ? '(正确)' : '(错误)'}}</span></p>
+			<!-- <p class="your-answer">你的答案: {{this.yourAnswe}} <span :class="[this.questionItem.isTrue?'true':'false']">{{this.questionItem.isTrue ? '(正确)' : '(错误)'}}</span></p> -->
+			<p class="true-analysis">
+				{{this.questionItem.analysis ? this.questionItem.analysis : '此答案暂时没有解析'}}
+			</p>
 		</section>
 	</div>
 </template>
@@ -23,7 +28,7 @@
 				questionAnswer: {}
 			}
 		},
-		props: ['questionItem', 'index'],
+		props: ['questionItem', 'index', 'answerlength'],
 		computed: {
 			yourAnswer () {
 				var arr = this.questionItem.studentAnswer.split('∏')
@@ -43,26 +48,32 @@
 <style scoped>
 
 	section {
-	    border: 1px solid #dedede;
+	    /* border: 1px solid #dedede; */
 	    padding: 0.1px;
 	}
 	.num {
 		position: relative;
-		background-color: rgb(0, 188, 155);
-		color: white;
+		/* background-color: #548CFE; */
+		color: #548CFE;
+		font-size: 1.6em;
+		padding: 10px 10px 0;
 	}
 	.num span {
 		position: absolute;
 		right: 0;
 		padding: 0 10px;
-		background-color: rgb(0, 149, 124);
+		background-color: #548CFE;
 	}
 	.content {
-	    font-size: 22px;
-	    margin: 0 5px 10px;
-        padding: 10px 10px 0;
-        border-bottom: 1px solid #dedede;
-        overflow: auto;
+        width: 100%;
+	    padding: 10px 10px 0;
+	    margin-bottom: 10px;
+	    /* border: 0 rgba(255, 255, 255, 0); */
+	    /* border-bottom: 1px solid #dedede; */
+	    font-size: 20px;
+       	white-space: pre-line;
+	    word-wrap: break-word;
+	    word-break: break-all;
 	}
 	.pad-item {
 	    display: inline-block;
@@ -72,11 +83,20 @@
 		width: 200px;
 	}
 	.true-answer {
-		margin-top: 20px;
+		/* margin-top: 20px; */
+		color:#FF431E;
+		padding: 10px 10px 0;
+	}
+	.true-analysis {
+		padding: 10px 10px 51px 10px;
+		font-size: 16px;
+		margin: 0 0 16px 0;
+		border-bottom: 1px solid #e4dddd;
 	}
 	.true-answer, .your-answer {
 		font-size: 16px;
 	}
+	
 	.your-answer span{
 		display: inline-block;
 		margin: 0 0 10px 10px;

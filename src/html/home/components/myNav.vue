@@ -57,6 +57,7 @@
 				websock: null
 			}
 		},
+		props: ['questionNumbers'],
 		computed: {
 			...mapState({
 				'user': state => {
@@ -178,12 +179,10 @@
 		created () {
 			let that = this
 			this.getMyInfo().then((data) => {
-				if(data.state){
+				if(data.state && !that.questionNumbers){
 					this.$router.push('homepage')
 					this.setPhoto()
-					that.initWebSocket()
-				}else{
-					this.$Message.error(data.info + ",请重新登陆！")
+					// that.initWebSocket()
 				}
 			}).catch((err) => {
 				window.location.href = "./login.html"			
@@ -202,6 +201,7 @@
 	.new-img {
 		width: 30px;
 		height: 30px;
+		border-radius: 5em;
 	}
 	.new-container {
 		display: flex;
@@ -218,11 +218,11 @@
 	.nav {
 	    /* position: fixed; */
 	    top: 0;
-	    width: 70%;
+	    width: 100%;
 	    /* background-color: #3d444c; */
 	    /* box-shadow: 0 1px 2px 2px rgba(73, 73, 73, 0.38); */
 	    z-index: 1000;
-		margin: 96px  auto 0  auto;
+		margin: 96px 0 0  0;
 	}
 	.nav-wrap {
 		position: relative;
@@ -261,6 +261,7 @@
 		height: 30px;
 		border-radius: 50%;
 		vertical-align: middle;
+		border-radius: 5em;
 	}
 	.person-info {
 		position: absolute;

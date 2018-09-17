@@ -1,7 +1,7 @@
 <template>
 	<section class="container-b" style="overflow-x: hidden;">
 		
-		<mynav/>
+		<!-- <mynav/> -->
 	  	
 	  	<!-- <Breadcrumb class="bread-crub">
             <Breadcrumb-item v-for="item in breadCrumbList" :href="item.path" :key="item.name">{{item.name}}</Breadcrumb-item>

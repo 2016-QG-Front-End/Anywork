@@ -1,11 +1,11 @@
 <template>
 	<section class="organ-page">
-		<Menu mode="horizontal" active-name="1" @on-select="handelSelect" :active-name="activeName">
+		<!-- <Menu mode="horizontal" active-name="1" @on-select="handelSelect" :active-name="activeName">
             <div class="layout-assistant">
-                <Menu-item name="test" >考试</Menu-item>
+                 <Menu-item name="test" >考试</Menu-item>
                 <Submenu name="practice">
                     <template slot="title">
-                        <!-- <Icon type="ios-person"></Icon> -->
+                        <Icon type="ios-person"></Icon>
                         练习
                     </template>
 					<Menu-item v-for="item in testChapterList" :name="item.chapterId" :key="item.chapterId">
@@ -13,13 +13,58 @@
 					</Menu-item>
                 </Submenu>
             </div>
-        </Menu>
+        </Menu> -->
+		<mynav :questionNumbers="1"/>
+		<div class="paper-nav">
+			<div>
+				<img src="../../../assets/images/preview@1x.png"/>
+				<div>{{testName}}</div>
+			</div>
+			<!-- <img src="../../../assets/images/anywork@2x.png"/> -->
+		</div>
 		<div class="main">
 			<!-- <div class="header">
 				<h2>{{title}}</h2>
 			</div> -->
-			<loading :spinShow="spinShow" />
-			<papers v-show="!spinShow"  :papers="paperList" />
+			<!-- <Menu-item v-for="item in testChapterList" :name="item.chapterId" :key="item.chapterId">
+						{{item.chapterName}}
+			</Menu-item> -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+			<!-- <loading :spinShow="spinShow" /> -->
+			<!-- <papers  :papers="paperList" /> -->
+			<div class="chapter-container" v-for="(item, index) in testChapterList" :key="item.chapterId">
+				<div  class="chapter-Item" v-on:click="showPaper(index)">
+					<div>
+						<img src="../../../assets/images/phone@2x.png"/>
+						<div>{{ item.chapterName }}</div>
+					</div>
+					<Icon :type="iconType" class="icon-chapter"/>
+					<!-- <Icon type="ios-arrow-up" /> -->
+					<!-- <div class="subject-container"> -->
+				</div>
+				<div class="subject-container" v-if="item.isShow">
+					<div class="subject-item" v-for="papers in item.paperList" :key="papers.testpaperId" v-on:click="handleDetailPaper(papers)"> 
+						<div class="subject-item-left">
+							<div class="subject-item-state unfinish" v-if="papers.status == 3">
+								未完成
+							</div>
+							<div class="subject-item-state uncommit" v-else-if="papers.status == 2">
+								未提交
+							</div>
+							<div class="subject-item-state finish" v-else-if="papers.status == 1">
+								已完成
+							</div>
+							<div class="subject-item-commom subject-item-tt">{{papers.testpaperTitle}}</div>
+						</div>
+						<div class="subject-item-right">
+							<div  class="subject-item-commom subject-item-right-c">
+								<Icon type="ios-alarm-outline"  class="subject-item-commom subject-icon"/>
+								{{papers.createTime}} —— {{papers.endingTime}} 
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
         </div>
 	</section>
 </template>
@@ -30,7 +75,7 @@
 
 	import papers from './organPage/papers'
 	import loading from './item/loading'
-
+	import mynav from './myNav'
 	export default {
 		data: function(){
 			return {
@@ -39,11 +84,14 @@
 				title: '',
 				spinShow: true,
 				testPaperType: null,
+				iconType: 'ios-arrow-down',
+				testName: null,
 			}
 		},
 		components: {
 			papers,
-			loading
+			loading,
+			mynav
 		},
 		computed: {
 			...mapState({
@@ -72,7 +120,53 @@
 				}
 
 			},
+			handleDetailPaper (data) {
+				this.setPaperInfo({
+					createTime: data.createTime,
+					endingTime: data.endingTime,
+					testpaperId: data.testpaperId,
+					testpaperTitle: data.testpaperTitle,
+					testpaperScore: data.testpaperScore,
+					testpaperType: this.testpaperType,
+					hasDown: data.status,
+					paperStatus: data.status,
+					testpaperAllScore: data.testpaperScore,
+					doneQuestions: data.doneQuestions,
+					totalQuestions: data.totalQuestions
 
+				})
+				this.$router.push({
+					name: 'answerPaper',
+					//  path: 'Homepage'
+					params: { testPaperType: this.testPaperType }
+				})
+			},
+			showPaper (index) {
+				if (!this.testChapterList[index].paperList.length) {
+					this.$Notice.warning({
+						title: '这一章节没有题目',
+						// desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
+					});
+				}
+				this.changePaperShows(index)
+			},
+			selectChapter (chapterId) {
+				this.getPracticeListByChapter({
+					organizationId: this.organizationId,
+					chapter: chapterId,
+					testPaperType: parseInt(this.testPaperType)
+				}).then((data) => {
+					if(data.state){
+						this.spinShow = false
+						this.paperList = this.allPracticePaperList
+						this.title = "练习"
+					}else{
+						this.$Message.error(data.info)
+					}
+				}).catch((err) => {
+					this.$Message.error(err)
+				})
+			},
 			toGetAllTestPapers () {
 				this.spinShow = true
 				this.getAllTestPapers({
@@ -93,11 +187,14 @@
 			},
 
 			toGetChapterList () {
+				let that = this
 				this.getChapterList({
 					organizationId: this.organizationId
 				}).then((data) => {
 					if(data.state){
-						
+						for (let i = 0; i < that.testChapterList.length; i++) {
+							that.selectChapter(that.testChapterList[i].chapterId)
+						}
 					}else{
 						this.$Message.error(data.info)
 					}
@@ -142,7 +239,13 @@
 						args[name] = value;
 					}
 				}
-		
+				if (args.test == 1) {
+					this.testName = '课程考试'
+				} else if (args.test == 2) {
+					this.testName = '课前预习'
+				} else {
+					this.testName = '课后练习'
+				}
 				this.testPaperType =  args.test;
 			}
 		},
@@ -153,15 +256,102 @@
 				})
 			}else{
 				this.getQueryStringArgs(location.href)
-				this.toGetAllTestPapers()
+				// this.toGetAllTestPapers()
 				this.toGetChapterList()
-				
+
 			}
 		},
 	}
 </script>
 
 <style scoped>
+.subject-container {
+	/* border-top: 1px solid #eae8e8; */
+}
+.subject-item-tt {
+	min-width: 300px;
+	margin:  0 0 0 18px;
+}
+.subject-icon {
+	margin: 0 10px 0 0;
+}
+.subject-item,
+.subject-item-left,
+.subject-item-right {
+	display: flex;
+	justify-content: space-between;
+}
+.unfinish {
+	background-color: #ee5353;
+}
+.uncommit {
+	background-color: #3bb255;
+}
+.finish{
+	background-color: #499ad3;
+}
+.subject-item-right-c {
+	display: flex;
+	align-items: center;
+}
+.subject-item-state {
+	padding: 4px 6px;
+	color: #fff;
+}
+.subject-item-commom {
+	font-size: 1.5em;
+}
+.subject-item {
+	height: 68px;
+	align-items: center;
+	border-top: 2px solid #eae8e8;
+	    height: 68px;
+}
+.subject-item-left {
+	/* width: 200px; */
+}
+.subject-item-right {
+	flex-grow: 1;
+	justify-content: flex-end;
+}
+.chapter-container  {
+
+    /* display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between; */
+
+    margin: 40px 0;
+    -webkit-box-shadow: 0 0 36px 2px #b4b4b4;
+    box-shadow: 0 0 36px 2px #b4b4b4;
+    /* -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; */
+    
+    padding: 0 20px;
+    border-radius: 1em;
+	cursor: pointer;
+}
+.chapter-Item {
+	display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+	align-items: center;
+	height: 64px;
+	    font-size: 1.5em;
+    font-weight: 600;
+}
+.icon-chapter {
+	font-size: 30px;
+}
+.chapter-Item div {
+	display: flex;
+	align-items: center;
+}
+.chapter-Item div div {
+	margin: 0 20px;
+}
 .organ-page {
     margin: auto;
     padding: 0 10px;
@@ -171,6 +361,24 @@
 
     background-color: white;
 }
+	.paper-nav {
+		display: flex;
+		/* padding: 10px 32px; */
+		align-items: center;
+		justify-content: space-between;
+		margin: 42px 0 0 0;
+	}
+	.paper-nav div {
+		display: flex;
+		/* padding: 10px 32px; */
+		align-items: center;
+		font-size: 1.4em;
+    	font-weight: 600;
+		color:#548CFE;
+	}
+	.paper-nav div  div {
+		margin: 0 0 0 20px;
+	}
 .header {
     position: relative;
 
@@ -181,7 +389,7 @@
 .main {
     position: relative;
 
-    padding: 10px 20px;
+    /* padding: 10px 20px; */
     min-height: 130px;
 }
 

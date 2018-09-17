@@ -35,22 +35,7 @@
 			...mapActions(paper.actions),
 			
 			handel() {
-				this.setPaperInfo({
-					createTime: this.createTime,
-					endingTime: this.endingTime,
-					testpaperId: this.testpaperId,
-					testpaperTitle: this.testpaperTitle,
-					testpaperScore: this.testpaperScore,
-					testpaperType: this.testpaperType,
-					hasDown: this.hasDown,
-					paperStatus: this.paperStatus,
-					testpaperAllScore: this.testpaperAllScore,
-					doneQuestions: this.doneQuestions
 
-				})
-				this.$router.push({
-					name: 'answerPaper',
-				})
 			}
 		},
 		created () {
