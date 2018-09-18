@@ -18,7 +18,8 @@ const state = {
     questionAnswerInfo: {},
     testChapterList: [],
     myPracticeList: [],
-    myTestList: []
+    myTestList: [],
+    isToCollections: false
 }
 
 const actions = {
@@ -258,6 +259,64 @@ const actions = {
             })
         })
     },
+    [types.actions.upLoadCollection]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/quest/collect',
+                data: data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    // context.commit(types.mutations.setInfo,{
+                    //     questionAnswerInfo: res.data.data,
+                    // })
+                    resolve({
+                        state: true,
+                        info: res.data.stateInfo,
+                        data: res.data.data}
+                    )
+                }else{
+                    reject({
+                        state: false,
+                        info: res.data.stateInfo}
+                    )
+                }
+            }).catch(function(err){
+                reject({
+                    info: err
+                })
+            })
+        })
+    },
+    [types.actions.deleteCollection]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/quest/collect/delete',
+                data: data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    // context.commit(types.mutations.setInfo,{
+                    //     questionAnswerInfo: res.data.data,
+                    // })
+                    resolve({
+                        state: true,
+                        info: res.data.stateInfo,
+                        data: res.data.data}
+                    )
+                }else{
+                    reject({
+                        state: false,
+                        info: res.data.stateInfo}
+                    )
+                }
+            }).catch(function(err){
+                reject({
+                    info: err
+                })
+            })
+        })
+    },
     [types.actions.getMyTestPaper]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
@@ -292,9 +351,9 @@ const actions = {
                 // data: data
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
-                    // context.commit(types.mutations.setInfo,{
-                    //     myTestList: res.data.data,
-                    // })
+                    context.commit(types.mutations.setToCollection,{
+                        myTestList: true,
+                    })
                     resolve({
                         state: true,
                         data: res.data.data}
@@ -309,6 +368,11 @@ const actions = {
                 reject(err)
             })
         })
+    },
+    [types.actions.setCFalse]: (context, data) => {
+            context.commit(types.mutations.setToCollection,{
+                myTestList: false,
+            })
     },
     [types.actions.detailCollection]: (context, data) => {
         return new Promise((resolve, reject) => {
@@ -396,6 +460,10 @@ const mutations = {
         // console.log(datas)
         console.log (state.testChapterList[datas.index].paperList)
         state.testChapterList[datas.index].isShow = !state.testChapterList[datas.index].isShow
+    },
+    [types.mutations.setToCollection]: (state, datas) => {
+        // console.log(datas)
+        state.isToCollections = datas.myTestList
     },
 }
 

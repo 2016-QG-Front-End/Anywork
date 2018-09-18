@@ -3,8 +3,10 @@
 		
 		<div class="num">
 			{{this.index + 1}}&nbsp;/&nbsp;{{this.answerlength}}&nbsp;&nbsp;（单选题）
+			<Icon :type="showCollection" class="star" @click="upDataCollection"/>
+			<!-- <Icon type="ios-star" /> -->
 			<!-- <span class="socre">{{questionItem.question.socre}}分</span> -->
-		</div> 
+		</div>
 		<section>
 			<div class="content">{{questionItem.question.content}}</div>
 			<!-- <p class="answer"> A : {{questionItem.question.a}} </p>
@@ -35,11 +37,15 @@
 </template>
 
 <script>
+	import { mapState, mapActions} from 'vuex';
+	import paper from  '../../../store/types/paper'
 	export default {
 		data () {
 			return {
 				key : '',
-				studentAnswer: ''
+				studentAnswer: '',
+				clickCollection: false,
+				showCollection: 'ios-star-outline'
 			}
 		},
 		props: {
@@ -58,6 +64,9 @@
 			},
 			answerlength: {
 				required: true
+			},
+			isCollect: {
+				required: true
 			}
 		},
 		computed: {
@@ -70,6 +79,7 @@
 			}
 		},
 		methods: {
+			...mapActions(paper.actions),
 			init() {
 				if(this.questionItem.isTrue){
 					this.key = this.questionItem.question.key
@@ -77,15 +87,54 @@
 					this.key = this.questionItem.question.key
 					this.studentAnswer = this.questionItem.studentAnswer
 				}
+			},
+			upDataCollection () {
+				this.clickCollection = !this.clickCollection
+				if (this.clickCollection) {
+				//需要对题目进行收藏
+					this.upLoadCollection({
+						questionId: this.questionItem.question.questionId
+					}).then(data => {
+						this.$Notice.success({
+							title: '收藏成功',
+							// desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
+						});
+					}).catch(err => {
+						this.$Notice.error({
+							title: '收藏失败，发生错误',
+							desc: err.info
+						});
+					})
+				} else {
+				//取消收藏
+					this.deleteCollection({
+						questionId: this.questionItem.question.questionId
+					}).then(data => {
+						this.$Notice.success({
+							title: '取消收藏成功',
+							// desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
+						});
+					}).catch(err => {
+						this.$Notice.error({
+							title: '取消失败，发生错误',
+							desc: err.info
+						});
+					})
+				}
 			}
 		},
 		watch: {
 			questionItem: function() {
 				this.init()
+			},
+			clickCollection: function () {
+				// this.showCollection = this.clickCollection
+				this.showCollection = this.clickCollection ? "ios-star" : "ios-star-outline"
 			}
 		},
 		mounted () {
 			this.init()
+			this.showCollection = this.clickCollection ? "ios-star" : "ios-star-outline"
 		}
 	}
 </script>
@@ -94,6 +143,10 @@
 
 	section {
 	    /* border: 1px solid #dedede; */
+	}
+	.star {
+		color: #f5a623;
+		cursor: pointer;
 	}
 	.num {
 		position: relative;

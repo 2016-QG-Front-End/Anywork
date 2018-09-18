@@ -95,13 +95,14 @@
 				</section> -->
 				<section class="rank-right">
 					<div class="rank-item"   v-for="(item, index) in rank" v-bind:key="item.number">
-						<i>
+						<i style="    min-width: 70px;">
 							NO.{{index + 1}}
 						</i>
 						<img :src=item.imagePath />
 						<div class="number-name">{{ item.username }}</div>
-						<div class="number-score">{{ item.score }}</div>
+						<div class="number-name">{{ item.organizationName }}</div>
 						<!-- <div >{{ item.studentId }}</div> -->
+						<div class="number-score">{{ item.score }}</div>
 						<div class="number-students">{{ item.studentId }}</div>
 					</div>
 				</section>
@@ -263,7 +264,8 @@
 				} else if (indexNumber == 3) {
 					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=1'
 				} else {
-					location.href = 'http://localhost:8080/html/home.html#/'
+					// location.href = 'http://localhost:8080/html/home.html#/'
+					location.href = 'http://localhost:8080/html/home.html#/paperPage/lookAnswer?isCollect=true'
 				}
 			},
 			chooseOrgination () {

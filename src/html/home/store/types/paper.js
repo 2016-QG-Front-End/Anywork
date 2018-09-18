@@ -14,12 +14,16 @@ export default namespace('paper', {
         'getMyPracticePaper',
         'getFinishedPaperAnswerById',
         'changePaperShows',
-        'getCollections'
+        'getCollections',
+        'upLoadCollection',
+        'deleteCollection',
+        'setCFalse'
     ],
     mutations: [
         'setInfo',
         'setInfos',
         'setPaperList',
-        'showPaper'
+        'showPaper',
+        'setToCollection'
     ]
 })

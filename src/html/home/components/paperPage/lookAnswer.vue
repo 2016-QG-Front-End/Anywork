@@ -4,7 +4,7 @@
 			:tabs="tabs" 
 			@tab-select="tabSelect"
 		/> -->
-		<span class="socre">
+		<span class="socre" v-if="answerAnalysisList && answerAnalysisList.length > 0">
 			客观题得分：<span>{{this.questionAnswerInfo.socre}}</span>
 		</span>
 		<!-- <Button class="do-again" type="success" v-if="this.paper.hasDown===1" @click="doAgain">再做一次</Button> -->
@@ -12,11 +12,20 @@
 
 		<!-- <component    class="question-wrap" :is="questionType" :questionItem="currentQuestion" :index="currentQuestionIndex" :key="currentQuestionIndex"/> -->
 
-		<div v-for="(item, index) in answerAnalysisList" v-bind:key="item.question.questionId">
-			<choose v-if="item.question.type == 1" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></choose>
+		<div v-for="(item, index) in answerAnalysisList" v-bind:key="item.question.questionId" v-if="!isCollect">
+			<choose v-if="item.question.type == 1" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index" :isCollect="collect"></choose>
 			<judge v-if="item.question.type == 2" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></judge>
 			<pad v-if="item.question.type == 3" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></pad>
 			<issue v-if="item.question.type == 4" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></issue>
+		</div>
+		<div v-for="(item, index) in detailCs" v-bind:key="item.question.questionId" v-if="isCollect">
+			<choose v-if="item.question.type == 1" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index" :isCollect="collect"></choose>
+			<judge v-if="item.question.type == 2" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></judge>
+			<pad v-if="item.question.type == 3" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></pad>
+			<issue v-if="item.question.type == 4" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></issue>
+		</div>
+		<div class="empty" v-if="isCollect || detailCs.length <= 0">
+			你的收藏本上空空如也
 		</div>
 	</section>
 </template>
@@ -54,7 +63,8 @@
 				isCollect: false,
 				allCollections: null,
 				detailCs: [],
-				questions: []
+				questions: [],
+				collect: false
 			}
 		},
 		components: {
@@ -193,7 +203,11 @@
 				}
 			}
 		},
+		beforeDestroy () {
+			this.setCFalse()
+		},
 		created () {
+			this.getQueryStringArgs(location.href)
 			if(this.paper.hasDown && (this.$route.params.handel === undefined || this.$route.params.handel !== 'submit')){
 				this.getFinishedPaperAnswerById({
 					testpaperId: this.paper.testpaperId,
@@ -211,25 +225,40 @@
 				}).catch((err) => {
 					this.$Message.error(err)
 				})
+				
 			} else if (this.isCollect) {
 				let that = this
 				this.getCollections().then(data => {
+					if (!data.data) {
+						this.$Notice.warning({
+							title: '你并没有收藏错题'
+						})
+						return
+					}
 					that.allCollections = data.data
+					that.getAllCollections()
 				}).catch(err => {
 					this.$Message.error(err)
 				})
+				this.collect = true
 			} else {
-				this.questionList = this.chooseList
-				this.showCurrentQuestion({
-					index: 0,
-					questionId: this.questionList[0].question.questionId,
-				})
+				// this.questionList = this.chooseList
+				// this.showCurrentQuestion({
+				// 	index: 0,
+				// 	questionId: this.questionList[0].question.questionId,
+				// })
+				location.href = 'http://localhost:8080/html/home.html#/homepage'
 			}
 		}
 	}
 </script>
 
 <style scoped>
+	.empty {
+		padding: 20px 10px;
+		font-size: 2.4em;
+		color: #ea6d6d;
+	}
 	section {
 		position: relative;
 	}

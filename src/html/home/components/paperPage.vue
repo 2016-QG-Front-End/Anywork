@@ -7,14 +7,21 @@
 		</div>  -->
 		<!-- <div class="time"></div>
 		<div class="time-choose">12:11:11</div> -->
-		<div class="paper-nav">
+		<div class="paper-nav" v-if="!isColl">
 			<div>
 				<img src="../../../assets/images/preview@1x.png"/>
 				<div>{{testName}}</div>
 			</div>
-			<img src="../../../assets/images/anywork@2x.png"/>
+			<img src="../../../assets/images/anywork@2x.png" @click="toHomepage"/>
 		</div>
-		<div class="tools-choose">
+		<div class="paper-nav" v-if="isColl">
+			<div>
+				<img src="../../../assets/images/preview@1x.png"/>
+				<div>错题收藏</div>
+			</div>
+			<img src="../../../assets/images/anywork@2x.png" @click="toHomepage"/>
+		</div>
+		<div class="tools-choose" v-if="!isColl">
 			<div class="answer-card" v-if="isAnswer">{{hour}}:{{min}}:{{sec}}</div>
 			<div class="answer-card" v-if="isAnswer">
 				<img src="../../../assets/images/papre.png" />
@@ -41,6 +48,7 @@
 				hours: 0,
 				isAnswer: true,
 				testName: null,
+				isColl: false
 			}
 		},
 		// props: ['testPaperType'],
@@ -112,6 +120,9 @@
 				let time = new Date()
 
 			},
+			toHomepage () {
+				location.href = 'http://localhost:8080/html/home.html#/homepage'
+			},
 			getQueryStringArgs(url){
 				url = url == null ? window.location.href : url;
 				var qs = url.substring(url.lastIndexOf("?") + 1);
@@ -137,6 +148,9 @@
 				} else {
 					this.testName = '课后练习'
 				}
+				if (args.isCollect) {
+					this.isColl = args.isCollect
+				}
 				// this.testPaperType =  args.test;
 			}
 		},
@@ -150,14 +164,14 @@
 			if (location.href =='http://localhost:8080/html/home.html#/paperPage/lookAnswer') {
 				this.isAnswer = false
 			}
-			if (this.$route.params.testPaperType == 1) {
+				if (this.$route.params.testPaperType == 1) {
 					this.testName = '课程考试'
 				} else if (this.$route.params.testPaperType == 2) {
 					this.testName = '课前预习'
 				} else {
 					this.testName = '课后练习'
 				}
-			// this.getQueryStringArgs(location.href)
+			this.getQueryStringArgs(location.href)
 			
 		}
 	}
@@ -194,6 +208,9 @@
 	}
 	.paper-nav div  div {
 		margin: 0 0 0 20px;
+	}
+	.paper-nav > img {
+		cursor: pointer;
 	}
 	.tools-choose {
 		position: fixed;

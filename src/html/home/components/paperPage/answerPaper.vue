@@ -31,6 +31,7 @@
 		</ul> -->
 		<div>{{time}}</div>
 		<Button class="submit-bt" type="success" size="large" @click="toSubmitAnswer" :disabled="!coundAnswer">提交</Button>
+		<Button class="submit-bt" type="success" size="large" @click="toSaveAnswer" :disabled="!coundAnswer">提交</Button>
 	</section>
 </template>
 
@@ -220,6 +221,16 @@
 				})
 			},
 			toSubmitAnswer() {
+				
+					var r=confirm("是否保存试卷当前做题情况");
+					if (r==true){
+					  	this.submitAnswer(1)
+					}else {
+					  	// alert("You pressed Cancel!");
+					}
+				
+			},
+			toSaveAnswer() {
 				if(this.paper.hasDown === 1){
 					var r=confirm("提交试卷后将不能再提交，是否继续？");
 					if (r==true){
