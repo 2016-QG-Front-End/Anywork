@@ -36,7 +36,7 @@
 </template>
 
 <style scoped lang="stylus">
-  .upload
+  
     position relative
     width 100%
     height 100%

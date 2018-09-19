@@ -149,9 +149,13 @@
 				this.searchInfo = ''
 			},
 			toPersonPage(){
-				this.$router.push({
-					name: 'myOrganization'
-				})
+				// this.$router.push({
+				// 	name: 'baseInfo',
+				// 	params: {
+				// 		isChangeI: true
+				// 	}
+				// })
+				location.href='http://localhost:8080/html/home.html#/personPage/baseInfo?isChangeI=true'
 			},
 			toFeedback() {
 				this.$router.push({

@@ -1,18 +1,25 @@
 <template>
 	<section>
-		<div class="header">
-			<h2>修改密码</h2>
-			<Button class="save-info" type="success" @click="changePassword">保存</Button>
-		</div>
+		<!-- <div class="header"> -->
+			<h2 class="head">修改密码</h2>
+			<!-- <Button class="save-info" type="success" @click="changePassword">保存</Button> -->
+		<!-- </div> -->
 		<div class="info">
-		 	<div>
-		 		<span class="text">旧密码</span>
-				<Input class="input" type="password" v-model="oldPassword"></Input> 
+		 	<div  class="commom-info-input">
+		 		<span class="text">原始密码</span>
+				<Input class="input" type="password" v-model="oldPassword" placeholder="请输入你的原始密码"></Input> 
 		 	</div>
-			<div>
-		 		<span class="text">新密码</span>
-				<Input class="input" type="password" v-model="newPassword"></Input> 
+			<div  class="commom-info-input">
+		 		<span class="text">重置密码</span>
+				<Input class="input" type="password" v-model="newPassword" placeholder="请输入你的新密码"></Input> 
 		 	</div>
+			 <div  class="commom-info-input">
+		 		<span class="text">再次输入密码</span>
+				<Input class="input" type="password" v-model="newPassword" placeholder="请输入你的新密码"></Input> 
+		 	</div>
+			 <div class="commom-info-button">
+				 <Button class="save-info" type="success" @click="changePassword">保存</Button>
+			 </div>
 		</div>
 	</section>
 </template>
@@ -55,6 +62,24 @@
 </script>
 
 <style scoped>
+	.commom-info-input {
+		border-bottom: 1px solid #548CFE;
+		width: 368px;
+		position: relative;
+		margin-top: 20px;
+		display: flex;
+    	align-items: center;
+		    margin-top: 36px;
+	}
+	.commom-info-button {
+		width: 300px;
+		position: relative;
+	}
+	.head {
+		padding: 0 30px;
+    font-size: 2.8em;
+	color:#548CFE;
+	}
 	.header {
 		position: relative;
 		padding: 10px 20px 5px;
@@ -62,26 +87,33 @@
 		border-bottom: 1px solid #b4b4b4;
 	}
 	.save-info {
-		position: absolute;
-		right: 25px;
-		top: 5px;
+		/* position: absolute; */
+		/* right: 25px; */
+		/* top: 5px; */
+		width: 100%;
+		background: #548CFE;
+		border-color: #548CFE;
+		height: 42px;
+		font-size: 1.5em;
+		margin: 54px 0px;
 	}
 	.info {
 		padding-left: 40px;
 		padding-bottom: 30px;
 	}
 	.info div {
-		margin-top: 10px;
+		/* margin-top: 10px; */
 	}
 	.text {
 		display: inline-block;
-		width: 80px;
+		width: 140px;
 		padding-right: 10px;
-		text-align: right;
-		font-size: 16px;
+		text-align: left;
+		    font-size: 18px;
+		color: #548CFE;
 	}
 	.input {
-		width: 200px;
+		    width: 220px;
 		vertical-align: initial;
 	}
 
