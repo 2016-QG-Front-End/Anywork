@@ -16,7 +16,7 @@
 					<img :src="userPhoto">
 					<ul class="person-info" v-show="personNav">
 						<li @click="toPersonPage">个人主页</li>
-						<li @click="toFeedback">意见反馈</li>
+						<li @click="toFeedback">修改密码</li>
 						<li @click="toExit">退出登录</li>
 					</ul>
 				</li>
@@ -32,7 +32,7 @@
 					<img src="../../../assets/images/anywork@1x.png">
 					<ul class="person-info" v-show="personNav">
 						<li @click="toPersonPage">个人主页</li>
-						<li @click="toFeedback">意见反馈</li>
+						<li @click="toFeedback">修改密码</li>
 						<li @click="toExit">退出登录</li>
 					</ul>
 				</li>
@@ -158,9 +158,10 @@
 				location.href='http://localhost:8080/html/home.html#/personPage/baseInfo?isChangeI=true'
 			},
 			toFeedback() {
-				this.$router.push({
-					name: 'feedback'
-				})
+				// this.$router.push({
+				// 	name: 'feedback'
+				// })
+				location.href='http://localhost:8080/html/home.html#/personPage/changePassword'
 			},
 			toExit () {
 				this.exit().then((data) => {

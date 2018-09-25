@@ -151,6 +151,8 @@
 				}
 				if (args.isChangeI) {
 					this.isChangeI =  args.isChangeI;
+				} else {
+					this.isChangeI = false
 				}
 				
 			},

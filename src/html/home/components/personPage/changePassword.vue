@@ -60,10 +60,29 @@
 		}
 	}
 </script>
-
+<style>
+input,input:active{
+    border: none !important;
+    /* border-bottom: 1px solid #d2d2d2 !important; */
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+	transition: none;
+	font-size: 16px;
+}
+input {
+	padding: 0 0 0 0 !important;
+	font-size: 16px !important;
+}
+input:hover,
+input:focus {
+	transition: none !important;
+	box-shadow: none !important;
+}
+</style>
 <style scoped>
 	.commom-info-input {
-		border-bottom: 1px solid #548CFE;
+		/* border-bottom: 1px solid #548CFE; */
 		width: 368px;
 		position: relative;
 		margin-top: 20px;
@@ -95,7 +114,7 @@
 		border-color: #548CFE;
 		height: 42px;
 		font-size: 1.5em;
-		margin: 54px 0px;
+		margin: 54px 0px 54px 56px;
 	}
 	.info {
 		padding-left: 40px;
@@ -108,13 +127,14 @@
 		display: inline-block;
 		width: 140px;
 		padding-right: 10px;
-		text-align: left;
+		text-align: right;
 		    font-size: 18px;
 		color: #548CFE;
 	}
 	.input {
 		    width: 220px;
 		vertical-align: initial;
+		border-bottom: 1px solid #548CFE; 
 	}
 
 	@media only screen and (max-width: 992px) {

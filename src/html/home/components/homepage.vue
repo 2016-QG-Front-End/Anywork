@@ -93,6 +93,25 @@
 					<img src="../../../assets/images/first@1x.png"/>
 					<img src="../../../assets/images/first@1x.png"/>
 				</section> -->
+				<div class="choose-rank">
+					<!-- <div class="rank-choose-item">
+						排序方式
+						<Icon type="ios-arrow-down" class="rank-choose-item-down" />
+					</div> -->
+					<Dropdown class="choose-rank-container" @on-click="chooseRank">
+						<a href="javascript:void(0)" class="rank-choose-item">
+							排序方式&nbsp;&nbsp;&nbsp;&nbsp;
+							<Icon type="ios-arrow-down"  class="font-weight"></Icon>
+						</a>
+						<DropdownMenu slot="list" >
+							<DropdownItem name='1'>班级排名</DropdownItem>
+							<DropdownItem name='2'>整体排名</DropdownItem>
+							<!-- <DropdownItem disabled>豆汁儿</DropdownItem>
+							<DropdownItem>冰糖葫芦</DropdownItem>
+							<DropdownItem divided>北京烤鸭</DropdownItem> -->
+						</DropdownMenu>
+					</Dropdown>
+				</div>
 				<section class="rank-right">
 					<div class="rank-item"   v-for="(item, index) in rank" v-bind:key="item.number">
 						<i style="    min-width: 70px;">
@@ -211,6 +230,17 @@
 				this.websock.onerror = this.websocketonerror;
 				this.websock.onmessage = this.websocketonmessage;
 				this.websock.onclose = this.websocketclose;
+			},
+			chooseRank: function (index) {
+				let that = this
+					this.getRank({
+						leaderboardType: parseInt(index)
+					}).then(data => {
+						that.rank = data
+					}).catch(err => {
+						this.$Message.error("请重新刷新！")
+					})
+
 			},
 			websocketonopen: function () {
 　　　　　　　　console.log("WebSocket连接成功");
@@ -478,6 +508,35 @@
     height: 891px;
     pointer-events: none;
 }
+.rank-choose-item, 
+.rank-choose-item-down {
+	color: #548cfe;
+	font-size: 1.3em;
+}
+.font-weight {
+	font-weight:600
+}
+.rank-choose-item {
+	height: 30px;
+    line-height: 30px;
+    width: 116px;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-shadow: 0 0 24px 4px #dedbdb;
+    box-shadow: 0 0 8px 1px #dedbdb;
+    border-radius: 1em;
+    font-weight: 600;
+}
+.choose-rank {
+	position: absolute;
+	top: 0;
+    right: 32px;
+}
 .margin-top {
 	margin-top: 212px;
 }
@@ -514,6 +573,7 @@
 }
 .news-container {
     margin: 40px 0;
+	    position: relative;
 }
 .news-container h2 {
     font-size: 2.5em;
