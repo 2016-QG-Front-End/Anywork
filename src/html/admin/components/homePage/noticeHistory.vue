@@ -1,9 +1,12 @@
 <template>
 	<section>
-		通知记录
+		<div class="nav-notice">
+			发布记录
+		</div>
+		
 		<section>
-			<Table :columns="columns1" :data="data1.list"></Table>
-			<Page :total="data1.endRow" :style="{textAlign:'center',margin:'10px 20px'}"/>
+			<Table :columns="columns1" :data="data1"></Table>
+			<!-- <Page :total="data1.endRow" :style="{textAlign:'center',margin:'10px 20px'}"/> -->
 		</section>
 	</section>
 </template>
@@ -30,7 +33,7 @@
                         title: '时间',
                         key: 'createTime'
                     },{
-                        title: 'Action',
+                        title: '行为',
                         key: 'action',
                         width: 150,
                         align: 'center',
@@ -46,15 +49,50 @@
                                             this.remove(params.row.messageId)
                                         }
                                     }
-                                }, '删除')
-                            ]);
+								}, '删除'),
+								 h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            // this.remove(params.row.messageId)
+                                        }
+                                    }
+                                }, '预览')
+							]);
+							//  h('div', [
+                            //     h('Button', {
+                            //         props: {
+                            //             type: 'primary',
+                            //             size: 'small'
+                            //         },
+                            //         style: {
+                            //             marginRight: '5px'
+                            //         },
+                            //         on: {
+                            //             click: () => {
+                            //                 this.show(params.index)
+                            //             }
+                            //         }
+                            //     }, 'View'),
+                            //     h('Button', {
+                            //         props: {
+                            //             type: 'error',
+                            //             size: 'small'
+                            //         },
+                            //         on: {
+                            //             click: () => {
+                            //                 this.remove(params.index)
+                            //             }
+                            //         }
+                            //     }, 'Delete')
+                            // ]);
                         }
                     }
                 ],
-                data1: {
-					pageNum: 0,
-					endRow:0
-				},
+                data1: [],
 				pages: 0
 			}		
 		},
@@ -74,16 +112,32 @@
 			...mapActions(organization.actions),
 			initNotice: function () {
 				let that = this
+				let i = 0;
+				let hasNextPage = false
+				
+				// this.getNo(0)
+					
+				
+			},
+			getNo: function (index) {
+				let that = this
 				this.getNotice({
-					pageNum: this.data1.pageNum,
-    				pageSize: 20,
+						pageNum: index,
+						pageSize: 20,
 				}).then(data => {
-					that.data1 = data
+						for (let l in data.list) {
+							that.data1.push = data.list[l]
+						}
+						// th at.data1 = data
+						if (data.hasNextPage) {
+							that.getNo(data.nextPage)
+						}
+						
 				}).catch(err => {
-					that.$Notice.error({
-						title: '请求失败',
-						desc: err
-					});
+						that.$Notice.error({
+							title: '请求失败',
+							desc: err
+						});
 				})
 			},
 			remove: function (id) {
@@ -109,3 +163,20 @@
 		}
 	}
 </script>
+<style>
+.nav-notice::before {
+	    content: " ";
+    width: 6px;
+    background-color: #e81a37;
+    display: block;
+    height: 25px;
+    margin-right: 8px;
+}
+.nav-notice {
+	    height: 50px;
+    /* line-height: 43px; */
+    display: flex;
+    align-items: center;
+    font-size: 1.8em;
+}
+</style>

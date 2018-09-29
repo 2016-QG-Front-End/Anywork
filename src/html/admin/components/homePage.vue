@@ -20,21 +20,21 @@
                     <Menu-item name="createTest">考试</Menu-item>
                     <Menu-item name="createPractice">练习</Menu-item>
                 </Submenu>
-                <Submenu name="info" v-if="showSubmenu">
+                <!-- <Submenu name="info" v-if="showSubmenu">
                     <template slot="title">
                         <Icon type="ios-analytics"></Icon>
                         通知
-                    </template>
+                    </template> -->
                     <Menu-item name="sendNotice">发通知</Menu-item>
-                    <Menu-item name="noticeHistory">通知记录</Menu-item>
-                </Submenu>
+                    <!-- <Menu-item name="noticeHistory">通知记录</Menu-item> -->
+                <!-- </Submenu> -->
             </Menu>
         </div>
         <div class="layout-right">
             <div class="layout-breadcrumb">
-                <Breadcrumb>
+                <!-- <Breadcrumb>
                     <Breadcrumb-item v-for="item in breadCrumbList" :href="item.path" :key="item.name">{{item.name}}</Breadcrumb-item>
-                </Breadcrumb>
+                </Breadcrumb> -->
             </div>
             <div class="layout-content">
                 <router-view class="view"></router-view>
