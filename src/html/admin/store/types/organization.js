@@ -19,7 +19,9 @@ export default namespace('organization', {
         'deleteNotice',
         
         'getTestsByOrganId',
-        'getPracticesByOrganId'
+        'getPracticesByOrganId',
+
+        'getOrganationNostice'
     ],
     mutations: [
         'setInfo',

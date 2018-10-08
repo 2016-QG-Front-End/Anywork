@@ -46,9 +46,18 @@ import paper from  '../../../store/types/paper'
 			// paperQuestionListL() {
 			// 	return this.paper.paperQuestionList.length
 			// }
+			...mapState({
+				'paper': state => {
+					return state.paper
+				},
+				'user': state => {
+					return state.user
+				}
+			}),
 		},
 		props: ['questionItem', 'index', 'questionNumbers'],
 		methods : {
+
 			selectAnswer (e) {
 				// console.log(this.paper.paperQuestionList.length)
 				this.selectItem = e.target.innerHTML
@@ -60,13 +69,14 @@ import paper from  '../../../store/types/paper'
 		},
 		mounted () {
 			// this.paperQuestionListL = this.paper.paperQuestionList.length
-			console.log(this.questionItem)
+			// console.log(this.questionItem)
 			if (this.questionItem.key) {
 				this.selectItem = this.questionItem.key
 				this.$emit('choose-select', {
 					questionId: this.questionItem.questionId.toString(),
 					studentAnswer: this.selectItem
 				})
+				console.log(this.paperAnswer)
 			}
 		}
 	}

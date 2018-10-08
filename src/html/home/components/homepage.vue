@@ -644,7 +644,7 @@
 .number-students {
     /* position: relative; */
     /* right: 0; */
-    margin: 0 0 0 545px;
+    margin: 0 0 0 422px;
 	overflow: hidden;
 	max-width:150px;
 	min-width: 150px;
@@ -709,6 +709,8 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
+
+	cursor: pointer;
 }
 .choose-container > div > div {
     margin: 12px 0;

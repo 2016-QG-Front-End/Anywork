@@ -55,7 +55,7 @@
 				// 	questionId: this.questionItem.questionId.toString(),
 				// 	studentAnswer: this.questionAnswer
 				// })
-				this.selectAnswer(parseInt(questionItem.key))
+				this.selectAnswer(parseInt(this.questionItem.key))
 			}
 		}
 	}
