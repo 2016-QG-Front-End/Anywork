@@ -6,7 +6,7 @@
                 <Submenu name="organization" v-show="showSubmenu" >
                     <template slot="title">
                         <Icon type="ios-navigate"></Icon>
-                        组织管理
+                        组织
                     </template>
                     <Menu-item name="students">组织中的学生</Menu-item>
                     <Menu-item name="tests">组织中的试卷</Menu-item>
@@ -129,7 +129,7 @@
         min-height: 200px;
         padding: .1px;
         padding-bottom: 20px;
-        background: #fff;
+        /* background: #fff; */
         border-radius: 4px;
     }
     .layout-menu-left{

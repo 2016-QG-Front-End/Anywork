@@ -1,41 +1,62 @@
 <template>
 	<section>
-		<div class="header">
-			<h2>我的组织</h2>
-			<Button type="primary" class="create-bt" @click="createOrgan">创建新组织</Button>
+		<div class="on-organ" @click="toggleTag">
+			<span id="organ-name">选择组织</span>
+			<span class="arrow" :class="optionsOpen ? 'opened' : 'closed'"></span>
 		</div>
-		<loading :spinShow="spinShow" />
-		<div key="organization" v-show="!spinShow">
-			<organitem class="organ-item" v-for="(organ, index) in myOrganizationList"  :key="organ.organizationId"
-				:organizationId = "organ.organizationId" 
-				:teacherName = "organ.teacherName" 
-				:teacherId = "organ.teacherId"
-				:organizationName = "organ.organizationName" 
-				:description = "organ.description" 
-				:count = "organ.count" 
-				:token = "organ.token"
-				@upload-organ = "uploadOrganization"
-			 />
-		</div>
+		<p class="read-more">详情</p>
 		<transition name="fade">
-			<div class="modal" v-show="showModel">
-	        	<h2>{{modalTitle}}</h2>
-		        <p>组织名</p><Input type="text" v-model="organizationName"></Input>
-		        <div class="avatar-wrap">
-		        	<p class="description-tip">组织头像</p>
-			        <div class="upload-file" @click="addFile">
-			        	<img :src="imgSrc">
-			        	<input class="file-input" type="file" ref="fileInput" @change="changeFile">
-			        </div>
-		        </div>
-		        <div class="description-wrap"><p class="description-tip">组织描述</p><textarea v-model="description" class="description"></textarea></div>
-				<p>组织口令</p><Input type="text" v-model="token"></Input>
-		        <Button class="bt" type="primary" @click="modelOk">确定</Button>
-		        <Button class="bt" type="primary" @click="modelCancel">取消</Button>
-		    </div>
+			<ul class="organ-list" v-show="optionsOpen" name="organ-list">
+				<li index="1">计算机科学6班</li>
+				<li index="2">软件工程4班</li>
+				<li index="3">软件工程4班</li>
+				<li index="3">软件工程4班</li>
+			</ul>
 		</transition>
-    	<div :class="{'modal-cover': showModel}"></div>
+		<Button type="primary" class="create-bt" @click="createOrgan">创建新组织</Button>
+		<div class="student-part">
+			<div class="header">
+				<h2>组织成员</h2>
+			</div>
+			<!-- <loading :spinShow="spinShow" /> -->
+			<div key="organization" v-show="!spinShow">
+				<organitem class="organ-item" v-for="(organ, index) in myOrganizationList"  :key="organ.organizationId"
+					:organizationId = "organ.organizationId" 
+					:teacherName = "organ.teacherName" 
+					:teacherId = "organ.teacherId"
+					:organizationName = "organ.organizationName" 
+					:description = "organ.description" 
+					:count = "organ.count" 
+					:token = "organ.token"
+					@upload-organ = "uploadOrganization"
+				/>
+			</div>
+			<transition name="fade">
+				<div class="modal" v-show="showModel">
+					<h2>{{modalTitle}}</h2>
+					<p>组织名</p><Input type="text" v-model="organizationName"></Input>
+					<div class="avatar-wrap">
+						<p class="description-tip">组织头像</p>
+						<div class="upload-file" @click="addFile">
+							<img :src="imgSrc">
+							<input class="file-input" type="file" ref="fileInput" @change="changeFile">
+						</div>
+					</div>
+					<div class="description-wrap"><p class="description-tip">组织描述</p><textarea v-model="description" class="description"></textarea></div>
+					<p>组织口令</p><Input type="text" v-model="token"></Input>
+					<Button class="bt" type="primary" @click="modelOk">确定</Button>
+					<Button class="bt" type="primary" @click="modelCancel">取消</Button>
+				</div>
+			</transition>
+			<div :class="{'modal-cover': showModel}"></div>
+		</div>
+		<div class="ranking-part">
+			<div class="header">
+				<h2>排行榜</h2>
+			</div>
+		</div>
 	</section>
+
 </template>
 
 <script>
@@ -56,7 +77,8 @@
 				imgSrc: '',
 				modalTitle: '',
 				token: '',
-				alterOrganId : undefined
+				alterOrganId : undefined,
+				optionsOpen: false
 			}		
 		},
 		components: {
@@ -150,6 +172,9 @@
 			},
 			modelCancel() {
 				this.showModel = false;
+			},
+			toggleTag() {
+				this.optionsOpen = !this.optionsOpen;
 			}
 		},
 		created () {
@@ -171,13 +196,53 @@
 	section {
 		position: relative;
 		min-height: 100px;
-	    background: white;
 	}
+
+	.student-part,
+	.ranking-part {
+		position: relative;
+		border-radius: 4px;
+		min-height: 100px;
+	    background: white;
+
+
+	}
+
+	.student-part {
+		margin-top: 50px;
+	}
+
+	.student-part::before {
+		content: '';
+		display: inline-block;
+		position: absolute;
+		top: 10px;
+
+		width: 6px;
+		height: 24px;
+
+		background-color: #ff093f;
+	}
+
+	.ranking-part::before {
+		content: '';
+		display: inline-block;
+		position: absolute;
+		top: 10px;
+
+		width: 6px;
+		height: 24px;
+
+		background-color: #7d09ff;
+	}
+
 	.header {
 		position: relative;
 		padding: 10px 20px 5px;
 		margin-bottom: 10px;
-		border-bottom: 1px solid #b4b4b4;
+		border-bottom: 1px solid #f0f0f0;
+
+		color: #393c42;
 	}
 	.organ-item {
 		display: inline-block;
@@ -186,7 +251,9 @@
 	.create-bt {
 		position: absolute;
 		right: 10px;
-		top: 0px;
+		top: 15px;
+
+		z-index: 100;
 	}
 	.description-wrap {
 	    width: calc(100% - 130px);
@@ -272,5 +339,128 @@
 	}
 	.fade-enter, .fade-leave-to /* .fade-leave-active 在低于版本 2.1.8 中 */ {
 	  	opacity: 0.5;
+	}
+
+	.on-organ {
+		display: inline-block;
+		position: absolute;
+
+		border-radius: 15.5px;
+		width: 153px;
+		height: 32px;
+		line-height: 32px;
+		
+
+		background: #548CFE;
+		color: white;
+		text-align: center;
+		font-size: 16px;
+
+		z-index: 100;
+		cursor: pointer;
+	}
+
+	/* .on-organ:after {
+		content: '';
+		display: inline-block;
+		position: absolute;
+		top: 10px;
+		right:10px;
+
+		width: 9px;
+		height: 9px;
+
+		transform: rotate(-135deg);
+		border: 2px solid #FFFFFF;
+		border-bottom: 0;
+		border-right:0;
+	} */
+
+	.arrow {
+		display: inline-block;
+		position: absolute;
+		top: 10px;
+		right: 10px;
+
+		width: 9px;
+		height: 9px;
+
+		transform: rotate(-135deg);
+		/* transition:all .5s ease-in .1s; */
+		border: 2px solid #FFFFFF;
+		border-bottom: 0;
+		border-right:0;
+	}
+
+	.opened {
+		top: 14px;
+		transform: rotate(45deg);
+		transition:all .1s ease-in .01s;
+	}
+
+	.closed {
+		top: 10px;
+		transform: rotate(-135deg);
+		transition:all .1s ease-in .01s;
+	}
+
+	.organ-list {
+		position: absolute;
+		top: 45px;
+
+		border:1px solid #548CEF;
+		border-bottom: none;
+		width: 153px;
+		/* height: 32px; */
+		
+
+		background: #fff;
+		color: #548CFE;
+		text-align: center;
+		font-size: 16px;
+		z-index: 110;
+	}
+
+	.organ-list li {
+		border-bottom:1px solid #548CEF;
+		/* border-top: none; */
+
+		list-style: none;
+		height: 32px;
+		line-height: 32px;
+		cursor: default;
+	}
+
+	.organ-list li:hover,
+	.organ-list li:active{
+		background: #548CEF;
+		color: #fff;
+	}
+
+	.organ-list li:link,
+	.organ-list li:visited{
+		background: #fff;
+		color: #548CFE;
+	}
+
+	.appear {
+		display: block;
+	}
+
+	.hidden {
+		display: none;
+	}
+
+	.read-more {
+		position: absolute;
+		top: 18px;
+		left: 180px;
+		color: #548cef;
+		font-size: 14px;
+		cursor: pointer;
+	}
+
+	.read-more:hover {
+		color: #aaa
 	}
 </style>
