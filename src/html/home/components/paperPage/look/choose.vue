@@ -67,7 +67,8 @@
 			},
 			isCollect: {
 				required: true
-			}
+			},
+			
 		},
 		computed: {
 			yourAnswe () {
@@ -90,6 +91,7 @@
 			},
 			upDataCollection () {
 				this.clickCollection = !this.clickCollection
+				let that = this
 				if (this.clickCollection) {
 				//需要对题目进行收藏
 					this.upLoadCollection({
@@ -99,6 +101,7 @@
 							title: '收藏成功',
 							// desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
 						});
+						that.showCollection = 'ios-star'
 					}).catch(err => {
 						this.$Notice.error({
 							title: '收藏失败，发生错误',
@@ -114,6 +117,7 @@
 							title: '取消收藏成功',
 							// desc: nodesc ? '' : 'Here is the notification description. Here is the notification description. '
 						});
+						that.showCollection = 'ios-star-outline'
 					}).catch(err => {
 						this.$Notice.error({
 							title: '取消失败，发生错误',
@@ -135,6 +139,10 @@
 		mounted () {
 			this.init()
 			this.showCollection = this.clickCollection ? "ios-star" : "ios-star-outline"
+			if (this.isCollect) {
+				this.clickCollection = this.isCollect
+				// this.showCollection = 'ios-star'
+			}
 		}
 	}
 </script>

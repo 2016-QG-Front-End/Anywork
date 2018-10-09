@@ -17,7 +17,8 @@ export default namespace('paper', {
         'getCollections',
         'upLoadCollection',
         'deleteCollection',
-        'setCFalse'
+        'setCFalse',
+        'detailCollection'
     ],
     mutations: [
         'setInfo',

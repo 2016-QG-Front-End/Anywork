@@ -1,5 +1,16 @@
 <template>
 	<section>
+		<!-- <Dropdown class="push-dowm" @on-click='doMore'>
+			<Button type="primary">
+				{{organiaza}}
+				<Icon type="ios-arrow-down"></Icon>
+			</Button>
+			<DropdownMenu slot="list"  v-for="item in organiazations" v-bind:key="item.organizationId">
+				<DropdownItem :name='item.organizationId'>{{item.organizationName}}</DropdownItem>
+
+			</DropdownMenu>
+		</Dropdown> -->
+
 		<noticeHistory></noticeHistory><Button @click="showSend" class="send-notice">发布公告</Button>
 		<section class="container" v-if="isShow">
 			<section class="container-item">
@@ -27,6 +38,8 @@
 				topic: '',
 				context: '',
 				isShow: false,
+				organiaza: '没有组织',
+				organiazations: []
 			}		
 		},
 		components: {
@@ -63,11 +76,29 @@
 			},
 			hideSend: function () {
 				this.isShow = false
+			},
+			doMore: function (nameId) {
+				
 			}
 			
 		},
 		created () {
-
+			let that = this
+			this.getOrganationNostice().then(data=> {
+				if (!data) {
+					that.$Notice.error({
+                    	title: '没有你创建的组织',
+                    
+					});
+					return
+				}
+				that.organiazations = data
+			}).catch(err => {
+				that.$Notice.error({
+                    title: '请求组织失败，请刷新',
+                    
+                });
+			})
 		}
 	}
 </script>
@@ -82,6 +113,11 @@
     color: #2d8cf0;
     font-size: 1.3em;
     font-weight: 600;
+}
+.push-dowm {
+	position: absolute;
+	top: 10px;
+    z-index: 9;
 }
 .container-item {
 	position: absolute;

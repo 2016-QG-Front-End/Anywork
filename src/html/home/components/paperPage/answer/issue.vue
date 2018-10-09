@@ -7,7 +7,7 @@
 		<section>
 			<div class="content" >{{questionItem.content}}</div> 
 			<dir class="answer-wrap">{{questionAnswer}}
-				<textarea class="issue-answer" rows='1' cols='1' @input="selectAnswer($event)"></textarea>
+				<textarea class="issue-answer" rows='1' cols='1' @input="selectAnswer($event)" :value="questionAnswer"></textarea>
 			</dir>
 		</section>
 	</li>
@@ -36,6 +36,7 @@
 			// console.log(this.questionNumbers)
 			if (this.questionItem.key) {
 				this.questionAnswer = this.questionItem.key
+				// this.selectAnswer(this.questionItem.key)
 				this.$emit('choose-select', {
 					questionId: this.questionItem.questionId.toString(),
 					studentAnswer: this.questionAnswer

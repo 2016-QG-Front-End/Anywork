@@ -30,7 +30,7 @@
 			<center class="no-question-tip" v-if="programList <= 0"> ~没有题目~ </center>
 		</ul> -->
 		<div>{{time}}</div>
-		<Button class="submit-bt" type="success" size="large" @click="toSubmitAnswer" :disabled="!coundAnswer">提交</Button>
+		<Button class="submit-bt" type="success" size="large" @click="toSubmitAnswer" :disabled="!coundAnswer">保存</Button>
 		<Button class="submit-bt" type="success" size="large" @click="toSaveAnswer" :disabled="!coundAnswer">提交</Button>
 	</section>
 </template>
@@ -138,12 +138,12 @@
 							if(item.type > 3){
 								return {
 									questionId: item.questionId.toString(),
-									studentAnswer: ' '
+									studentAnswer: item.key ? item.key : ' '
 								}
 							}else if(item.type === 3){
 								var arr = new Array()
 								for(let i=0; i<item.other; i++){
-									arr.push(' ')
+									arr.push(item.key ? item.key : ' ')
 								}
 								return {
 									questionId: item.questionId.toString(),
@@ -152,16 +152,16 @@
 							}else if(item.type === 2){
 								return {
 									questionId: item.questionId.toString(),
-									studentAnswer: ''
+									studentAnswer: item.key ? item.key : ''
 								}
 							}else if(item.type === 1){
 								return {
 									questionId: item.questionId.toString(),
-									studentAnswer: ''
+									studentAnswer: item.key ? item.key : ' '
 								}
 							}
 						})
-						console.log('this.paperAnswer' + this.paperAnswer)
+						console.log(this.paperAnswer)
 					}else{
 						this.coundAnswer = false
 						this.$Message.error(data.info)

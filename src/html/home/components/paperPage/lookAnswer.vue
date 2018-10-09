@@ -14,17 +14,17 @@
 
 		<div v-for="(item, index) in answerAnalysisList" v-bind:key="item.question.questionId" v-if="!isCollect">
 			<choose v-if="item.question.type == 1" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index" :isCollect="collect"></choose>
-			<judge v-if="item.question.type == 2" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></judge>
-			<pad v-if="item.question.type == 3" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></pad>
-			<issue v-if="item.question.type == 4" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></issue>
+			<judge v-if="item.question.type == 2" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index" :isCollect="collect"></judge>
+			<pad v-if="item.question.type == 3" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index" :isCollect="collect"></pad>
+			<issue v-if="item.question.type == 4" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index" :isCollect="collect"></issue>
 		</div>
 		<div v-for="(item, index) in detailCs" v-bind:key="item.question.questionId" v-if="isCollect">
 			<choose v-if="item.question.type == 1" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index" :isCollect="collect"></choose>
-			<judge v-if="item.question.type == 2" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></judge>
-			<pad v-if="item.question.type == 3" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></pad>
-			<issue v-if="item.question.type == 4" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index"></issue>
+			<judge v-if="item.question.type == 2" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index" :isCollect="collect"></judge>
+			<pad v-if="item.question.type == 3" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index" :isCollect="collect"></pad>
+			<issue v-if="item.question.type == 4" :answerlength="answerAnalysisList.length" :questionItem="item" :index="index" :key="index" :isCollect="collect"></issue>
 		</div>
-		<div class="empty" v-if="isCollect || detailCs.length <= 0">
+		<div class="empty" v-if="isCollect && detailCs.length <= 0">
 			你的收藏本上空空如也
 		</div>
 	</section>
@@ -192,11 +192,12 @@
 			getAllCollections () {
 				let len = this.allCollections.length
 				let cData = this.allCollections
+				let that = this
 				for (let i = 0; i < len; i++) {
 					this.detailCollection({
 						questionId: cData[i].questionId
 					}).then(data => {
-						detailCs.push(data.data)
+						that.detailCs.push(data.data)
 					}).catch(err => {
 						this.$Message.error(err)
 					})
@@ -208,7 +209,23 @@
 		},
 		created () {
 			this.getQueryStringArgs(location.href)
-			if(this.paper.hasDown && (this.$route.params.handel === undefined || this.$route.params.handel !== 'submit')){
+			if(this.isCollect){
+
+				let that = this
+				this.getCollections().then(data => {
+					if (!data.data) {
+						this.$Notice.warning({
+							title: '你并没有收藏错题'
+						})
+						return
+					}
+					that.allCollections = data.data
+					that.getAllCollections()
+				}).catch(err => {
+					this.$Message.error(err)
+				})
+				this.collect = true
+			} else if (this.paper.hasDown && (this.$route.params.handel === undefined || this.$route.params.handel !== 'submit')) {
 				this.getFinishedPaperAnswerById({
 					testpaperId: this.paper.testpaperId,
 				}).then((data) => {
@@ -225,22 +242,6 @@
 				}).catch((err) => {
 					this.$Message.error(err)
 				})
-				
-			} else if (this.isCollect) {
-				let that = this
-				this.getCollections().then(data => {
-					if (!data.data) {
-						this.$Notice.warning({
-							title: '你并没有收藏错题'
-						})
-						return
-					}
-					that.allCollections = data.data
-					that.getAllCollections()
-				}).catch(err => {
-					this.$Message.error(err)
-				})
-				this.collect = true
 			} else {
 				// this.questionList = this.chooseList
 				// this.showCurrentQuestion({
