@@ -1,24 +1,24 @@
 <template>
 	<section>
 		<div class="on-organ" @click="toggleTag">
-			<span id="organ-name">选择组织</span>
+			<span id="organ-name">{{myOrganizationList[organIndex].organizationName}}</span>
 			<span class="arrow" :class="optionsOpen ? 'opened' : 'closed'"></span>
 		</div>
 		<p class="read-more">详情</p>
 		<transition name="fade">
 			<ul class="organ-list" v-show="optionsOpen" name="organ-list">
-				<li index="1">计算机科学6班</li>
-				<li index="2">软件工程4班</li>
-				<li index="3">软件工程4班</li>
-				<li index="3">软件工程4班</li>
+			    <li @click="changeIndex(-1)">全部组织</li>
+				<li v-for="(organ, index) in myOrganizationList" :key="organ.organizationId"
+					:organizationId = "organ.organizationId"
+					:organizationName = "organ.organizationName"
+					@click="changeIndex(index, organ)">{{organ.organizationName}}</li>
 			</ul>
 		</transition>
 		<Button type="primary" class="create-bt" @click="createOrgan">创建新组织</Button>
-		<div class="student-part">
+		<div class="member-part" v-if="!selected">
 			<div class="header">
-				<h2>组织成员</h2>
+				<h2>我的组织</h2>
 			</div>
-			<!-- <loading :spinShow="spinShow" /> -->
 			<div key="organization" v-show="!spinShow">
 				<organitem class="organ-item" v-for="(organ, index) in myOrganizationList"  :key="organ.organizationId"
 					:organizationId = "organ.organizationId" 
@@ -29,6 +29,24 @@
 					:count = "organ.count" 
 					:token = "organ.token"
 					@upload-organ = "uploadOrganization"
+				/>
+			</div>
+		</div>
+		<div class="member-part" v-if="selected">
+			<div class="header">
+				<h2>组织成员</h2>
+			</div>
+			<!-- <loading :spinShow="spinShow" /> -->
+			<div class="students">
+				<student-item 
+					v-for="item in studentsList" 
+					:key="item.userId" 
+					:userId = "item.userId"
+					:userName = "item.userName" 
+					:email = "item.email" 
+					:phone = "item.phone"
+					:student = "item.studentId"
+					:organizationId = "organization.organizationId"
 				/>
 			</div>
 			<transition name="fade">
@@ -53,6 +71,9 @@
 		<div class="ranking-part">
 			<div class="header">
 				<h2>排行榜</h2>
+				<div class="rank-left">
+					
+				</div>
 			</div>
 		</div>
 	</section>
@@ -65,6 +86,7 @@
 
 	import organitem from '../item/organItem'
 	import loading from '../item/loading'
+	import studentItem from '../item/studentCardItem'
 	export default {
 		data () {
 			return {		
@@ -78,23 +100,47 @@
 				modalTitle: '',
 				token: '',
 				alterOrganId : undefined,
-				optionsOpen: false
+				optionsOpen: false,
+				organIndex: 0,
+				currentPage: 1,
+				pageCount: 0,
+				selected: false
 			}		
 		},
 		components: {
 			organitem,
-			loading
+			loading,
+			'student-item': studentItem
 		},
 		computed: {
 			...mapState({
 				'myOrganizationList': state => {
 					return state.organization.myOrganizationList
 				},
+				'studentsList': state => {
+					return state.organization.studentsList
+				},
+				'organization': state => state.organization
 			})
 		},
 		methods: {
 			...mapActions(organization.actions),
 
+			toGetStudentsByOrganId() {
+				this.spinShow = true
+				this.getStudentsByOrganId({
+					organizationId: this.organization.organizationId
+				}).then((data) => {
+					if(data.state){
+						this.spinShow = false
+						// this.$Message.success(data.info)
+					}else{
+						this.$Message.error(data.info)
+					}
+				}).catch((err) => {
+					this.$Message.error(err)
+				})
+			},
 			createOrgan() {
 				this.modalTitle = '创建组织'
 				this.showModel = true;
@@ -175,6 +221,24 @@
 			},
 			toggleTag() {
 				this.optionsOpen = !this.optionsOpen;
+			},
+			changeIndex(index, organ) {
+				this.organIndex = index
+				if(index == -1) {
+					this.selected = false
+					alert(this.selected)
+					return ;
+				}
+				this.optionsOpen = false
+				this.setOrganizationInfo({
+					organizationId: organ.organizationId,
+					organName: organ.organizationName,
+					teacherId: organ.teacherId,
+					teacherName: organ.teacherName,
+				})
+				this.toGetStudentsByOrganId()
+				this.selected = true
+				console.log(organ)
 			}
 		},
 		created () {
@@ -188,6 +252,8 @@
 			}).catch((err) => {
 				this.$Message.error(err)
 			})
+			this.toGetStudentsByOrganId()
+			this.refresh = new Date().getTime() - new Date().getTime() % 60000
 		}
 	}
 </script>
@@ -198,7 +264,7 @@
 		min-height: 100px;
 	}
 
-	.student-part,
+	.member-part,
 	.ranking-part {
 		position: relative;
 		border-radius: 4px;
@@ -208,11 +274,11 @@
 
 	}
 
-	.student-part {
+	.member-part {
 		margin-top: 50px;
 	}
 
-	.student-part::before {
+	.member-part::before {
 		content: '';
 		display: inline-block;
 		position: absolute;
@@ -360,21 +426,6 @@
 		cursor: pointer;
 	}
 
-	/* .on-organ:after {
-		content: '';
-		display: inline-block;
-		position: absolute;
-		top: 10px;
-		right:10px;
-
-		width: 9px;
-		height: 9px;
-
-		transform: rotate(-135deg);
-		border: 2px solid #FFFFFF;
-		border-bottom: 0;
-		border-right:0;
-	} */
 
 	.arrow {
 		display: inline-block;
@@ -462,5 +513,10 @@
 
 	.read-more:hover {
 		color: #aaa
+	}
+
+	.students {
+		width: 95%;
+		margin: 0 auto;
 	}
 </style>

@@ -9,6 +9,7 @@
 				:userName = "item.userName" 
 				:email = "item.email" 
 				:phone = "item.phone"
+				:student = "item.studentId"
 				:organizationId = "organization.organizationId"
 			/>
 		</div>
@@ -21,7 +22,7 @@
 	import organization from  '../../store/types/organization'
 
 	import loading from '../item/loading'
-	import studentItem from '../item/studentItem'
+	import studentItem from '../item/studentCardItem'
 	export default {
 		data () {
 			return {		
