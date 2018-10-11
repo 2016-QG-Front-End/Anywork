@@ -1,13 +1,13 @@
 <template>
 	<section>
 		<div class="on-organ" @click="toggleTag">
-			<span id="organ-name">{{myOrganizationList[organIndex].organizationName}}</span>
+			<span id="organ-name">{{selected ? myOrganizationList[organIndex].organizationName : '全部组织'}}</span>
 			<span class="arrow" :class="optionsOpen ? 'opened' : 'closed'"></span>
 		</div>
 		<p class="read-more">详情</p>
 		<transition name="fade">
 			<ul class="organ-list" v-show="optionsOpen" name="organ-list">
-			    <li @click="changeIndex(-1)">全部组织</li>
+			    <li @click="changeIndex(-1, null)">全部组织</li>
 				<li v-for="(organ, index) in myOrganizationList" :key="organ.organizationId"
 					:organizationId = "organ.organizationId"
 					:organizationName = "organ.organizationName"
@@ -31,24 +31,6 @@
 					@upload-organ = "uploadOrganization"
 				/>
 			</div>
-		</div>
-		<div class="member-part" v-if="selected">
-			<div class="header">
-				<h2>组织成员</h2>
-			</div>
-			<!-- <loading :spinShow="spinShow" /> -->
-			<div class="students">
-				<student-item 
-					v-for="item in studentsList" 
-					:key="item.userId" 
-					:userId = "item.userId"
-					:userName = "item.userName" 
-					:email = "item.email" 
-					:phone = "item.phone"
-					:student = "item.studentId"
-					:organizationId = "organization.organizationId"
-				/>
-			</div>
 			<transition name="fade">
 				<div class="modal" v-show="showModel">
 					<h2>{{modalTitle}}</h2>
@@ -68,12 +50,34 @@
 			</transition>
 			<div :class="{'modal-cover': showModel}"></div>
 		</div>
+		<div class="member-part" v-if="selected">
+			<div class="header">
+				<h2>组织成员</h2>
+			</div>
+			<!-- <loading :spinShow="spinShow" /> -->
+			<div class="students">
+				<student-item 
+					v-for="item in studentsList.slice(currentList[0] , currentList[1])" 
+					:key="item.userId" 
+					:userId = "item.userId"
+					:userName = "item.userName" 
+					:email = "item.email" 
+					:phone = "item.phone"
+					:student = "item.studentId"
+					:organizationId = "organization.organizationId"
+				/>
+			</div>
+			<div class="pages">
+				<p class="prev" @click="filpPage(-1)">上一页</p>
+				<span class="page-item" v-for="(item, index) in pageCount"
+				@click="filpPage(index)">{{ index + 1}}</span>
+				<p class="next" @click="filpPage(-2)">下一页</p>
+			</div>
+		</div>
 		<div class="ranking-part">
 			<div class="header">
 				<h2>排行榜</h2>
-				<div class="rank-left">
-					
-				</div>
+				<rank></rank>
 			</div>
 		</div>
 	</section>
@@ -87,6 +91,7 @@
 	import organitem from '../item/organItem'
 	import loading from '../item/loading'
 	import studentItem from '../item/studentCardItem'
+	import rank from './rank'
 	export default {
 		data () {
 			return {		
@@ -102,15 +107,16 @@
 				alterOrganId : undefined,
 				optionsOpen: false,
 				organIndex: 0,
-				currentPage: 1,
-				pageCount: 0,
+				currentPage: 0,
+				// pageCount: 5,
 				selected: false
 			}		
 		},
 		components: {
 			organitem,
 			loading,
-			'student-item': studentItem
+			'student-item': studentItem,
+			rank
 		},
 		computed: {
 			...mapState({
@@ -120,8 +126,28 @@
 				'studentsList': state => {
 					return state.organization.studentsList
 				},
+				// 'pageCount': state => {
+				// 	return state.organization.studentsList.length
+				// },
 				'organization': state => state.organization
-			})
+			}),
+			pageCount : function() {
+				var len = this.studentsList.length
+				if((len % 14) != 0) {
+					return (len - (len % 14)) / 14 + 1
+				} else {
+					return this.studentsList.length / 14
+				}
+			},
+			currentList: function() {
+				var start = this.currentPage * 14
+				if((start + 14) > this.studentsList.length) {
+					var end = this.studentsList.length - 1
+				} else {
+					var end = start + 14
+				}
+				return [start, end]
+			}
 		},
 		methods: {
 			...mapActions(organization.actions),
@@ -224,21 +250,38 @@
 			},
 			changeIndex(index, organ) {
 				this.organIndex = index
+				this.optionsOpen = false
 				if(index == -1) {
 					this.selected = false
-					alert(this.selected)
-					return ;
+					this.pageCount = 0
+				} else {
+					this.setOrganizationInfo({
+						organizationId: organ.organizationId,
+						organName: organ.organizationName,
+						teacherId: organ.teacherId,
+						teacherName: organ.teacherName,
+					})
+					this.toGetStudentsByOrganId()
+					this.selected = true
+					// alert(this.pageCount)
 				}
-				this.optionsOpen = false
-				this.setOrganizationInfo({
-					organizationId: organ.organizationId,
-					organName: organ.organizationName,
-					teacherId: organ.teacherId,
-					teacherName: organ.teacherName,
-				})
-				this.toGetStudentsByOrganId()
-				this.selected = true
-				console.log(organ)
+			},
+			filpPage(index) {
+				if(index == -1) {
+					if(this.currentPage == 0) {
+						alert("已经是第一页")
+						return ;
+					}
+					this.currentPage --
+				} else if(index == -2) {
+					if(this.currentPage == this.pageCount - 1) {
+						alert("已经是最后一页")
+						return ;
+					}
+					this.currentPage ++
+				} else {
+					this.currentPage = index
+				}
 			}
 		},
 		created () {
@@ -518,5 +561,40 @@
 	.students {
 		width: 95%;
 		margin: 0 auto;
+	}
+
+	.pages {
+		/* width: 15%; */
+		text-align: center;
+		/* margin: 10px 0; */
+	}
+
+	.prev,
+	.next {
+		display: inline-block;
+
+		width: 48px;
+		height: 24px;
+		border: 1px solid #548cef;
+
+		color: #548cef;
+		font-size: 14px;
+
+		cursor: pointer;
+	}
+
+	.page-item {
+		display: inline-block;
+
+		margin: 0 5px;
+		border: 1px solid #548cef;
+		width: 24px;
+		height: 24px;
+
+		color: #548cef;
+		font-size: 14px;
+		text-align: center;
+
+		cursor: pointer;
 	}
 </style>
