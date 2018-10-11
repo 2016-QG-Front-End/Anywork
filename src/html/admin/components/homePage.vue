@@ -12,14 +12,23 @@
                     <Menu-item name="tests">组织中的试卷</Menu-item>
                     <Menu-item name="practices">组织中的练习</Menu-item>
                 </Submenu>
-                <Submenu name="paper" v-if="showSubmenu">
+
+                    
+                    
+                    <Submenu name="paper" v-if="showSubmenu">
+                    <template slot="title"><Icon type="ios-keypad"></Icon>组卷</template>
+                        <Menu-item name="createChapter">章节</Menu-item>
+                        <Menu-item name="createPractice">试卷</Menu-item>
+                    </Submenu>
+
+                <!-- <Submenu name="paper" v-if="showSubmenu">
                     <template slot="title">
                         <Icon type="ios-keypad"></Icon>
                         出卷
                     </template>
                     <Menu-item name="createTest">考试</Menu-item>
                     <Menu-item name="createPractice">练习</Menu-item>
-                </Submenu>
+                </Submenu> -->
                 <!-- <Submenu name="info" v-if="showSubmenu">
                     <template slot="title">
                         <Icon type="ios-analytics"></Icon>

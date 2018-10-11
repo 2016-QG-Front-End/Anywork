@@ -27,6 +27,7 @@ const routes = [
         practices: '组织中的练习',
         createTest: '出考卷',
         createPractice: '出练习',
+        createChapter:'章节',
         sendNotice: '发通知',
         noticeHistory: '通知记录',
         score: '评分',
@@ -41,6 +42,7 @@ const routes = [
         practices: '/homePage/practices',
         createTest: '/homePage/createTest',
         createPractice: '/homePage/createPractice',
+        createChapter:'/homePage/createChapter',
         sendNotice: '/homePage/sendNotice',
         noticeHistory: '/homePage/noticeHistory',
         score: '/homePage/tests/completeStatus/score',
@@ -88,6 +90,11 @@ const routes = [
         path: 'createPractice',
         name: 'createPractice',
         component: require('../components/homePage/createPractice.vue'),
+      },
+      {
+        path: 'createChapter',
+        name: 'createChapter',
+        component: require('../components/homePage/createChapter.vue'),
       },
       {
         path: 'createTest',
