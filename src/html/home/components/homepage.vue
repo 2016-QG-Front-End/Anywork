@@ -39,7 +39,7 @@
 		<div class="news-container" v-if="allnews.length > 0">
 			<h2>公告</h2>
 			<section class="news-all-container"  v-if="!showAll">
-				<div class="news-item-container"  v-for="item in news" v-bind:key="item.messageId">
+				<div class="news-item-container"  v-for="item in news" v-bind:key="item.messageId" @on-click='beReaded(item.messageId, item.status, item)'>
 					<div  class="news-img">
 						<img src="../../../assets/images/read@1x.png" />
 					</div>
@@ -58,7 +58,7 @@
 				</div>
 			</section>
 			<section class="news-all-container"  v-if="showAll || news.length <= 0">
-				<div class="news-item-container"  v-for="item in pagenews[pageNum - 1]" v-bind:key="item.messageId">
+				<div class="news-item-container"  v-for="item in pagenews[pageNum - 1]" v-bind:key="item.messageId" @on-click='beReaded(item.messageId, item.status, item)'>
 					<div  class="news-img">
 						<img src="../../../assets/images/read@1x.png" />
 					</div>
@@ -342,6 +342,41 @@
 						this.$Message.error(data.info + ",请重新登陆！")
 					}
 				}).catch((err) => {
+					this.$Message.error(err)
+				})
+			},
+			beReaded (massageId, status, item) {
+				let newss = this.allnews
+				this.$Modal.confirm({
+                    title: item.title,
+                    content: '<p>' + item.content + '</p><p>' + item.createTime + '</p>',
+                    onOk: () => {
+                        
+                    },
+                    onCancel: () => {
+                       
+                    }
+                });
+				if (status) {
+					return 
+				}
+				for (let i = 0; i < newss.length; i++) {
+					if (newss[i].massageId == massageId) {
+						this.allnews[i].status = 1
+					}
+				}
+				for (let i = 0; i < pagenews.length; i++) {
+					for (let j = 0; j < pagenews[i].length; j++) {
+						if (pagenews[i][j].massageId == massageId) {
+							this.pagenews[i][j].status = 1
+						}
+					}
+				}
+				this.readMessage({
+					messageId: messageId
+				}).then(data => {
+					console.log(data)
+				}).catch(err => {
 					this.$Message.error(err)
 				})
 			},

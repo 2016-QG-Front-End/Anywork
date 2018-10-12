@@ -11,7 +11,8 @@ export default namespace('user', {
         'exit',
         'getRank',
         'getNews',
-        'detailCollection'
+        'detailCollection',
+        'readMessage'
     ],
     mutations: [
         'setInfo',
