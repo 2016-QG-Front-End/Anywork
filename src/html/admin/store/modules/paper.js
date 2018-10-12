@@ -177,7 +177,35 @@ const actions = {
             })
         })
     },
-
+    [types.actions.deleteChapter]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/test/deleteChapter',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "1") {
+                    var arr = context.state.testChapterList
+                    arr.pop(res.data.data)
+                    context.commit(types.mutations.setInfo, {
+                        testChapterList: arr
+                    })
+                    resolve({
+                        state: true,
+                        info: res.data.stateInfo,
+                    })
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
     [types.actions.getPaperAnswerById]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
@@ -260,7 +288,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             myAxios({
                 method: 'POST',
-                url: 'quest/upload',
+                url: 'paper/publish',
                 data: data
             }).then(function(res){
                  if(res.data.state.toString()==="1"){

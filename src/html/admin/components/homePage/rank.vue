@@ -1,8 +1,17 @@
 <template>
 	<section>
-		<loading :spinShow="spinShow" />
-		<div>
-			<student-item 
+        <div class="rank-left">
+            <ul>
+                <li><img src="../../../../assets/images/first@3x.png"></li>
+                <li><img src="../../../../assets/images/second@3x.png"></li>
+                <li><img src="../../../../assets/images/third@3x.png"></li>
+                <li><p>NO.4</p></li>
+                <li><p>NO.5</p></li>
+                <li><p>NO.6</p></li>
+            </ul>
+        </div>
+		<!-- <div class="rank-right">
+			<rank-item 
 				v-for="item in studentsList" 
 				:key="item.userId" 
 				:userId = "item.userId"
@@ -12,8 +21,8 @@
 				:student = "item.studentId"
 				:organizationId = "organization.organizationId"
 			/>
-		</div>
-		<p v-if="studentsList.length<=0" class="no-info"> 没有数据... </p>
+		</div> -->
+		<!-- <p v-if="studentsList.length<=0" class="no-info"> 没有数据... </p> -->
 	</section>
 </template>
 
@@ -22,7 +31,7 @@
 	import organization from  '../../store/types/organization'
 
 	import loading from '../item/loading'
-	import studentItem from '../item/studentCardItem'
+	import rankItem from '../item/rankItem'
 	export default {
 		data () {
 			return {		
@@ -31,7 +40,7 @@
 		},
 		components: {
 			loading,
-			'student-item': studentItem
+			'rank-item': rankItem
 		},
 		computed: {
 			...mapState({
@@ -71,10 +80,33 @@
 <style scoped lang='less'>
 	section {
 		position: relative;
-	}
-	.no-info {
-		margin-top: 30px;
-		text-align: center;
-		font-size: 20px;
-	}
+    }
+    
+    .rank-left {
+        margin-left: 2%;
+    }
+	li {
+        list-style: none;
+        margin-top: 30px;
+        height: 65px;
+
+    }
+
+    li:nth-child(-n + 3) img{
+        width: 58px;
+        height: 61px;
+    }
+
+    li:nth-child(n + 3) p{
+        width: 52px;
+        padding-left: 8px;
+
+        text-align: center;
+        line-height: 65px;
+        font-family: HappyZcool-2016;
+        font-size: 20px;
+        color: #616161;
+    }
+
+
 </style>

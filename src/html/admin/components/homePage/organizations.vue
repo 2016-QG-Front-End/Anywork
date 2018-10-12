@@ -1,24 +1,24 @@
 <template>
 	<section>
 		<div class="on-organ" @click="toggleTag">
-			<span id="organ-name">选择组织</span>
+			<span id="organ-name">{{selected ? myOrganizationList[organIndex].organizationName : '全部组织'}}</span>
 			<span class="arrow" :class="optionsOpen ? 'opened' : 'closed'"></span>
 		</div>
 		<p class="read-more">详情</p>
 		<transition name="fade">
 			<ul class="organ-list" v-show="optionsOpen" name="organ-list">
-				<li index="1">计算机科学6班</li>
-				<li index="2">软件工程4班</li>
-				<li index="3">软件工程4班</li>
-				<li index="3">软件工程4班</li>
+			    <li @click="changeIndex(-1, null)">全部组织</li>
+				<li v-for="(organ, index) in myOrganizationList" :key="organ.organizationId"
+					:organizationId = "organ.organizationId"
+					:organizationName = "organ.organizationName"
+					@click="changeIndex(index, organ)">{{organ.organizationName}}</li>
 			</ul>
 		</transition>
 		<Button type="primary" class="create-bt" @click="createOrgan">创建新组织</Button>
-		<div class="student-part">
+		<div class="member-part" v-if="!selected">
 			<div class="header">
-				<h2>组织成员</h2>
+				<h2>我的组织</h2>
 			</div>
-			<!-- <loading :spinShow="spinShow" /> -->
 			<div key="organization" v-show="!spinShow">
 				<organitem class="organ-item" v-for="(organ, index) in myOrganizationList"  :key="organ.organizationId"
 					:organizationId = "organ.organizationId" 
@@ -50,9 +50,34 @@
 			</transition>
 			<div :class="{'modal-cover': showModel}"></div>
 		</div>
+		<div class="member-part" v-if="selected">
+			<div class="header">
+				<h2>组织成员</h2>
+			</div>
+			<!-- <loading :spinShow="spinShow" /> -->
+			<div class="students">
+				<student-item 
+					v-for="item in studentsList.slice(currentList[0] , currentList[1])" 
+					:key="item.userId" 
+					:userId = "item.userId"
+					:userName = "item.userName" 
+					:email = "item.email" 
+					:phone = "item.phone"
+					:student = "item.studentId"
+					:organizationId = "organization.organizationId"
+				/>
+			</div>
+			<div class="pages">
+				<p class="prev" @click="filpPage(-1)">上一页</p>
+				<span class="page-item" v-for="(item, index) in pageCount"
+				@click="filpPage(index)">{{ index + 1}}</span>
+				<p class="next" @click="filpPage(-2)">下一页</p>
+			</div>
+		</div>
 		<div class="ranking-part">
 			<div class="header">
 				<h2>排行榜</h2>
+				<rank></rank>
 			</div>
 		</div>
 	</section>
@@ -65,6 +90,8 @@
 
 	import organitem from '../item/organItem'
 	import loading from '../item/loading'
+	import studentItem from '../item/studentCardItem'
+	import rank from './rank'
 	export default {
 		data () {
 			return {		
@@ -78,23 +105,68 @@
 				modalTitle: '',
 				token: '',
 				alterOrganId : undefined,
-				optionsOpen: false
+				optionsOpen: false,
+				organIndex: 0,
+				currentPage: 0,
+				// pageCount: 5,
+				selected: false
 			}		
 		},
 		components: {
 			organitem,
-			loading
+			loading,
+			'student-item': studentItem,
+			rank
 		},
 		computed: {
 			...mapState({
 				'myOrganizationList': state => {
 					return state.organization.myOrganizationList
 				},
-			})
+				'studentsList': state => {
+					return state.organization.studentsList
+				},
+				// 'pageCount': state => {
+				// 	return state.organization.studentsList.length
+				// },
+				'organization': state => state.organization
+			}),
+			pageCount : function() {
+				var len = this.studentsList.length
+				if((len % 14) != 0) {
+					return (len - (len % 14)) / 14 + 1
+				} else {
+					return this.studentsList.length / 14
+				}
+			},
+			currentList: function() {
+				var start = this.currentPage * 14
+				if((start + 14) > this.studentsList.length) {
+					var end = this.studentsList.length - 1
+				} else {
+					var end = start + 14
+				}
+				return [start, end]
+			}
 		},
 		methods: {
 			...mapActions(organization.actions),
 
+			toGetStudentsByOrganId() {
+				this.spinShow = true
+				this.getStudentsByOrganId({
+					organizationId: this.organization.organizationId
+				}).then((data) => {
+					if(data.state){
+						this.spinShow = false
+						// this.$Message.success(data.info)
+					}else{
+						this.$Message.error(data.info)
+					}
+				}).catch((err) => {
+					this.$Message.error(err)
+				})
+			},
 			createOrgan() {
 				this.modalTitle = '创建组织'
 				this.showModel = true;
@@ -175,6 +247,41 @@
 			},
 			toggleTag() {
 				this.optionsOpen = !this.optionsOpen;
+			},
+			changeIndex(index, organ) {
+				this.organIndex = index
+				this.optionsOpen = false
+				if(index == -1) {
+					this.selected = false
+					this.pageCount = 0
+				} else {
+					this.setOrganizationInfo({
+						organizationId: organ.organizationId,
+						organName: organ.organizationName,
+						teacherId: organ.teacherId,
+						teacherName: organ.teacherName,
+					})
+					this.toGetStudentsByOrganId()
+					this.selected = true
+					// alert(this.pageCount)
+				}
+			},
+			filpPage(index) {
+				if(index == -1) {
+					if(this.currentPage == 0) {
+						alert("已经是第一页")
+						return ;
+					}
+					this.currentPage --
+				} else if(index == -2) {
+					if(this.currentPage == this.pageCount - 1) {
+						alert("已经是最后一页")
+						return ;
+					}
+					this.currentPage ++
+				} else {
+					this.currentPage = index
+				}
 			}
 		},
 		created () {
@@ -188,6 +295,8 @@
 			}).catch((err) => {
 				this.$Message.error(err)
 			})
+			this.toGetStudentsByOrganId()
+			this.refresh = new Date().getTime() - new Date().getTime() % 60000
 		}
 	}
 </script>
@@ -198,7 +307,7 @@
 		min-height: 100px;
 	}
 
-	.student-part,
+	.member-part,
 	.ranking-part {
 		position: relative;
 		border-radius: 4px;
@@ -208,11 +317,11 @@
 
 	}
 
-	.student-part {
+	.member-part {
 		margin-top: 50px;
 	}
 
-	.student-part::before {
+	.member-part::before {
 		content: '';
 		display: inline-block;
 		position: absolute;
@@ -360,21 +469,6 @@
 		cursor: pointer;
 	}
 
-	/* .on-organ:after {
-		content: '';
-		display: inline-block;
-		position: absolute;
-		top: 10px;
-		right:10px;
-
-		width: 9px;
-		height: 9px;
-
-		transform: rotate(-135deg);
-		border: 2px solid #FFFFFF;
-		border-bottom: 0;
-		border-right:0;
-	} */
 
 	.arrow {
 		display: inline-block;
@@ -462,5 +556,45 @@
 
 	.read-more:hover {
 		color: #aaa
+	}
+
+	.students {
+		width: 95%;
+		margin: 0 auto;
+	}
+
+	.pages {
+		/* width: 15%; */
+		text-align: center;
+		/* margin: 10px 0; */
+	}
+
+	.prev,
+	.next {
+		display: inline-block;
+
+		width: 48px;
+		height: 24px;
+		border: 1px solid #548cef;
+
+		color: #548cef;
+		font-size: 14px;
+
+		cursor: pointer;
+	}
+
+	.page-item {
+		display: inline-block;
+
+		margin: 0 5px;
+		border: 1px solid #548cef;
+		width: 24px;
+		height: 24px;
+
+		color: #548cef;
+		font-size: 14px;
+		text-align: center;
+
+		cursor: pointer;
 	}
 </style>
