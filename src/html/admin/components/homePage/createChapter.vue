@@ -1,14 +1,22 @@
 <template>
 		<div class="info-wrap">
-<Tag v-for="item in testChapterList" :key="item.chapterId" :name="item.chapterName"  closable @on-close="toDeleteChapter(item.chapterId)">{{item.chapterName}}</Tag>
+<Tag v-for="item in testChapterList" :key="item.chapterId" :name="item.chapterName"  closable @on-close="toDeleteChapter(item.chapterId)">{{item.chapterName}}<Icon type="edit" @click="editChapterName(item.chapterName,item.chapterId)"></Icon></Tag>
       
-            <Button icon="md-add" type="dashed" @click="handelModel">添加章节</Button>
+            <Button icon="android-add" type="dashed" @click="handelModel">添加章节</Button>
       
 			<Modal
 		        title="章节名称"
 		        v-model="showModel" 
-		        @on-ok="toCreatechapter" >
+		        @on-ok="toCreateChapter" >
 		        <Input type="text" placeholder="章节名" v-model="chapterName"></Input>
+    	</Modal>
+
+
+      <Modal
+		        title="修改章节名称"
+		        v-model="showEditModel" 
+		        @on-ok="toUpdateChapter">
+		        <Input type="text" placeholder="章节名" v-model="newchapterName">{{newchapterName}}</Input>
     	</Modal>
 		</div>
 </template>
@@ -24,7 +32,10 @@ export default {
     return {
       chapterId: 1,
       showModel: false,
+      showEditModel: false,
       chapterName: "",
+      newchapterName: "",
+      chapterIdForUpdate:0,
       count: [0, 1, 2]
     };
   },
@@ -54,8 +65,12 @@ export default {
     handelModel() {
       this.showModel = true;
     },
-
-    toCreatechapter() {
+    editChapterName(chapterName,chapterId) {
+      this.showEditModel = true;
+      this.newchapterName = chapterName;
+      this.chapterIdForUpdate = chapterId;
+    },
+    toCreateChapter() {
       this.addChapter({
         organizationId: this.organization.organizationId,
         chapterName: this.chapterName
@@ -72,13 +87,35 @@ export default {
           this.$Message.error(err);
         });
     },
+    toUpdateChapter() {
+      let that = this
+      this.updateChapter({
+        chapterId: this.chapterIdForUpdate,
+        chapterName: this.newchapterName
+      })
+        .then(data => {
+          if (data.state) {
+            this.$Message.success(data.info);
+            this.chapterId = data.chapterId;
+            this.chapterName = "";
+            that.toGetChapterList();
+          } else {
+            this.$Message.error(data.info);
+          }
+        })
+        .catch(err => {
+          this.$Message.error(err);
+        });
+    },
     toDeleteChapter(chapterId) {
+      let that = this
       this.deleteChapter({
         chapterId: chapterId
       }).then(data => {
         if (data.state) {
           this.$Message.success(data.info);
           this.chapterId = data.chapterId;
+          that.toGetChapterList();
         } else {
           this.$Message.error(data.info);
         }
@@ -99,6 +136,10 @@ export default {
 .info-wrap {
   & > div {
     display: block;
+    height:35px;
+    font-size:15px;
+    line-height: 35px;
+
   }
   button {
     margin-top: 10px;

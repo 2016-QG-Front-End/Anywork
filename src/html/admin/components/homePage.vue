@@ -18,7 +18,7 @@
                     <Submenu name="paper" v-if="showSubmenu">
                     <template slot="title"><Icon type="ios-keypad"></Icon>组卷</template>
                         <Menu-item name="createChapter">章节</Menu-item>
-                        <Menu-item name="createPractice">试卷</Menu-item>
+                        <Menu-item name="createPaper">试卷</Menu-item>
                     </Submenu>
 
                 <!-- <Submenu name="paper" v-if="showSubmenu">

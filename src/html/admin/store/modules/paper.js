@@ -82,7 +82,8 @@ const actions = {
             myAxios({
                 method: 'POST',
                 url: '/test/submit',
-                data: data
+                data: data,
+                headers: { 'Content-Type': 'multipart/form-data' },
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
                     context.commit(types.mutations.setInfo,{
@@ -177,6 +178,32 @@ const actions = {
             })
         })
     },
+    [types.actions.updateChapter]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/test/chapter/update',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "1") {
+                    resolve({
+                        state: true,
+                        info: res.data.stateInfo,
+                        chapterId: res.data.data.chapterId
+                    })
+                    // [types.actions.getChapterList]();
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
     [types.actions.deleteChapter]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
@@ -185,11 +212,6 @@ const actions = {
                 data: data
             }).then(function (res) {
                 if (res.data.state.toString() === "1") {
-                    var arr = context.state.testChapterList
-                    arr.pop(res.data.data)
-                    context.commit(types.mutations.setInfo, {
-                        testChapterList: arr
-                    })
                     resolve({
                         state: true,
                         info: res.data.stateInfo,
@@ -318,8 +340,8 @@ const actions = {
         return new Promise((resolve, reject) => {
             myAxios({
                 method: 'POST',
-                url: 'quest/'+ data.organizationId +'/submit',
-                data: data
+                url: 'paper/publish',
+                data: data,
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
                     context.commit(types.mutations.setInfo,{

@@ -9,6 +9,7 @@ export default namespace('paper', {
 
         'getChapterList',
         'addChapter',
+        'updateChapter',
         'deleteChapter',
         'getPaperAnswerById',
 
