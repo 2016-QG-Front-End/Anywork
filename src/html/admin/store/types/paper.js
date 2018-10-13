@@ -6,7 +6,8 @@ export default namespace('paper', {
         'getPaperInfo',
         'setPaperInfo',
         'submitPaper',
-
+        'getMyOrganizations',
+        
         'getChapterList',
         'addChapter',
         'updateChapter',

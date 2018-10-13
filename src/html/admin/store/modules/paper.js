@@ -15,7 +15,8 @@ const state = {
     paperQuestionList: [],     
     questionAnswerInfo: {},
     testChapterList: [],
-    studentList: []
+    studentList: [],
+    myOrganizationList: []
 }
 
 const actions = {
@@ -305,37 +306,6 @@ const actions = {
             })
         })
     },
-
-    [types.actions.parseFile]: (context, data) => {
-        return new Promise((resolve, reject) => {
-            myAxios({
-                method: 'POST',
-                url: 'paper/publish',
-                data: data
-            }).then(function(res){
-                 if(res.data.state.toString()==="1"){
-                    context.commit(types.mutations.setInfo,{
-                        paperQuestionList: res.data.data || [],
-                    })
-                    resolve({
-                        state: true,
-                        info: res.data.stateInfo}
-                    )
-                }else{
-                    context.commit(types.mutations.setInfo,{
-                        paperQuestionList: [],
-                    })
-                    resolve({
-                        state: false,
-                        info: res.data.stateInfo}
-                    )
-                }
-            }).catch(function(err){
-                reject(err)
-            })
-        })
-    },
-
     [types.actions.createPaper]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
@@ -410,7 +380,28 @@ const actions = {
                 reject(err)
             })
         })
+    }, 
+    [types.actions.getMyOrganizations]: (context) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/organization/myOrganization',
+            }).then(function (res) {
+                if (res.data.state.toString() === "1") {
+                    resolve(res.data)
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
     },
+
 }
 
 const mutations = {

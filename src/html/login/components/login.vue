@@ -22,7 +22,7 @@
 		    </Row>
 			<div class="div-contain">
 				<Button  class="login-bt register" long @click="toRegister">注册</Button>
-				<Button class="login-bt"  long @click="toLogin" :loading="loadStatu">登陆</Button>
+				<Button class="login-bt"  long @click="toLogin" :loading="loadStatu">登录</Button>
 			</div>
 			<div class="div-contain">
 				<a href="#" class="forget-psw" @click="forgetPasswork">忘记密码</a>

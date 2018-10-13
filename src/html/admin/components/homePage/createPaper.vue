@@ -58,7 +58,6 @@ import organization from "../../store/types/organization";
 import { IP } from "src/utils/interaction";
 // import practicesHistory from "../paper/practicesHistory.vue"
 
-
 export default {
   data() {
     return {
@@ -74,9 +73,9 @@ export default {
       uploadType: "byFile",
       canCreate: true,
       fileInput: null,
-      upfile:null,
-      choosedFile:false,
-      choosedFileName:""
+      upfile: null,
+      choosedFile: false,
+      choosedFileName: ""
     };
   },
 
@@ -136,9 +135,14 @@ export default {
         .then(data => {
           if (data.state) {
             this.$Message.success(data.info);
-            this.canCreate = false;
+            // this.canCreate = false;
             this.testpaperTitle = "";
+            this.paperType = null;
             this.date = [];
+            this.chapterId = null;
+            this.upfile=null;
+            this.choosedFile = false;
+
           } else {
             this.$Message.error(data.info);
           }
@@ -147,27 +151,55 @@ export default {
           this.$Message.error(err);
         });
     },
+    dateFormat(fmt, date) {
+      var o = {
+        "M+": date.getMonth() + 1, //月份
+        "d+": date.getDate(), //日
+        "h+": date.getHours(), //小时
+        "m+": date.getMinutes(), //分
+        "s+": date.getSeconds(), //秒
+        "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+        S: date.getMilliseconds() //毫秒
+      };
+      if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1,(date.getFullYear() + "").substr(4 - RegExp.$1.length));
+
+      for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+          fmt = fmt.replace(
+            RegExp.$1,
+            RegExp.$1.length == 1? o[k]:("00" + o[k]).substr((""+o[k]).length)
+          );
+      return fmt;
+    },
     create() {
       if (this.check()) {
         var data = new FormData();
         data.append("file", this.upfile);
         data.append("testpaperTitle", this.testpaperTitle);
         data.append("testpaperType", this.testpaperType);
-        // data.append("createTime", this.date[0]);
-        data.append("createTime", "2018-10-14 1:00:00");
-        data.append("endingTime", "2018-10-15 12:00:00");
-
-        // data.append("endingTime", new Date(this.date[1]).valueOf());
+        data.append(
+          "createTime",
+          this.dateFormat("yyyy-MM-dd hh:mm:ss", this.date[0])
+        );
+        data.append(
+          "endingTime",
+          this.dateFormat("yyyy-MM-dd hh:mm:ss", this.date[1])
+        );
         data.append("chapterId", this.chapterId);
-
         this.toCreatePaper(data);
       }
     },
     check() {
-      if (this.testpaperTitle.trim() === "" || this.date.length === 0 ||this.paperType===null||this.chapterId===null) {
+      if (
+        this.testpaperTitle.trim() === "" ||
+        this.date.length === 0 ||
+        this.paperType === null ||
+        this.chapterId === null 
+      ){
         alert("试卷信息不能为空");
         return false;
-      }else if(this.upfile===null){
+      } else if (this.upfile === null) {
         alert("请选择上传的试卷文件!");
         return false;
       }
@@ -208,7 +240,7 @@ export default {
         this.choosedFileName = file.name;
         this.upfile = file;
       }
-    },
+    }
   },
   created() {
     this.toGetChapterList();
