@@ -120,6 +120,10 @@
 			</div> -->
 			
 		</div>
+		<!-- 表格预览 -->
+		<Table border :columns="columns7" :data="pratiseLists[pageNum - 1]"></Table>
+		<Page :total="pratiseLists.length" :current="pageNum" page-size="10" @on-change="changeNum" class="pagepra"/>
+		<!-- end表格预览 -->
 		<!-- <questionNav></questionNav> -->
 	</section>
 </template>
@@ -178,7 +182,92 @@
 				questionsObject: {},
 				uploadType: 'byFile',
 				canCreate: true,
-				fileInput: null
+				fileInput: null,
+
+				// organizationId: organization.organizationId,
+				columns7: [
+                    {
+                        title: '试卷标题',
+                        key: 'testpaperTitle',
+                        // render: (h, params) => {
+                        //     return h('div', [
+                        //         h('Icon', {
+                        //             props: {
+                        //                 type: 'person'
+                        //             }
+                        //         }),
+                        //         h('strong', params.row.name)
+                        //     ]);
+                        // }
+                    },
+                    {
+                        title: '开始时间',
+                        key: 'createTime'
+                    },
+                    {
+                        title: '结束时间',
+                        key: 'endingTime'
+                    },
+                    {
+                        title: 'Action',
+                        key: 'action',
+                        width: 150,
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.show(params.row.testpaperId)
+                                        }
+                                    }
+                                }, '分析'),
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            // this.remove(params.row.testpaperId)
+                                        }
+                                    }
+                                }, '预览')
+                            ]);
+                        }
+                    }
+                ],
+                pratiseLists: [
+                    // {
+                    //     testpaperTitle: 'John Brown',
+                    //     createTime: 18,
+                    //     endingTime: 'New York No. 1 Lake Park'
+                    // },
+                    // {
+                    //     testpaperTitle: 'Jim Green',
+                    //     createTime: 24,
+                    //     endingTime: 'London No. 1 Lake Park'
+                    // },
+                    // {
+                    //     testpaperTitle: 'Joe Black',
+                    //     createTime: 30,
+                    //     endingTime: 'Sydney No. 1 Lake Park'
+                    // },
+                    // {
+                    //     testpaperTitle: 'Jon Snow',
+                    //     createTime: 26,
+                    //     endingTime: 'Ottawa No. 2 Lake Park'
+                    // }
+				],
+				pageNum: 1
+				
 			}
 		},
 		components: {
@@ -394,6 +483,27 @@
 							break;
 					}
 				})
+			},
+			getPractice() {
+				let that = this
+				this.getExPracticeList({
+					organizationId: this.organization.organizationId
+				}).then(data => {
+					let arr = []
+					for (let i = 0; i < data.length; i+=10) {
+						let ari = []
+						for (let j = i; j < 10; j++) {
+							ari.push(data[j])
+						}
+						arr.push(ari)
+					}
+					that.pratiseLists = arr
+				}).catch(err => {
+					console.log('error')
+				})
+			},
+			changeNum(value) {
+				this.pageNum = value
 			}
 		},
 		watch: {
@@ -410,6 +520,9 @@
 						}
 					}
 				}
+			},
+			organization: function () {
+				this.getPractice()
 			},
 			padNumber: function(newVal, oldVal) {
 				if(this.uploadType === 'byFile') {
@@ -484,6 +597,7 @@
 		},
 		created () {
 			this.toGetChapterList()
+			this.getPractice()
 		},
 	}
 </script>
@@ -556,5 +670,9 @@
 <style>
 	.file-input {
 		display: none;
+	}
+	.pagepra {
+		text-align: center;
+		margin: 10px 10px;
 	}
 </style>

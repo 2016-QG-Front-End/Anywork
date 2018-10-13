@@ -46,7 +46,32 @@ const actions = {
             })
         })
     },
-
+    [types.actions.getExPracticeList]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/paper/' + data.organizationId + '/list',
+                data: data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    context.commit(types.mutations.setInfo,{
+                        allPracticePaperList: res.data.data,
+                    })
+                    resolve({
+                        state: true,
+                        info: res.data.stateInfo}
+                    )
+                }else{
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo}
+                    )
+                }
+            }).catch(function(err){
+                reject(err)
+            })
+        })
+    },
     [types.actions.getPaperInfo]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
