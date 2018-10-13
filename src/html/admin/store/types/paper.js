@@ -21,6 +21,8 @@ export default namespace('paper', {
         'parseFile',
         'createPaper',
         'deletePaper',
+        'previewPaper',
+        'analyzePaper',
         'downloadPaper',
         'getExPracticeList'
     ],

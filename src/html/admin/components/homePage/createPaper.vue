@@ -5,7 +5,7 @@
 				<span>出卷老师</span>
 				<Input type="text" class="input" disabled :value="user.userName"></Input>
 			</div> -->
-			<div>
+      		<div>
 				<span>试卷标题</span>
 				<Input type="text" class="input" v-model="testpaperTitle"></Input>
 			</div>
@@ -44,11 +44,50 @@
       <span v-show="choosedFile">{{choosedFileName}}</span>
 			<Button type="primary" v-show="uploadType==='byFile'" @click="uploadHandle">选择文件</Button>
 			<Button type="primary" @click="create" v-show="canCreate">发布</Button>
-      
-		</div>
+
+  
+			<Modal
+		        :title="previewPaperTitle"
+		        v-model="previewDialog" >
+            <div class="answer" v-for="item in previewpaperContent" v-bind:key="item.questionId">
+             <h4> {{item.content}}</h4>
+
+            <ul v-if="item.type==1">
+            <li><span class="abc">A</span>{{item.a}}</li>
+            <li><span class="abc">B</span>{{item.b}}</li>
+            <li><span class="abc">B</span>{{item.c}}</li>
+            <li><span class="abc">B</span>{{item.d}}</li>
+            正确答案:<span>{{item.key}}</span>
+            </ul>
+
+
+            <div v-if="item.type==2">
+              正确答案:<span>{{item.key}}</span>
+            </div>
+
+            <div v-if="item.type==3">
+             正确答案: <span>{{item.key}}</span>
+              </div>
+
+              <div v-if="item.type==4">
+              正确答案:<span>{{item.key}}</span>
+              </div>
+
+
+            </div>
+
+    		</Modal>
+
+
+			<Modal
+		        :title="analyzePaperTitle"
+		        v-model="analyzeDialog" >
+          <p>{{analyzepaperContent}}</p>
+    		</Modal>
+
     <!-- 表格预览 -->
 		<Table border :columns="columns7" :data="pratiseLists[pageNum - 1]"></Table>
-		<Page :total="totalPar" :current="pageNum" page-size="10" @on-change="changeNum" class="pagepra"/>
+		<Page :total="totalPar" :current="pageNum" page-size="10"  @on-change="changeNum" class="pagepra"/>
 
 		<!-- end表格预览 -->
 	</section>
@@ -81,107 +120,118 @@ export default {
       upfile: null,
       choosedFile: false,
       choosedFileName: "",
+
+      previewDialog: false,
+      previewPaperTitle: "",
+      previewpaperContent:[],
+
+      analyzeDialog: false,
+      analyzePaperTitle: "",
+      analyzepaperContent:"分析试卷内容",
+
       totalPar: 0,
       columns7: [
-                    {
-                        title: '试卷标题',
-                        key: 'testpaperTitle',
-                    },
-                    {
-                        title: '开始时间',
-                        key: 'createTime'
-                    },
-                    {
-                        title: '结束时间',
-                        key: 'endingTime'
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        width: 300,
-                        align: 'center',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'info',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.row.testpaperId)
-                                        }
-                                    }
-                                }, '分析'),
-                                h('Button', {
-                                    props: {
-                                        type: 'success',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            // this.remove(params.row.testpaperId)
-                                        }
-                                    }
-                                }, '预览') ,
-                                h('Button', {
-                                    props: {
-                                        type: 'warning',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            // this.remove(params.row.testpaperId)
-                                        }
-                                    }
-                                }, '修改'),
-                                 h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            // this.remove(params.row.testpaperId)
-                                        }
-                                    }
-                                }, '删除')
-                            ]);
-                        }
+        {
+          title: "试卷标题",
+          key: "testpaperTitle"
+        },
+        {
+          title: "开始时间",
+          key: "createTime"
+        },
+        {
+          title: "结束时间",
+          key: "endingTime"
+        },
+        {
+          title: "操作",
+          key: "action",
+          width: 300,
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "info",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      // alert('dyfyfty');
+                      this.toPreviewPaper(
+                        params.row.testpaperTitle,
+                        params.row.testpaperId
+                      );
                     }
-                ],
-                pratiseLists: [
-                    // {
-                    //     testpaperTitle: 'John Brown',
-                    //     createTime: 18,
-                    //     endingTime: 'New York No. 1 Lake Park'
-                    // },
-                    // {
-                    //     testpaperTitle: 'Jim Green',
-                    //     createTime: 24,
-                    //     endingTime: 'London No. 1 Lake Park'
-                    // },
-                    // {
-                    //     testpaperTitle: 'Joe Black',
-                    //     createTime: 30,
-                    //     endingTime: 'Sydney No. 1 Lake Park'
-                    // },
-                    // {
-                    //     testpaperTitle: 'Jon Snow',
-                    //     createTime: 26,
-                    //     endingTime: 'Ottawa No. 2 Lake Park'
-                    // }
-				],
-				pageNum: 1
+                  }
+                },
+                "预览"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "success",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.toAnalyzePaper(
+                        params.row.testpaperTitle,
+                        params.row.testpaperId
+                      );
+                    }
+                  }
+                },
+                "分析"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "warning",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      // this.remove(params.row.testpaperId)
+                    }
+                  }
+                },
+                "修改"
+              ),
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "error",
+                    size: "small"
+                  },
+                  on: {
+                    click: () => {
+                      this.toDeletePaper(params.row.testpaperId);
+                    }
+                  }
+                },
+                "删除"
+              )
+            ]);
+          }
+        }
+      ],
+      pratiseLists: [],
+      pageNum: 1
     };
   },
 
@@ -241,14 +291,14 @@ export default {
         .then(data => {
           if (data.state) {
             this.$Message.success(data.info);
+            this.getPractice();
             // this.canCreate = false;
             this.testpaperTitle = "";
             this.paperType = null;
             this.date = [];
             this.chapterId = null;
-            this.upfile=null;
+            this.upfile = null;
             this.choosedFile = false;
-
           } else {
             this.$Message.error(data.info);
           }
@@ -268,13 +318,18 @@ export default {
         S: date.getMilliseconds() //毫秒
       };
       if (/(y+)/.test(fmt))
-        fmt = fmt.replace(RegExp.$1,(date.getFullYear() + "").substr(4 - RegExp.$1.length));
+        fmt = fmt.replace(
+          RegExp.$1,
+          (date.getFullYear() + "").substr(4 - RegExp.$1.length)
+        );
 
       for (var k in o)
         if (new RegExp("(" + k + ")").test(fmt))
           fmt = fmt.replace(
             RegExp.$1,
-            RegExp.$1.length == 1? o[k]:("00" + o[k]).substr((""+o[k]).length)
+            RegExp.$1.length == 1
+              ? o[k]
+              : ("00" + o[k]).substr(("" + o[k]).length)
           );
       return fmt;
     },
@@ -301,8 +356,8 @@ export default {
         this.testpaperTitle.trim() === "" ||
         this.date.length === 0 ||
         this.paperType === null ||
-        this.chapterId === null 
-      ){
+        this.chapterId === null
+      ) {
         alert("试卷信息不能为空");
         return false;
       } else if (this.upfile === null) {
@@ -348,33 +403,92 @@ export default {
       }
     },
     getPractice() {
-				let that = this
-				this.getExPracticeList({
-					organizationId: this.organization.organizationId
-				}).then(data => {
-					let arr = []
-					for (let i = 0; i < data.length; i+=10) {
-						let ari = []
-						for (let j = i; j < i + 10; j++) {
-              if (!data[j]) break
-							ari.push(data[j])
-						}
-						arr.push(ari)
+      let that = this;
+      this.getExPracticeList({
+        organizationId: this.organization.organizationId
+      })
+        .then(data => {
+          let arr = [];
+          for (let i = 0; i < data.length; i += 10) {
+            let ari = [];
+            for (let j = i; j < i + 10; j++) {
+              if (!data[j]) break;
+              ari.push(data[j]);
+            }
+            arr.push(ari);
           }
-          that.totalPar = data.length
-					that.pratiseLists = arr
-				}).catch(err => {
-					console.log('error')
-				})
-			},
-			changeNum(value) {
-				this.pageNum = value
-			}
+          that.totalPar = data.length;
+          that.pratiseLists = arr;
+        })
+        .catch(err => {
+          console.log("error");
+        });
+    },
+    changeNum(value) {
+      this.pageNum = value;
+    },
+    toDeletePaper(val) {
+      this.deletePaper({
+        testpaperId: val
+      })
+        .then(data => {
+          if (data.state) {
+            this.getPractice();
+            this.$Message.success(data.info);
+          } else {
+            this.$Message.error(data.info);
+          }
+        })
+        .catch(err => {
+          this.$Message.error(err);
+        });
+    },
+    toPreviewPaper(title, paperID) {
+      this.previewDialog = true;
+      this.previewPaperTitle = title;
+      this.previewPaper({
+        testpaperId: paperID,
+        organizationId: this.organization.organizationId
+      })
+        .then(data => {
+          if (data.state) {
+            console.log(data);
+            console.log(data.info.data.questions);
+            this.previewpaperContent=data.info.data.questions;
+
+            this.$Message.success(data.info);
+          } else {
+            this.$Message.error(data.info);
+          }
+        })
+        .catch(err => {
+          this.$Message.error(err);
+        });
+    },
+    toAnalyzePaper(title, paperID) {
+      this.analyzeDialog = true;
+      this.analyzePaperTitle = title;
+      this.analyzePaper({
+        testpaperId: paperID,
+        organizationId: this.organization.organizationId
+      })
+        .then(data => {
+          if (data.state) {
+            console.log(data);
+            this.$Message.success(data.info);
+          } else {
+            this.$Message.error(data.info);
+          }
+        })
+        .catch(err => {
+          this.$Message.error(err);
+        });
+    }
   },
   watch: {
-    			organization: function () {
-				this.getPractice()
-			},
+    organization: function() {
+      this.getPractice();
+    }
   },
   created() {
     this.toGetChapterList();
@@ -437,11 +551,37 @@ section {
 </style>
 
 <style>
-	.file-input {
-		display: none;
-	}
-	.pagepra {
-		text-align: center;
-		margin: 10px 10px;
-	}
+.file-input {
+  display: none;
+}
+.pagepra {
+  text-align: center;
+  margin: 10px 10px;
+}
+
+
+.answer h4{
+  margin-top:10px;
+
+}
+.answer li{
+  list-style: none;
+}
+.answer .right{
+  font-weight: bold;
+  color:green;
+}
+.answer .abc{
+  display: inline-block;
+  padding-left: 7px;
+  margin-bottom: 15px;
+  margin-right: 30px;
+  height: 30px;
+  width: 30px;
+  font-size: 16px;
+  line-height: 28px;
+  border:solid rgb(103, 103, 255);
+  color: rgb(103, 103, 255);
+  border-radius: 50%;
+}
 </style>

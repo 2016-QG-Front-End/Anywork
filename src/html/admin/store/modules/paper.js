@@ -361,8 +361,9 @@ const actions = {
     [types.actions.deletePaper]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
-                method: 'GET',
-                url: 'quest/'+ data.testpaperId +'/delete',
+                method: 'POST',
+                url: 'paper/delete',
+                data:data
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
                     resolve({
@@ -380,7 +381,79 @@ const actions = {
             })
         })
     },
-
+     [types.actions.deletePaper]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/delete',
+                data:data
+            }).then(function(res){
+                 if(res.data.state.toString()==="1"){
+                    resolve({
+                        state: true,
+                        info: res.data.stateInfo}
+                    )
+                }else{
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo}
+                    )
+                }
+            }).catch(function(err){
+                reject(err)
+            })
+        })
+    },
+    [types.actions.previewPaper]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/show',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "1") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.analyzePaper]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/analyse',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "1") {
+                    resolve({
+                        state: true,
+                        info: res.data.stateInfo
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
     [types.actions.downloadPaper]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
