@@ -6,8 +6,9 @@
 			<span>评分：</span><Input class="mark-input" type="text" v-model="score"></Input>
 		</div>
 		<center class="num">
-			题号 : {{this.index + 1}}
-			<span class="socre">{{questionItem.question.socre}}分</span>
+			<!-- 题号 : {{this.index + 1}}
+			<span class="socre">{{questionItem.question.socre}}分</span> -->
+			{{this.index + 1}}&nbsp;/&nbsp;{{this.questionNumbers}}&nbsp;&nbsp;（判断题）
 		</center> 
 		<section>
 			<div class="content" >{{questionItem.question.content}}</div> 
@@ -85,7 +86,7 @@
 </script>
 
 <style scoped>
-	.wrap {
+	/* .wrap {
 		position: relative;
 	}
 	.mark {
@@ -140,7 +141,7 @@
 	.icon {
 		color: #19be6b; 
 		font-size: 40px;
-	}
+	} */
 	.error-answer {
 		color: red;
 	}

@@ -21,7 +21,8 @@ export default namespace('paper', {
         'parseFile',
         'createPaper',
         'deletePaper',
-        'downloadPaper'
+        'downloadPaper',
+        'getExPracticeList'
     ],
     mutations: [
         'setInfo',

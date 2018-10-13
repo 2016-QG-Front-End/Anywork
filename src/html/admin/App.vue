@@ -49,17 +49,17 @@ export default {
         }
     },
     created () {
-		this.getMyInfo().then((data) => {
-			if(data.state){
-				this.$router.push({
-                    name: 'organizations'
-                })
-			}else{
-				this.$Message.error(data.info)
-			}
-		}).catch((err) => {
-			window.location.href = "./login.html"			
-		})
+		// this.getMyInfo().then((data) => {
+		// 	if(data.state){
+		// 		this.$router.push({
+        //             name: 'organizations'
+        //         })
+		// 	}else{
+		// 		this.$Message.error(data.info)
+		// 	}
+		// }).catch((err) => {
+		// 	window.location.href = "./login.html"			
+		// })
 	}
 }
 </script>
