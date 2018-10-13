@@ -46,6 +46,11 @@
 			<Button type="primary" @click="create" v-show="canCreate">发布</Button>
       
 		</div>
+    <!-- 表格预览 -->
+		<Table border :columns="columns7" :data="pratiseLists[pageNum - 1]"></Table>
+		<Page :total="totalPar" :current="pageNum" page-size="10" @on-change="changeNum" class="pagepra"/>
+
+		<!-- end表格预览 -->
 	</section>
 </template>
 
@@ -75,7 +80,108 @@ export default {
       fileInput: null,
       upfile: null,
       choosedFile: false,
-      choosedFileName: ""
+      choosedFileName: "",
+      totalPar: 0,
+      columns7: [
+                    {
+                        title: '试卷标题',
+                        key: 'testpaperTitle',
+                    },
+                    {
+                        title: '开始时间',
+                        key: 'createTime'
+                    },
+                    {
+                        title: '结束时间',
+                        key: 'endingTime'
+                    },
+                    {
+                        title: '操作',
+                        key: 'action',
+                        width: 300,
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'info',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.show(params.row.testpaperId)
+                                        }
+                                    }
+                                }, '分析'),
+                                h('Button', {
+                                    props: {
+                                        type: 'success',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            // this.remove(params.row.testpaperId)
+                                        }
+                                    }
+                                }, '预览') ,
+                                h('Button', {
+                                    props: {
+                                        type: 'warning',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            // this.remove(params.row.testpaperId)
+                                        }
+                                    }
+                                }, '修改'),
+                                 h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            // this.remove(params.row.testpaperId)
+                                        }
+                                    }
+                                }, '删除')
+                            ]);
+                        }
+                    }
+                ],
+                pratiseLists: [
+                    // {
+                    //     testpaperTitle: 'John Brown',
+                    //     createTime: 18,
+                    //     endingTime: 'New York No. 1 Lake Park'
+                    // },
+                    // {
+                    //     testpaperTitle: 'Jim Green',
+                    //     createTime: 24,
+                    //     endingTime: 'London No. 1 Lake Park'
+                    // },
+                    // {
+                    //     testpaperTitle: 'Joe Black',
+                    //     createTime: 30,
+                    //     endingTime: 'Sydney No. 1 Lake Park'
+                    // },
+                    // {
+                    //     testpaperTitle: 'Jon Snow',
+                    //     createTime: 26,
+                    //     endingTime: 'Ottawa No. 2 Lake Park'
+                    // }
+				],
+				pageNum: 1
     };
   },
 
@@ -240,10 +346,39 @@ export default {
         this.choosedFileName = file.name;
         this.upfile = file;
       }
-    }
+    },
+    getPractice() {
+				let that = this
+				this.getExPracticeList({
+					organizationId: this.organization.organizationId
+				}).then(data => {
+					let arr = []
+					for (let i = 0; i < data.length; i+=10) {
+						let ari = []
+						for (let j = i; j < i + 10; j++) {
+              if (!data[j]) break
+							ari.push(data[j])
+						}
+						arr.push(ari)
+          }
+          that.totalPar = data.length
+					that.pratiseLists = arr
+				}).catch(err => {
+					console.log('error')
+				})
+			},
+			changeNum(value) {
+				this.pageNum = value
+			}
+  },
+  watch: {
+    			organization: function () {
+				this.getPractice()
+			},
   },
   created() {
     this.toGetChapterList();
+    this.getPractice();
   }
 };
 </script>
@@ -302,7 +437,11 @@ section {
 </style>
 
 <style>
-.file-input {
-  display: none;
-}
+	.file-input {
+		display: none;
+	}
+	.pagepra {
+		text-align: center;
+		margin: 10px 10px;
+	}
 </style>

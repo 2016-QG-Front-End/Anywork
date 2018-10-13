@@ -55,13 +55,10 @@ const actions = {
                 data: data
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
-                    context.commit(types.mutations.setInfo,{
-                        allPracticePaperList: res.data.data,
-                    })
-                    resolve({
-                        state: true,
-                        info: res.data.stateInfo}
-                    )
+                    // context.commit(types.mutations.setInfo,{
+                    //     allPracticePaperList: res.data.data,
+                    // })
+                    resolve(res.data.data)
                 }else{
                     resolve({
                         state: false,
