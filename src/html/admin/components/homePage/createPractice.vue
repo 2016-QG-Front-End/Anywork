@@ -41,15 +41,15 @@
 			<Button type="primary" @click="create" v-show="canCreate">创建试卷</Button>
 		</div>
 		<div class="paper-wrap" v-if="canCreate">
-			<typetab 
+			<!-- <typetab 
 				:tabs="tabs" 
 				@tab-select="tabSelect"
-			/>
-			<div class="question-wrap" v-show="currentTab === 'choose'">
-				<div class="question-num-wrap">
+			/> -->
+			<!-- <div class="question-wrap" v-show="currentTab === 'choose'"> -->
+				<!-- <div class="question-num-wrap">
 					<span>题目数量</span>
 					<Input-number class="input" :min="0" v-model="chooseNumber" ></Input-number>
-				</div>
+				</div> -->
 				<choose
 					v-for="(item, index) in (parseChooseList.length>0 ? parseChooseList : chooseNumber)"
 					:index="index"
@@ -57,56 +57,56 @@
 					:question="item"
 					@set-question-item = "setQuestion" 
 					@delete-question-item = "deleteQuestion" />
-			</div>
-			<div class="question-wrap" v-show="currentTab === 'pad'">
+			<!-- </div> -->
+			<!-- <div class="question-wrap" v-show="currentTab === 'pad'">
 				<div class="question-num-wrap">
 					<span>题目数量</span>
 					<Input-number class="input" :min="0" v-model="padNumber" ></Input-number>
-				</div>
+				</div> -->
 				<pad v-for="(item, index) in (parsePadList.length>0 ? parsePadList : padNumber)" 
 					:index="index" 
 					:key="'pad-' + index" 
 					:question="item"
 					@set-question-item = "setQuestion" 
 					@delete-question-item = "deleteQuestion" />
-			</div>
-			<div class="question-wrap" v-show="currentTab === 'judge'">
+			<!-- </div> -->
+			<!-- <div class="question-wrap" v-show="currentTab === 'judge'">
 				<div class="question-num-wrap">
 					<span>题目数量</span>
 					<Input-number class="input" :min="0" v-model="judgeNumber" ></Input-number>
-				</div>
+				</div> -->
 				<judge v-for="(item, index) in (parseJudgeList.length>0 ? parseJudgeList : judgeNumber)" 
 					:index="index" 
 					:key="'judeg-' + index" 
 					:question="item"
 					@set-question-item = "setQuestion" 
 					@delete-question-item = "deleteQuestion" />
-			</div>
-			<div class="question-wrap" v-show="currentTab === 'issue'">
+			<!-- </div> -->
+			<!-- <div class="question-wrap" v-show="currentTab === 'issue'">
 				<div class="question-num-wrap">
 					<span>题目数量</span>
 					<Input-number class="input" :min="0" v-model="issueNumber" ></Input-number>
-				</div>
+				</div> -->
 				<issue v-for="(item, index) in (parseIssueList.length>0 ? parseIssueList : issueNumber)" 
 					:index = "index" 
 					:key = "'judeg-' + index" 
 					:question = "item"
 					@set-question-item = "setQuestion" 
 					@delete-question-item = "deleteQuestion" />
-			</div>
-			<div class="question-wrap" v-show="currentTab === 'integrated'">
+			<!-- </div> -->
+			<!-- <div class="question-wrap" v-show="currentTab === 'integrated'">
 				<div class="question-num-wrap">
 					<span>题目数量</span>
 					<Input-number class="input" :min="0" v-model="integratedNumber" ></Input-number>
-				</div>
+				</div> -->
 				<integrated v-for="(item, index) in (parseIntegratedList.length>0 ? parseIntegratedList : integratedNumber)" 
 					:index="index" 
 					:key="'judeg-' + index" 
 					:question = "item"
 					@set-question-item = "setQuestion" 
 					@delete-question-item = "deleteQuestion" />
-			</div>
-			<div class="question-wrap" v-show="currentTab === 'program'">
+			<!-- </div> -->
+			<!-- <div class="question-wrap" v-show="currentTab === 'program'">
 				<div class="question-num-wrap">
 					<span>题目数量</span>
 					<Input-number class="input" :min="0" v-model="programNumber" ></Input-number>
@@ -117,8 +117,10 @@
 					:question = "item"
 					@set-question-item = "setQuestion" 
 					@delete-question-item = "deleteQuestion" />
-			</div>
+			</div> -->
+			
 		</div>
+		<!-- <questionNav></questionNav> -->
 	</section>
 </template>
 
@@ -137,7 +139,8 @@
 	import issue from './paper/create/issue'
 	import integrated from './paper/create/integrated'
 	import program from './paper/create/program'
-
+	import questionNav from './paper/questionNav.vue'
+	// import questionTypeTab from './paper/questionNav.vue'
 	export default {
 		data() {
 			return {
@@ -174,7 +177,7 @@
 
 				questionsObject: {},
 				uploadType: 'byFile',
-				canCreate: false,
+				canCreate: true,
 				fileInput: null
 			}
 		},
@@ -186,6 +189,7 @@
 			issue,
 			integrated,
 			program,
+			questionNav,
 		},
 		computed: {
 			...mapState({

@@ -6,27 +6,32 @@
 			<span>评分：</span><Input class="mark-input" type="text" v-model="score"></Input>
 		</div>
 		<center class="num">
-			题号 : {{this.index + 1}}
-			<span class="socre">{{questionItem.question.socre}}分</span>
+			<!-- 题号 : {{this.index + 1}}
+			<span class="socre">{{questionItem.question.socre}}分</span> -->
+			{{this.index + 1}}&nbsp;/&nbsp;{{this.questionNumbers}}&nbsp;&nbsp;（单选题）
 		</center> 
 		<section>
 			<div class="content">{{questionItem.question.content}}</div>
-			<p class="answer"> A : {{questionItem.question.a}} </p>
+			<!-- <p class="answer"> A : {{questionItem.question.a}} </p>
 			<p class="answer"> B : {{questionItem.question.b}} </p>
 			<p class="answer"> C : {{questionItem.question.c}} </p>
-			<p class="answer"> D : {{questionItem.question.d}} </p>
+			<p class="answer"> D : {{questionItem.question.d}} </p> -->
 			<div>
 				<span class="answer_option">
 					<label :class="[{trueResult: key === 'A'},{errorResult: studentAnswer === 'A'}]">A</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;{{questionItem.a}}
 				</span>
 	    		<span class="answer_option">
 					<label :class="[{trueResult: key === 'B'},{errorResult: studentAnswer === 'B'}]">B</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;{{questionItem.b}}
 				</span>
 	    		<span class="answer_option">
 					<label :class="[{trueResult: key === 'C'},{errorResult: studentAnswer === 'C'}]">C</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;{{questionItem.c}}
 				</span>
 	    		<span class="answer_option">
 					<label :class="[{trueResult: key === 'D'},{errorResult: studentAnswer === 'D'}]">D</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;{{questionItem.d}}
 				</span>
 			</div>
 		</section>
@@ -119,7 +124,7 @@
 </script>
 
 <style scoped>
-	.wrap {
+	/* .wrap {
 		position: relative;
 	}
 	section {
@@ -217,6 +222,70 @@
 
 		.true-answer, .your-answer {
 			font-size: 2rem;
+		}
+	} */
+	.answer_option {
+		font-size: 1.3em;
+	}
+	section {
+	    /* border: 1px solid #dedede; */
+	}
+	.num {
+		position: relative;
+		/* background-color: #548CFE; */
+		color: #548CFE;
+		font-size: 1.6em;
+		padding: 10px 10px 0;
+	}
+	.num span {
+		position: absolute;
+		right: 0;
+		padding: 0 10px;
+		background-color: #548CFE;
+	}
+	.content {
+        width: 100%;
+	    padding: 10px 10px 0;
+	    margin-bottom: 10px;
+	    /* border: 0 rgba(255, 255, 255, 0); */
+	    /* border-bottom: 1px solid #dedede; */
+	    font-size: 20px;
+       	white-space: pre-line;
+	    word-wrap: break-word;
+	    word-break: break-all;
+	}
+	.answer {
+	    padding: 0 25px;
+	    font-size: 16px;
+	}
+	.on {
+	    background-color: #548CFE;
+	    color: #fff;
+	}
+	label {
+		display: inline-block;
+		/* padding: 0.2rem 0.2rem; */
+		margin: .7rem .5rem;
+		font-size: 1.2rem;
+		color: #548CFE;
+		cursor: pointer;
+		width: 32px;
+		border: 1px solid #548CFE;
+		height: 32px;
+		text-align: center;
+		border-radius: 5em;
+		line-height: 32px;
+	}
+	@media only screen and (max-width: 992px) {
+		.content {
+		    font-size: 3rem;
+		}
+		.answer {
+		    font-size: 2.5rem;
+		}
+		label {
+			font-size: 3rem;
+		    padding: 0 4rem;
 		}
 	}
 </style>
