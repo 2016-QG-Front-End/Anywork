@@ -1,11 +1,7 @@
 <template>
 	<div class="student-item" @click="handel">
 		<img :src=" '/anywork/picture/' + userId + '.jpg?' + refresh ">
-		<div>
-			<p><strong>姓名：</strong>{{userName}}</p>
-			<p><strong>账号：</strong>{{email}}</p> 
-			<p><strong>电话：</strong>{{phone}}</p>
-		</div>
+		<p>{{ userName }}</p>
 	</div>
 </template>
 

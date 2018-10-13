@@ -22,7 +22,7 @@
 	export default {
 		data () {
 			return {
-				organImg : IP + "picture/organization/"+ this.organizationId + ".jpg?" + ( new Date().getTime() - new Date().getTime() % 60000 ),  //以一分钟刷新一次
+				organImg : IP + "picture/organization/"+ this.organizationName + ".jpg?" + ( new Date().getTime() - new Date().getTime() % 60000 ),  //以一分钟刷新一次
 				hasExit: false,
 				showTip: false
 			}

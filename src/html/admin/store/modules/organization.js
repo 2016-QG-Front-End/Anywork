@@ -356,27 +356,6 @@ const actions = {
             })
         })
     },
-    [types.actions.getOrganationNostice]: (context, data) => {
-        return new Promise((resolve, reject) => {
-            myAxios({
-                method: 'POST',
-                url: '/organization/myOrganization',
-                // data: data
-            }).then(function(res){
-                 if(res.data.state.toString()==="1"){
-                    resolve(
-                        res.data.data
-                    )
-                }else{
-                    resolve(
-                        res.data.data
-                    )
-                }
-            }).catch(function(err){
-                reject('服务器出现错误：' + err)
-            })
-        })
-    },
 }
 
 const mutations = {

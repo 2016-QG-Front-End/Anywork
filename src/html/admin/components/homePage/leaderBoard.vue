@@ -31,7 +31,7 @@
 	import organization from  '../../store/types/organization'
 
 	import loading from '../item/loading'
-	import rankItem from '../item/rankItem'
+	import leaderboardItem from '../item/leaderBoardItem'
 	export default {
 		data () {
 			return {		
@@ -40,7 +40,7 @@
 		},
 		components: {
 			loading,
-			'rank-item': rankItem
+			'leaderboard-item': leaderboardItem
 		},
 		computed: {
 			...mapState({
@@ -94,7 +94,7 @@
 
     li:nth-child(-n + 3) img{
         width: 58px;
-        height: 61px;
+        height: 63px;
     }
 
     li:nth-child(n + 3) p{

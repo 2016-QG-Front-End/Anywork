@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<div class="on-organ" @click="toggleTag">
+		<!-- <div class="on-organ" @click="toggleTag">
 			<span id="organ-name">{{selected ? myOrganizationList[organIndex].organizationName : '全部组织'}}</span>
 			<span class="arrow" :class="optionsOpen ? 'opened' : 'closed'"></span>
 		</div>
@@ -13,7 +13,20 @@
 					:organizationName = "organ.organizationName"
 					@click="changeIndex(index, organ)">{{organ.organizationName}}</li>
 			</ul>
-		</transition>
+		</transition> -->
+		<Dropdown trigger="click">
+			<Button type="primary" >
+				{{selected ? myOrganizationList[organIndex].organizationName : '全部组织'}}
+				<Icon type="ios-arrow-down"></Icon>
+			</Button>
+			<DropdownMenu slot="list">
+				<DropdownItem @click.native="changeIndex(-1, null)">全部组织</DropdownItem>
+				<DropdownItem v-for="(organ, index) in myOrganizationList" :key="organ.organizationId"
+					:organizationId = "organ.organizationId"
+					:organizationName = "organ.organizationName"
+					@click.native="changeIndex(index, organ)">{{organ.organizationName}}</DropdownItem>
+			</DropdownMenu>
+		</Dropdown>
 		<Button type="primary" class="create-bt" @click="createOrgan">创建新组织</Button>
 		<div class="member-part" v-if="!selected">
 			<div class="header">
@@ -74,10 +87,36 @@
 				<p class="next" @click="filpPage(-2)">下一页</p>
 			</div>
 		</div>
+		<Dropdown style="margin-left: 20px">
+			<Button type="primary" ghost>
+				选择试卷
+				<Icon type="ios-arrow-down"></Icon>
+			</Button>
+			<DropdownMenu slot="list">
+				<DropdownItem>驴打滚</DropdownItem>
+				<DropdownItem>炸酱面</DropdownItem>
+				<DropdownItem disabled>豆汁儿</DropdownItem>
+				<DropdownItem>冰糖葫芦</DropdownItem>
+				<DropdownItem divided>北京烤鸭</DropdownItem>
+			</DropdownMenu>
+		</Dropdown>
+		<Dropdown style="margin-left: 20px">
+			<Button type="primary">
+				选择组织
+				<Icon type="ios-arrow-down"></Icon>
+			</Button>
+			<DropdownMenu slot="list">
+				<DropdownItem>驴打滚</DropdownItem>
+				<DropdownItem>炸酱面</DropdownItem>
+				<DropdownItem disabled>豆汁儿</DropdownItem>
+				<DropdownItem>冰糖葫芦</DropdownItem>
+				<DropdownItem divided>北京烤鸭</DropdownItem>
+			</DropdownMenu>
+		</Dropdown>
 		<div class="ranking-part">
 			<div class="header">
 				<h2>排行榜</h2>
-				<rank></rank>
+				<leader-board></leader-board>
 			</div>
 		</div>
 	</section>
@@ -91,7 +130,7 @@
 	import organitem from '../item/organItem'
 	import loading from '../item/loading'
 	import studentItem from '../item/studentCardItem'
-	import rank from './rank'
+	import leaderBoard from './leaderBoard'
 	export default {
 		data () {
 			return {		
@@ -116,7 +155,7 @@
 			organitem,
 			loading,
 			'student-item': studentItem,
-			rank
+			leaderBoard
 		},
 		computed: {
 			...mapState({
@@ -310,6 +349,8 @@
 	.member-part,
 	.ranking-part {
 		position: relative;
+		margin-top: 20px;
+		margin-bottom: 50px;
 		border-radius: 4px;
 		min-height: 100px;
 	    background: white;
@@ -317,9 +358,6 @@
 
 	}
 
-	.member-part {
-		margin-top: 50px;
-	}
 
 	.member-part::before {
 		content: '';
@@ -360,7 +398,7 @@
 	.create-bt {
 		position: absolute;
 		right: 10px;
-		top: 15px;
+		top: 8px;
 
 		z-index: 100;
 	}
@@ -451,22 +489,9 @@
 	}
 
 	.on-organ {
-		display: inline-block;
-		position: absolute;
-
-		border-radius: 15.5px;
-		width: 153px;
-		height: 32px;
-		line-height: 32px;
-		
-
-		background: #548CFE;
-		color: white;
-		text-align: center;
-		font-size: 16px;
-
-		z-index: 100;
-		cursor: pointer;
+		padding: 8px 18px;
+		border-radius: 5px;
+		box-shadow: 10px 10px 50px 10px rgb(225, 225, 225);
 	}
 
 
@@ -529,6 +554,7 @@
 	.organ-list li:active{
 		background: #548CEF;
 		color: #fff;
+		
 	}
 
 	.organ-list li:link,
