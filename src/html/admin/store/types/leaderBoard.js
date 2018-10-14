@@ -4,7 +4,7 @@ export default namespace('rank', {
   actions: [
     'getTotalLeaderBoard',
     'getOrganLeaderBoard',
-    'getMyPaper'
+    'setLeaderBoardInfo'
   ],
   mutations: [
     'setInfo',

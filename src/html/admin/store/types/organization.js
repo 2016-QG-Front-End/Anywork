@@ -21,7 +21,10 @@ export default namespace('organization', {
         'getTestsByOrganId',
         'getPracticesByOrganId',
 
-        'getOrganationNostice'
+        'getOrganationNostice',
+
+        'getMyPapers',
+        'setTestId'
     ],
     mutations: [
         'setInfo',

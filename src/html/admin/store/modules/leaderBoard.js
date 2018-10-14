@@ -9,7 +9,8 @@ const state = {
   leaderBoardList: [],
   testOrganList: [],
   testPaperList: [],
-  testOrganId: ''
+  testPaperId: undefined,
+  testOrganId: undefined
 }
 
 // const getters = {
@@ -25,6 +26,7 @@ const actions = {
       myAxios({
         method: 'POST',
         url: '/leaderboard/teacher/show',
+        data: data
       }).then(function (res) {
         if (res.data.state.toString() === "1") {
           context.commit(types.mutations.setInfo, {
@@ -49,10 +51,12 @@ const actions = {
 
   [types.actions.getOrganLeaderBoard]: (context, data) => {
     //context: commit,dispatch,getters,state
+    let organId = context.state.testOrganId
     return new Promise((resolve, reject) => {
       myAxios({
         method: 'POST',
-        url: '/leaderboard/teacher/show/' + testOrganId,
+        url: '/leaderboard/teacher/show/' + organId,
+        data: data
       }).then(function (res) {
         if (res.data.state.toString() === "1") {
           context.commit(types.mutations.setInfo, {
@@ -74,33 +78,11 @@ const actions = {
     })
   },
 
-  [types.actions.getMyPaper]: (context, data) => {
-    //context: commit,dispatch,getters,state
-    return new Promise((resolve, reject) => {
-      myAxios({
-        method: 'POST',
-        url: '/leaderboard/teacher/show',
-      }).then(function (res) {
-        if (res.data.state.toString() === "1") {
-          context.commit(types.mutations.setInfo, {
-            testOrganList: res.data.data.organizations,
-            leaderBoardList: res.data.data.leaderboards
-          })
-          resolve({
-            state: true,
-            info: res.data.stateInfo
-          })
-        } else {
-          resolve({
-            state: false,
-            info: res.data.stateInfo
-          })
-        }
-      }).catch(function (err) {
-        reject(err)
-      })
-    })
-  },
+   [types.actions.setLeaderBoardInfo]: (context, data) => {
+     context.commit(types.mutations.setInfo, data)
+   }, 
+
+  
 }
 
 const mutations = {
@@ -111,7 +93,6 @@ const mutations = {
 
 export default {
   state,
-  getters,
   actions,
   mutations
 };

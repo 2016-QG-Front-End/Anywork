@@ -1,30 +1,28 @@
 <template>
 	<section>
-		<!-- <div class="on-organ" @click="toggleTag">
-			<span id="organ-name">{{selected ? myOrganizationList[organIndex].organizationName : '全部组织'}}</span>
-			<span class="arrow" :class="optionsOpen ? 'opened' : 'closed'"></span>
-		</div>
-		<p class="read-more">详情</p>
-		<transition name="fade">
-			<ul class="organ-list" v-show="optionsOpen" name="organ-list">
-			    <li @click="changeIndex(-1, null)">全部组织</li>
-				<li v-for="(organ, index) in myOrganizationList" :key="organ.organizationId"
-					:organizationId = "organ.organizationId"
-					:organizationName = "organ.organizationName"
-					@click="changeIndex(index, organ)">{{organ.organizationName}}</li>
-			</ul>
-		</transition> -->
 		<Dropdown trigger="click">
 			<Button type="primary" >
 				{{selected ? myOrganizationList[organIndex].organizationName : '全部组织'}}
 				<Icon type="ios-arrow-down"></Icon>
 			</Button>
 			<DropdownMenu slot="list">
-				<DropdownItem @click.native="changeIndex(-1, null)">全部组织</DropdownItem>
+				<DropdownItem @click.native="changeIndex(-1, null); getPapers()">全部组织</DropdownItem>
 				<DropdownItem v-for="(organ, index) in myOrganizationList" :key="organ.organizationId"
 					:organizationId = "organ.organizationId"
 					:organizationName = "organ.organizationName"
-					@click.native="changeIndex(index, organ)">{{organ.organizationName}}</DropdownItem>
+					@click.native="changeIndex(index, organ); getPapers(organ.organizationId);">{{organ.organizationName}}</DropdownItem>
+			</DropdownMenu>
+		</Dropdown>
+		<Dropdown style="margin-left: 20px" trigger="click">
+			<Button type="primary" ghost>
+				{{ selectTest ? papersList[testIndex].testpaperTitle : "选择试卷" }}
+				<Icon type="ios-arrow-down"></Icon>
+			</Button>
+			<DropdownMenu slot="list">
+				<DropdownItem v-for="(paper, index) in papersList" :key="papersList.testpaperId"
+				:testpaperId = "paper.testpaperId"
+				:testpaperTitle = "paper.testpaperTitle"
+				@click.native="setCurrentTest(index, paper.testpaperId)">{{paper.testpaperTitle}}</DropdownItem>
 			</DropdownMenu>
 		</Dropdown>
 		<Button type="primary" class="create-bt" @click="createOrgan">创建新组织</Button>
@@ -87,36 +85,12 @@
 				<p class="next" @click="filpPage(-2)">下一页</p>
 			</div>
 		</div>
-		<Dropdown style="margin-left: 20px">
-			<Button type="primary" ghost>
-				选择试卷
-				<Icon type="ios-arrow-down"></Icon>
-			</Button>
-			<DropdownMenu slot="list">
-				<DropdownItem>驴打滚</DropdownItem>
-				<DropdownItem>炸酱面</DropdownItem>
-				<DropdownItem disabled>豆汁儿</DropdownItem>
-				<DropdownItem>冰糖葫芦</DropdownItem>
-				<DropdownItem divided>北京烤鸭</DropdownItem>
-			</DropdownMenu>
-		</Dropdown>
-		<Dropdown style="margin-left: 20px">
-			<Button type="primary">
-				选择组织
-				<Icon type="ios-arrow-down"></Icon>
-			</Button>
-			<DropdownMenu slot="list">
-				<DropdownItem>驴打滚</DropdownItem>
-				<DropdownItem>炸酱面</DropdownItem>
-				<DropdownItem disabled>豆汁儿</DropdownItem>
-				<DropdownItem>冰糖葫芦</DropdownItem>
-				<DropdownItem divided>北京烤鸭</DropdownItem>
-			</DropdownMenu>
-		</Dropdown>
 		<div class="ranking-part">
 			<div class="header">
 				<h2>排行榜</h2>
-				<leader-board></leader-board>
+				<leader-board :testpaperId = "papersList[testIndex].testpaperId"
+				:total = "!selected"
+				:organizationId = "myOrganizationList[organIndex].organizationId"></leader-board>
 			</div>
 		</div>
 	</section>
@@ -148,7 +122,9 @@
 				organIndex: 0,
 				currentPage: 0,
 				// pageCount: 5,
-				selected: false
+				selected: false,
+				testIndex: 0,
+				selectTest: false
 			}		
 		},
 		components: {
@@ -165,10 +141,10 @@
 				'studentsList': state => {
 					return state.organization.studentsList
 				},
-				// 'pageCount': state => {
-				// 	return state.organization.studentsList.length
-				// },
-				'organization': state => state.organization
+				'papersList': state => {
+					return state.organization.organPaperList
+				},
+				'organization': state => state.organization,
 			}),
 			pageCount : function() {
 				var len = this.studentsList.length
@@ -321,6 +297,16 @@
 				} else {
 					this.currentPage = index
 				}
+			},
+			getPapers(id) {
+				this.getMyPapers(id)
+			},
+			setCurrentTest (index, id) {
+				this.testIndex = index
+				this.selectTest = true
+				this.setTestId({
+					teatId: id,
+				})
 			}
 		},
 		created () {
@@ -334,7 +320,16 @@
 			}).catch((err) => {
 				this.$Message.error(err)
 			})
-			this.toGetStudentsByOrganId()
+			this.getMyPapers().then((data) => {
+				if(data.state){
+
+				}else{
+					this.$Message.error(data.info)
+				}
+			}).catch((err) => {
+				this.$Message.error(err)
+			})
+			// this.toGetStudentsByOrganId()
 			this.refresh = new Date().getTime() - new Date().getTime() % 60000
 		}
 	}
@@ -357,7 +352,6 @@
 
 
 	}
-
 
 	.member-part::before {
 		content: '';
@@ -488,89 +482,6 @@
 	  	opacity: 0.5;
 	}
 
-	.on-organ {
-		padding: 8px 18px;
-		border-radius: 5px;
-		box-shadow: 10px 10px 50px 10px rgb(225, 225, 225);
-	}
-
-
-	.arrow {
-		display: inline-block;
-		position: absolute;
-		top: 10px;
-		right: 10px;
-
-		width: 9px;
-		height: 9px;
-
-		transform: rotate(-135deg);
-		/* transition:all .5s ease-in .1s; */
-		border: 2px solid #FFFFFF;
-		border-bottom: 0;
-		border-right:0;
-	}
-
-	.opened {
-		top: 14px;
-		transform: rotate(45deg);
-		transition:all .1s ease-in .01s;
-	}
-
-	.closed {
-		top: 10px;
-		transform: rotate(-135deg);
-		transition:all .1s ease-in .01s;
-	}
-
-	.organ-list {
-		position: absolute;
-		top: 45px;
-
-		border:1px solid #548CEF;
-		border-bottom: none;
-		width: 153px;
-		/* height: 32px; */
-		
-
-		background: #fff;
-		color: #548CFE;
-		text-align: center;
-		font-size: 16px;
-		z-index: 110;
-	}
-
-	.organ-list li {
-		border-bottom:1px solid #548CEF;
-		/* border-top: none; */
-
-		list-style: none;
-		height: 32px;
-		line-height: 32px;
-		cursor: default;
-	}
-
-	.organ-list li:hover,
-	.organ-list li:active{
-		background: #548CEF;
-		color: #fff;
-		
-	}
-
-	.organ-list li:link,
-	.organ-list li:visited{
-		background: #fff;
-		color: #548CFE;
-	}
-
-	.appear {
-		display: block;
-	}
-
-	.hidden {
-		display: none;
-	}
-
 	.read-more {
 		position: absolute;
 		top: 18px;
@@ -589,6 +500,7 @@
 		margin: 0 auto;
 	}
 
+/** 翻页 **/
 	.pages {
 		/* width: 15%; */
 		text-align: center;
@@ -612,7 +524,7 @@
 	.page-item {
 		display: inline-block;
 
-		margin: 0 5px;
+		margin: 25px 5px;
 		border: 1px solid #548cef;
 		width: 24px;
 		height: 24px;
@@ -623,4 +535,8 @@
 
 		cursor: pointer;
 	}
+
+/** end 翻页 **/
+
+
 </style>
