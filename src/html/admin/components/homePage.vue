@@ -2,8 +2,8 @@
   	<div class="layout">
         <div class="layout-menu-left">
             <Menu ref="leftMenu" :active-name="activeName" theme="dark" width="auto" @on-select="onSelect" @on-open-change="onOpenChange">
-                <div class="layout-logo-left">{{organName}}</div>
-                <Submenu name="organization" v-show="showSubmenu" >
+                <div class="layout-logo-left">{{organization.organName}}</div>
+                <!-- <Submenu name="organization" v-show="showSubmenu" >
                     <template slot="title">
                         <Icon type="ios-navigate"></Icon>
                         组织
@@ -11,7 +11,8 @@
                     <Menu-item name="students">组织中的学生</Menu-item>
                     <Menu-item name="tests">组织中的试卷</Menu-item>
                     <Menu-item name="practices">组织中的练习</Menu-item>
-                </Submenu>
+                </Submenu> -->
+                <Menu-item name="organizations" v-show="showSubmenu"><Icon type="ios-people"></Icon>组织</Menu-item>
 
                     
                     
@@ -34,7 +35,7 @@
                         <Icon type="ios-analytics"></Icon>
                         通知
                     </template> -->
-                    <Menu-item name="sendNotice">发通知</Menu-item>
+                    <Menu-item name="sendNotice"><Icon type="ios-paper"></Icon>发通知</Menu-item>
                     <!-- <Menu-item name="noticeHistory">通知记录</Menu-item> -->
                 <!-- </Submenu> -->
             </Menu>
@@ -102,11 +103,12 @@
             }
         },
         updated() {
-            if(this.$route.name === 'organizations'){
-                this.organName = ''
-            }else{
-                this.organName = this.organization.organName
-            }
+            // if(this.$route.name === 'organizations'){
+            //     this.organName = ''
+            // }else{
+            //     this.organName = this.organization.organName
+            // }
+            // this.organName = this.organization.organName
         },
         beforeRouteUpdate (to, from, next) {
             var matchedArray = to.path.split('\/')
