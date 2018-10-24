@@ -47,47 +47,65 @@
 
   
 			<Modal
-		        :title="previewPaperTitle"
+		        :title="previewPaperTitle+'__'+previewPaperType"
 		        v-model="previewDialog" >
             <div class="answer" v-for="item in previewpaperContent" v-bind:key="item.questionId">
+
+                   <h3 v-if="item.type==1">选择题</h3>
+              <h3 v-if="item.type==2">判断题</h3>
+              <h3 v-if="item.type==3">填空题</h3>
+              <h3 v-if="item.type==4">问答题</h3>
+
              <h4> {{item.content}}</h4>
 
+             <!-- 选择题 -->
             <ul v-if="item.type==1">
             <li><span class="abc">A</span>{{item.a}}</li>
             <li><span class="abc">B</span>{{item.b}}</li>
-            <li><span class="abc">B</span>{{item.c}}</li>
-            <li><span class="abc">B</span>{{item.d}}</li>
-            正确答案:<span>{{item.key}}</span>
+            <li><span class="abc">C</span>{{item.c}}</li>
+            <li><span class="abc">D</span>{{item.d}}</li>
             </ul>
 
-
-            <div v-if="item.type==2">
-              正确答案:<span>{{item.key}}</span>
             </div>
-
-            <div v-if="item.type==3">
-             正确答案: <span>{{item.key}}</span>
-              </div>
-
-              <div v-if="item.type==4">
-              正确答案:<span>{{item.key}}</span>
-              </div>
-
-
-            </div>
-
     		</Modal>
 
 
 			<Modal
 		        :title="analyzePaperTitle"
 		        v-model="analyzeDialog" >
-          <p>{{analyzepaperContent}}</p>
+                <div class="answer" v-for="item in analyzepaperContent" v-bind:key="item.questionId">
+             <h3> {{item.content}}</h3>
+
+             <!-- 选择题 -->
+            <ul v-if="item.type==1">
+            <li><span class="abc">A</span>{{item.a}}</li>
+            <li><span class="abc">B</span>{{item.b}}</li>
+            <li><span class="abc">C</span>{{item.c}}</li>
+            <li><span class="abc">D</span>{{item.d}}</li>
+            解析:正确答案<span>{{item.key}}</span>
+            </ul>
+
+            <!-- 判断题 -->
+            <div v-if="item.type==2">
+              正确答案:<span>{{item.key}}</span>
+            </div>
+
+            <!-- 填空题 -->
+            <div v-if="item.type==3">
+             正确答案: <span>{{item.key}}</span>
+              </div>
+
+
+              <!-- 问答题 -->
+              <div v-if="item.type==4">
+              正确答案:<span>{{item.key}}</span>
+              </div>
+            </div>
     		</Modal>
 
     <!-- 表格预览 -->
 		<Table border :columns="columns7" :data="pratiseLists[pageNum - 1]"></Table>
-		<Page :total="totalPar" :current="pageNum" page-size="10"  @on-change="changeNum" class="pagepra"/>
+		<Page :total="totalPar" :current="pageNum"   @on-change="changeNum" class="pagepra"/>
 
 		<!-- end表格预览 -->
 	</section>
@@ -124,6 +142,8 @@ export default {
       previewDialog: false,
       previewPaperTitle: "",
       previewpaperContent:[],
+
+      previewPaperType:"",
 
       analyzeDialog: false,
       analyzePaperTitle: "",
@@ -452,13 +472,20 @@ export default {
       })
         .then(data => {
           if (data.state) {
-            console.log(data);
-            console.log(data.info.data.questions);
             this.previewpaperContent=data.info.data.questions;
 
-            this.$Message.success(data.info);
+          switch(data.info.data.testpaperType){
+              case 1: this.previewPaperType="考试"
+              break;
+              case 2: this.previewPaperType="预习题"
+              break;
+              case 3: this.previewPaperType="课后复习题"
+              break;
+            }
+
+            this.$Message.success(data.info.info);
           } else {
-            this.$Message.error(data.info);
+            this.$Message.error(data.info.info);
           }
         })
         .catch(err => {
@@ -468,13 +495,16 @@ export default {
     toAnalyzePaper(title, paperID) {
       this.analyzeDialog = true;
       this.analyzePaperTitle = title;
+
       this.analyzePaper({
         testpaperId: paperID,
         organizationId: this.organization.organizationId
       })
         .then(data => {
           if (data.state) {
-            console.log(data);
+           console.log(data.questions);
+            // this.analyzepaperContent=data.questions;
+            // console.log(data.data.questions);
             this.$Message.success(data.info);
           } else {
             this.$Message.error(data.info);
@@ -560,9 +590,10 @@ section {
 }
 
 
-.answer h4{
+.answer h3{
   margin-top:10px;
-
+  margin-bottom:10px;
+  color: #2d8cf0;
 }
 .answer li{
   list-style: none;
@@ -573,15 +604,15 @@ section {
 }
 .answer .abc{
   display: inline-block;
-  padding-left: 7px;
+  padding-left: 9px;
   margin-bottom: 15px;
   margin-right: 30px;
   height: 30px;
   width: 30px;
   font-size: 16px;
-  line-height: 28px;
-  border:solid rgb(103, 103, 255);
-  color: rgb(103, 103, 255);
+  line-height: 30px;
+  border:solid #2d8cf0 1px;
+  color: #2d8cf0;
   border-radius: 50%;
 }
 </style>

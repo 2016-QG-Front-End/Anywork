@@ -18,8 +18,6 @@
 		        <Input type="text" placeholder="章节名" v-model="newchapterName">{{newchapterName}}</Input>
     	</Modal>
 
-
-
     <Modal title="选择组织" v-model="chooseOrganization" @on-ok="choosedOrganization">
 		      <Select v-model="this.organization.organizationId" class="select-type" @on-change="clickedItem">
 			        <Option v-for="item in organizationList" :value="item.organizationId" :key="item.organizationId" >{{item.organizationName}}</Option>
