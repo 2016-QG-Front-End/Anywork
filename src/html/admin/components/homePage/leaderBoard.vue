@@ -17,11 +17,11 @@
 			>
 				<img :src="item.imgPath" alt="头像">
 				<p class="user-name">{{item.username}}</p>
-				<p class="student-id">3216005169</p>
+				<p class="student-id">{{item.studentId}}</p>
 			</li>
 		</div>
 		<div class="clear"></div>
-		<!-- <p v-if="studentsList.length<=0" class="no-info"> 没有数据... </p> -->
+		<p v-if="leaderBoardList.length<=0" class="no-info"> 没有数据... </p>
 	</section>
 </template>
 
@@ -30,7 +30,6 @@
 	import leaderBoard from  '../../store/types/leaderBoard'
 
 	import loading from '../item/loading'
-	import leaderboardItem from '../item/leaderBoardItem'
 import organization from '../../store/types/organization';
 	export default {
 		data () {
@@ -41,7 +40,6 @@ import organization from '../../store/types/organization';
 		props: ['testpaperId', 'total', 'organizationId'],
 		components: {
 			loading,
-			'leaderboard-item': leaderboardItem
 		},
 		computed: {
 			...mapState({
@@ -168,4 +166,9 @@ import organization from '../../store/types/organization';
 		clear: both;
 	}
 
+	.no-info {
+		margin-top: 30px;
+		text-align: center;
+		font-size: 20px;
+	}
 </style>

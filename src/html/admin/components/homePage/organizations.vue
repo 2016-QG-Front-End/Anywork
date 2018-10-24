@@ -2,7 +2,8 @@
 	<section>
 		<Dropdown trigger="click">
 			<Button type="primary" >
-				{{selected ? myOrganizationList[organIndex].organizationName : '全部组织'}}
+				<!-- {{selected ? myOrganizationList[organIndex].organizationName : '全部组织'}} -->
+				{{organization.organName == ''? '全部组织' : organization.organName}}
 				<Icon type="ios-arrow-down"></Icon>
 			</Button>
 			<DropdownMenu slot="list">
@@ -25,7 +26,7 @@
 				@click.native="setCurrentTest(index, paper.testpaperId)">{{paper.testpaperTitle}}</DropdownItem>
 			</DropdownMenu>
 		</Dropdown>
-		<Button type="primary" class="create-bt" @click="createOrgan">创建新组织</Button>
+		<Button type="primary" class="create-bt" v-show="!selected" @click="createOrgan">创建新组织</Button>
 		<div class="member-part" v-if="!selected">
 			<div class="header">
 				<h2>我的组织</h2>
@@ -39,7 +40,9 @@
 					:description = "organ.description" 
 					:count = "organ.count" 
 					:token = "organ.token"
+					:index = "index"
 					@upload-organ = "uploadOrganization"
+					@chooseOrgan = "enterOrgan"
 				/>
 			</div>
 			<transition name="fade">
@@ -124,7 +127,7 @@
 				// pageCount: 5,
 				selected: false,
 				testIndex: 0,
-				selectTest: false
+				selectTest: false,
 			}		
 		},
 		components: {
@@ -264,22 +267,29 @@
 				this.optionsOpen = !this.optionsOpen;
 			},
 			changeIndex(index, organ) {
-				this.organIndex = index
+				
 				this.optionsOpen = false
 				if(index == -1) {
 					this.selected = false
 					this.pageCount = 0
+					this.setOrganizationInfo({
+						organName: '',
+					})
 				} else {
+					this.organIndex = index
 					this.setOrganizationInfo({
 						organizationId: organ.organizationId,
 						organName: organ.organizationName,
 						teacherId: organ.teacherId,
 						teacherName: organ.teacherName,
 					})
-					this.toGetStudentsByOrganId()
+					this.getStudentsByOrganId({
+						organizationId: this.organization.organizationId
+					})
 					this.selected = true
 					// alert(this.pageCount)
 				}
+				// alert(this.selected)
 			},
 			filpPage(index) {
 				if(index == -1) {
@@ -302,13 +312,23 @@
 				this.getMyPapers(id)
 			},
 			setCurrentTest (index, id) {
-				this.testIndex = index
+				if(index >= 0) this.testIndex = index
 				this.selectTest = true
 				this.setTestId({
 					teatId: id,
 				})
+			},
+
+			enterOrgan(index) {
+				this.selected = true;
+				this.organIndex = index;
+				this.getStudentsByOrganId({
+						organizationId: this.organization.organizationId
+					})
 			}
 		},
+
+
 		created () {
 			this.spinShow = true
 			this.getMyOrganizations().then((data) => {

@@ -24,10 +24,11 @@
 			return {
 				organImg : IP + "picture/organization/"+ this.organizationName + ".jpg?" + ( new Date().getTime() - new Date().getTime() % 60000 ),  //以一分钟刷新一次
 				hasExit: false,
-				showTip: false
+				showTip: false,
+				// index: 
 			}
 		},
-		props: ['organizationId', 'teacherId', 'teacherName', 'organizationName', 'description', 'count', 'token'],
+		props: ['organizationId', 'teacherId', 'teacherName', 'organizationName', 'description', 'count', 'token', 'index'],
 		computed: {
 			isEllipsis (state) {
 				return state.description.length >= 12 ? true : false
@@ -43,9 +44,10 @@
 					teacherId: this.teacherId,
 					teacherName: this.teacherName,
 				})
-				this.$router.push({
-					name: 'students',
-				})
+				// this.$router.push({
+				// 	name: 'students',
+				// })
+				this.$emit('chooseOrgan', this.index)
 			},
 			toDeleteOrganization () {
 				this.deleteOrganization({
