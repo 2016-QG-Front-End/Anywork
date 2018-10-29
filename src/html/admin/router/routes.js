@@ -101,6 +101,10 @@ const routes = [
         path: 'createPaper',
         name: 'createPaper',
         component: require('../components/homePage/createPaper.vue'),
+      }, {
+        path: 'checkPaper',
+        name: 'checkPaper',
+        component: require('../components/homePage/checkPaper.vue'),
       },
       {
         path: 'createTest',

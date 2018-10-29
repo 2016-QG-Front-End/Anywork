@@ -358,29 +358,29 @@ const actions = {
         })
     },
 
-    [types.actions.deletePaper]: (context, data) => {
-        return new Promise((resolve, reject) => {
-            myAxios({
-                method: 'POST',
-                url: 'paper/delete',
-                data:data
-            }).then(function(res){
-                 if(res.data.state.toString()==="1"){
-                    resolve({
-                        state: true,
-                        info: res.data.stateInfo}
-                    )
-                }else{
-                    resolve({
-                        state: false,
-                        info: res.data.stateInfo}
-                    )
-                }
-            }).catch(function(err){
-                reject(err)
-            })
-        })
-    },
+    // [types.actions.deletePaper]: (context, data) => {
+    //     return new Promise((resolve, reject) => {
+    //         myAxios({
+    //             method: 'POST',
+    //             url: 'paper/delete',
+    //             data:data
+    //         }).then(function(res){
+    //              if(res.data.state.toString()==="1"){
+    //                 resolve({
+    //                     state: true,
+    //                     info: res.data.stateInfo}
+    //                 )
+    //             }else{
+    //                 resolve({
+    //                     state: false,
+    //                     info: res.data.stateInfo}
+    //                 )
+    //             }
+    //         }).catch(function(err){
+    //             reject(err)
+    //         })
+    //     })
+    // },
      [types.actions.deletePaper]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
@@ -439,13 +439,139 @@ const actions = {
                 if (res.data.state.toString() === "1") {
                     resolve({
                         state: true,
-                        info: res.data.stateInfo
+                        info: res.data
                     }
                     )
                 } else {
                     resolve({
                         state: false,
-                        info: res.data.stateInfo
+                        info: res.data
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.updatePaper]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/update',
+                headers: { 'Content-Type': 'application/json' },
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "0") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.checkProgress]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/student/list',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "0") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.testDetail]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/student/testDetail',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "0") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.checkSubject]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/student/subject',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "0") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.submitSubjectScore]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/teacher/judge',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "0") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data
                     }
                     )
                 }

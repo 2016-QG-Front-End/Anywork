@@ -23,6 +23,11 @@ export default namespace('paper', {
         'deletePaper',
         'previewPaper',
         'analyzePaper',
+        'updatePaper',
+        'checkProgress',
+        'testDetail',
+        'checkSubject',
+        'submitSubjectScore',
         'downloadPaper',
         'getExPracticeList'
     ],

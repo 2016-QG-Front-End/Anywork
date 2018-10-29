@@ -71,7 +71,7 @@
 
 
 			<Modal
-		        :title="analyzePaperTitle"
+		        :title="analyzePaperTitle+'__'+previewPaperType"
 		        v-model="analyzeDialog" >
                 <div class="answer" v-for="item in analyzepaperContent" v-bind:key="item.questionId">
              <h3> {{item.content}}</h3>
@@ -103,6 +103,34 @@
             </div>
     		</Modal>
 
+
+<!-- 修改试卷信息 -->
+        <Modal
+        title="修改试卷信息"
+        v-model="updateDialog"
+        @on-ok="toUpdatePaper">
+
+          <div>
+				<span>试卷标题</span>
+				<Input type="text" class="input" v-model="updatePaperTitle"></Input>
+			</div>
+			<div class="chapter-wrap">
+				<span>试卷类型</span>
+				<Select v-model="paperType" class="select-type" @on-change="choosePaperType">
+					<Option value="1">考试</Option>
+					<Option value="2">预习题</Option>
+					<Option value="3">课后复习题</Option>
+				</Select>
+			</div>
+			<br/>
+			<div>
+				<span>做题时间</span>
+				<Date-picker class="input" type="datetimerange" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间" v-model="updateDate"></Date-picker>
+			</div>
+
+        </Modal>
+
+
     <!-- 表格预览 -->
 		<Table border :columns="columns7" :data="pratiseLists[pageNum - 1]"></Table>
 		<Page :total="totalPar" :current="pageNum"   @on-change="changeNum" class="pagepra"/>
@@ -128,6 +156,7 @@ export default {
       testpaperType: null,
       testpaperTitle: "",
       date: [],
+      updateDate: [],
       templateURL: IP + "excel/template.xlsx",
       showModel: false,
       chapterName: "",
@@ -141,13 +170,16 @@ export default {
 
       previewDialog: false,
       previewPaperTitle: "",
-      previewpaperContent:[],
+      previewpaperContent: [],
 
-      previewPaperType:"",
+      previewPaperType: "",
 
       analyzeDialog: false,
       analyzePaperTitle: "",
-      analyzepaperContent:"分析试卷内容",
+      analyzepaperContent: "分析试卷内容",
+
+      updateDialog: false,
+      updatePaperTitle: "",
 
       totalPar: 0,
       columns7: [
@@ -225,7 +257,10 @@ export default {
                   },
                   on: {
                     click: () => {
-                      // this.remove(params.row.testpaperId)
+                      this.toShowUpdateDialog(
+                        params.row.testpaperTitle,
+                        params.row.testpaperId
+                      );
                     }
                   }
                 },
@@ -447,22 +482,7 @@ export default {
     changeNum(value) {
       this.pageNum = value;
     },
-    toDeletePaper(val) {
-      this.deletePaper({
-        testpaperId: val
-      })
-        .then(data => {
-          if (data.state) {
-            this.getPractice();
-            this.$Message.success(data.info);
-          } else {
-            this.$Message.error(data.info);
-          }
-        })
-        .catch(err => {
-          this.$Message.error(err);
-        });
-    },
+    // 预览试卷
     toPreviewPaper(title, paperID) {
       this.previewDialog = true;
       this.previewPaperTitle = title;
@@ -471,27 +491,31 @@ export default {
         organizationId: this.organization.organizationId
       })
         .then(data => {
-          if (data.state) {
-            this.previewpaperContent=data.info.data.questions;
+          if (data.info.state) {
+            this.previewpaperContent = data.info.data.questions;
 
-          switch(data.info.data.testpaperType){
-              case 1: this.previewPaperType="考试"
-              break;
-              case 2: this.previewPaperType="预习题"
-              break;
-              case 3: this.previewPaperType="课后复习题"
-              break;
+            switch (data.info.data.testpaperType) {
+              case 1:
+                this.previewPaperType = "考试";
+                break;
+              case 2:
+                this.previewPaperType = "预习题";
+                break;
+              case 3:
+                this.previewPaperType = "课后复习题";
+                break;
             }
-
-            this.$Message.success(data.info.info);
+            this.$Message.success(data.info.stateInfo);
           } else {
-            this.$Message.error(data.info.info);
+            this.$Message.error(data.info.stateInfo);
           }
         })
         .catch(err => {
           this.$Message.error(err);
         });
     },
+
+    // 分析试卷
     toAnalyzePaper(title, paperID) {
       this.analyzeDialog = true;
       this.analyzePaperTitle = title;
@@ -501,10 +525,80 @@ export default {
         organizationId: this.organization.organizationId
       })
         .then(data => {
+          if (data.info.state) {
+            this.analyzepaperContent = data.info.data.questions;
+            switch (data.info.data.testpaperType) {
+              case 1:
+                this.previewPaperType = "考试";
+                break;
+              case 2:
+                this.previewPaperType = "预习题";
+                break;
+              case 3:
+                this.previewPaperType = "课后复习题";
+                break;
+            }
+
+            this.$Message.success(data.info.stateInfo);
+          } else {
+            this.$Message.error(data.info.stateInfo);
+          }
+        })
+        .catch(err => {
+          this.$Message.error(err);
+        });
+    },
+
+    toShowUpdateDialog(title, paperID) {
+      this.updateDialog = true;
+
+      this.testpaperId = paperID;
+      this.updatePaperTitle = title;
+    },
+    
+    checkUpdateData() {
+      console.log(this.testpaperType);
+      if (
+        this.updatePaperTitle.trim() === "" ||
+        this.updateDate[0] === "" ||
+         this.updateDate[1] === "" ||
+        this.paperType === null
+      ) {
+        // alert("试卷信息不能为空");
+        this.$Message.error('试卷信息不能为空');
+        return false;
+      } else return true;
+    },
+    // 更新试卷信息
+    toUpdatePaper() {
+      if(this.checkUpdateData()){
+      this.updatePaper({
+        testpaperId: this.testpaperId,
+        testpaperTitle: this.updatePaperTitle,
+        testpaperType: parseInt(this.paperType),
+        createTime: this.dateFormat("yyyy-MM-dd hh:mm:ss", this.updateDate[0]),
+        endingTime: this.dateFormat("yyyy-MM-dd hh:mm:ss", this.updateDate[1])
+      })
+        .then(data => {
+          if (data.info.state) {
+            this.$Message.success(data.info.stateInfo);
+          } else {
+            this.$Message.error(data.info.stateInfo);
+          }
+        })
+        .catch(err => {
+          this.$Message.error(err);
+        });
+    }},
+
+    // 删除试卷
+    toDeletePaper(val) {
+      this.deletePaper({
+        testpaperId: val
+      })
+        .then(data => {
           if (data.state) {
-           console.log(data.questions);
-            // this.analyzepaperContent=data.questions;
-            // console.log(data.data.questions);
+            this.getPractice();
             this.$Message.success(data.info);
           } else {
             this.$Message.error(data.info);
@@ -589,20 +683,19 @@ section {
   margin: 10px 10px;
 }
 
-
-.answer h3{
-  margin-top:10px;
-  margin-bottom:10px;
+.answer h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
   color: #2d8cf0;
 }
-.answer li{
+.answer li {
   list-style: none;
 }
-.answer .right{
+.answer .right {
   font-weight: bold;
-  color:green;
+  color: green;
 }
-.answer .abc{
+.answer .abc {
   display: inline-block;
   padding-left: 9px;
   margin-bottom: 15px;
@@ -611,7 +704,7 @@ section {
   width: 30px;
   font-size: 16px;
   line-height: 30px;
-  border:solid #2d8cf0 1px;
+  border: solid #2d8cf0 1px;
   color: #2d8cf0;
   border-radius: 50%;
 }
