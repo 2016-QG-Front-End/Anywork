@@ -82,7 +82,7 @@
 .form {
     position: relative;
     top: 300px;
-
+left: -10px;
     box-sizing: border-box;
     border-radius: 10px;
     padding: 30px;
@@ -105,7 +105,11 @@
     color: #a0a0a0;
 }
 .register {
-    color: #a0a0a0;
+    color: #a0a0a0 !important;
+	background: none !important;;
+}
+.register a {
+	background: none !important;;
 }
 .competence {
     position: absolute;

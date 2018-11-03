@@ -178,117 +178,138 @@
 </script>
 
 <style scoped>
-	.time {
-		width: 150px;
-		height: 28px;
+.time {
+    position: fixed;
+    top: 0;
+    right: 74px;
 
-		position: fixed;
-		top: 0;
-		right: 74px;
+    border-top: 30px solid #548cfe;
+    border-right: 20px solid transparent;
+    border-bottom: 0 solid transparent;
+    border-left: 20px solid transparent;
+    width: 150px;
+    height: 28px;
+}
+.paper-nav {
+    display: flex;
 
-		border-top: 30px solid #548CFE;
-		border-right:20px solid transparent;
-		border-bottom:0px solid transparent;
-		border-left:20px solid transparent;
-	}
-	.paper-nav {
-		display: flex;
-		padding: 10px 32px;
-		align-items: center;
-		justify-content: space-between;
-		margin: 100px 0 0 0;
-	}
-	.paper-nav div {
-		display: flex;
-		/* padding: 10px 32px; */
-		align-items: center;
-		font-size: 1.4em;
-    	font-weight: 600;
-		color:#548CFE;
-	}
-	.paper-nav div  div {
-		margin: 0 0 0 20px;
-	}
-	.paper-nav > img {
-		cursor: pointer;
-	}
-	.tools-choose {
-		position: fixed;
-		bottom: 70px;
-    	right: 60px;
-	}
-	.answer-card {
-		width: 70px;
-		height: 70px;
-		background-color: #548CFE;
-		margin: 10px 0 10px 0;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		border-radius: 5em;
-		font-size: 14px;
-		color: #fff;
-		cursor: pointer;
-	}
-	.time-choose {
-		width: 150px;
-		height: 28px;
-		text-align: center;
-		position: fixed;
-		top: 0;
-		right: 74px;
-		line-height: 28PX;
-		font-size: 1.5em;
-		font-weight: 600;
-		color:#fff;
-	}
-	.paper-page {
-		width: 70%;
-		height: 100%;
-		min-width: 1000px;
-		margin: auto;
-		padding: 0 10px;
-		background-color: white;
-		overflow: hidden;
-	}
+    margin: 100px 0 0 0;
+    padding: 10px 32px;
 
-	.main {
-		padding: 10px 20px;
-	}
+    align-items: center;
+    justify-content: space-between;
+}
+.paper-nav div {
+    display: flex;
 
-	.paper-info {
-		position: relative;
-		border-bottom: 1px solid #a6a6a6;
-	}
+    font-size: 1.4em;
+    font-weight: 600;
 
-	.paper-info span {
-		display: inline-block;
-	    margin: 10px;
-	    padding: 3px 5px;
-	    font-size: 20px;
-	    box-shadow: 0 0 7px 0px #a6a6a6;
-	}
-	.score, .time{
-		float: right;
-	}
+    color: #548cfe;
 
-	@media only screen and (max-width: 992px) {
-		.paper-page {
-			width: 100%;
-			min-width: 0;
-		}
-		.paper-info {
-		    padding-top: 1rem;
-			padding-bottom: 1rem;
-		}
+/* padding: 10px 32px; */
 
-		.paper-info span {
-			font-size: 2rem;
-		}
+    align-items: center;
+}
+.paper-nav div  div {
+    margin: 0 0 0 20px;
+}
+.paper-nav > img {
+    cursor: pointer;
+}
+.tools-choose {
+    position: fixed;
+    right: 60px;
+    bottom: 70px;
+}
+.answer-card {
+    display: flex;
 
-		.time {
-			float: none;
-		}
-	}
+    margin: 10px 0 10px 0;
+    border-radius: 5em;
+    width: 70px;
+    height: 70px;
+
+    font-size: 14px;
+
+    color: #fff;
+    background-color: #548cfe;
+
+    cursor: pointer;
+
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.time-choose {
+    position: fixed;
+    top: 0;
+    right: 74px;
+
+    width: 150px;
+    height: 28px;
+
+    font-size: 1.5em;
+    font-weight: 600;
+    line-height: 28PX;
+    text-align: center;
+
+    color: #fff;
+}
+.paper-page {
+    overflow: hidden;
+
+    margin: auto;
+    padding: 0 10px;
+    width: 70%;
+    min-width: 1000px;
+    height: 100%;
+
+    background-color: white;
+}
+
+.main {
+    padding: 10px 20px;
+}
+
+.paper-info {
+    position: relative;
+
+    border-bottom: 1px solid #a6a6a6;
+}
+
+.paper-info span {
+    display: inline-block;
+
+    margin: 10px;
+    padding: 3px 5px;
+
+    font-size: 20px;
+
+    box-shadow: 0 0 7px 0 #a6a6a6;
+}
+.score,
+.time {
+    float: right;
+}
+
+@media only screen and (max-width: 992px) {
+    .paper-page {
+        width: 100%;
+        min-width: 0;
+    }
+    .paper-info {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .paper-info span {
+        font-size: 2rem;
+    }
+
+    .time {
+        float: none;
+    }
+}
+
 </style>

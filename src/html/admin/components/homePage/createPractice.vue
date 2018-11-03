@@ -306,6 +306,9 @@
 			handelModel(){
 				this.showModel = true
 			},
+			// showsda(id) {
+
+			// }
 			toCreatechapter() {
 				this.addChapter({
 					organizationId: this.organization.organizationId,

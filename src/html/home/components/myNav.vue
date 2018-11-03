@@ -222,151 +222,182 @@
 </script>
 
 <style scoped>
-	.people-number {
-		position: absolute;
-		right: 8px;
-		top: 65px;
-		color: #000;
-	}
-	.new-img {
-		width: 30px;
-		height: 30px;
-		border-radius: 5em;
-	}
-	.new-container {
-		display: flex;
-		align-items: center;
-	}
-	.container-nav {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-		left: 90%;
-		z-index: 9;
-	}
-	.nav {
-	    /* position: fixed; */
-	    top: 0;
-	    width: 100%;
-	    /* background-color: #3d444c; */
-	    /* box-shadow: 0 1px 2px 2px rgba(73, 73, 73, 0.38); */
-	    z-index: 1000;
-		margin: 96px 0 0  0;
-	}
-	.nav-wrap {
-		position: relative;
-		width: 70%;
-	    min-width: 1000px;
-	    margin: auto;
-	}
-	.logo{
-		display: inline-block;
-		width: 50px;
-		height: 50px;
-		/*margin-left: 15%;*/
-		vertical-align: middle;
-		background-image: url('~assets/images/logo.png');
-		background-size: contain;
-	}
-	.nav li{
-		display: inline-block;
-	    color: white;
-	    line-height: 50px;
-	    width: 82px;
-	    text-align: center;
-		cursor: pointer;
-	}
-	.sub-nav {
-	    position: absolute;
-	    right: 0;
-	    top: 0;
-	}
-	.select {
-		/* background-color: #666666; */
-	}
-	.photo img {
-		display: inline-block;
-		width: 30px;
-		height: 30px;
-		border-radius: 50%;
-		vertical-align: middle;
-		border-radius: 5em;
-	}
-	.person-info {
-		position: absolute;
-    	top: 40px;
-		/* background-color: #666666; */
-		z-index: 1000;
-	}
-	.person-info li{
-		display: block;
-		padding: 10px 16px;;
-		line-height: 20px;
-		color:#000;
-	}
-	.person-info li:hover {
-		/* background-color: #484747; */
-	}
-	.search-wrap {
-		position: absolute;
-    	top: 48px;
-	    width: 200px;
-	    padding: 0 5px;
-        background-color: #666666;
-		z-index: 1000;
-	}
-	.search-bt {
-	    position: absolute;
-	    top: 15px;
-	    right: .5rem;
-	    cursor: pointer;
-	    font-size: 1.5rem;
-	}
+.people-number {
+    position: absolute;
+    top: 65px;
+    right: 8px;
 
-	@media only screen and (max-width: 992px){
-		.nav {
-		    width: 100%;
-		    /* background-color: #3d444c; */
-		    /* box-shadow: 0 1px 2px 2px rgba(73, 73, 73, 0.38); */
-		    z-index: 1000;
-		}
-		.nav-wrap {
-			width: 99%;
-		    min-width: 0;
-		}
-		.logo{
-			width: 8rem;
-			height: 8rem;
-		}
-		.nav li{
-		    line-height: 8rem;
-		    width: 12rem;
-		}	
-		.photo img {
-			width: 6rem;
-			height: 6rem;
-		}
-		.person-info {
-			top: 8rem;
-			right: 0;
-			line-height: 3rem;
-			font-size: 2rem;
-		}
+    color: #000;
+}
+.new-img {
+    border-radius: 5em;
+    width: 30px;
+    height: 30px;
+}
+.new-container {
+    display: flex;
 
-		.person-info li {
-			line-height: 5rem;
-		}
-		.search-wrap {
-		    top: 8rem;
-		    width: 25rem;
-		    padding: 0 1rem;
-		}
+    align-items: center;
+}
+.container-nav {
+    display: flex;
 
-		.search-bt {
-			top: 45px;
-			right: 2rem;
-			font-size: 3rem;
-		}
-	}
+    position: relative;
+    left: 90%;
+    z-index: 9;
+
+    align-items: center;
+    justify-content: center;
+}
+.nav {
+    /* position: fixed; */
+    top: 0;
+/* background-color: #3d444c; */
+    /* box-shadow: 0 1px 2px 2px rgba(73, 73, 73, 0.38); */
+    z-index: 1000;
+
+    margin: 96px 0 0  0;
+    width: 100%;
+}
+.nav-wrap {
+    position: relative;
+
+    margin: auto;
+    width: 70%;
+    min-width: 1000px;
+}
+.logo {
+    display: inline-block;
+
+    width: 50px;
+    height: 50px;
+
+/*margin-left: 15%;*/
+
+    vertical-align: middle;
+
+    background-image: url("~assets/images/logo.png");
+    background-size: contain;
+}
+.nav li {
+    display: inline-block;
+
+    width: 82px;
+
+    line-height: 50px;
+    text-align: center;
+
+    color: white;
+
+    cursor: pointer;
+}
+.sub-nav {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.select {
+    /* background-color: #666666; */
+}
+.photo img {
+    display: inline-block;
+
+    border-radius: 50%;
+    border-radius: 5em;
+    width: 30px;
+    height: 30px;
+
+    vertical-align: middle;
+}
+.person-info {
+    position: absolute;
+    top: 40px;
+
+/* background-color: #666666; */
+    z-index: 1000;
+}
+.person-info li {
+    display: block;
+
+    padding: 10px 16px;
+
+    line-height: 20px;
+
+    color: #000;
+;
+}
+.person-info li:hover {
+    /* background-color: #484747; */
+}
+.search-wrap {
+    position: absolute;
+    top: 48px;
+    z-index: 1000;
+
+    padding: 0 5px;
+    width: 200px;
+
+    background-color: #666;
+}
+.search-bt {
+    position: absolute;
+    top: 15px;
+    right: .5rem;
+
+    font-size: 1.5rem;
+
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 992px) {
+    .nav {
+/* background-color: #3d444c; */
+        /* box-shadow: 0 1px 2px 2px rgba(73, 73, 73, 0.38); */
+        z-index: 1000;
+
+        width: 100%;
+    }
+    .nav-wrap {
+        width: 99%;
+        min-width: 0;
+    }
+    .logo {
+        width: 8rem;
+        height: 8rem;
+    }
+    .nav li {
+        width: 12rem;
+
+        line-height: 8rem;
+    }
+    .photo img {
+        width: 6rem;
+        height: 6rem;
+    }
+    .person-info {
+        top: 8rem;
+        right: 0;
+
+        font-size: 2rem;
+        line-height: 3rem;
+    }
+
+    .person-info li {
+        line-height: 5rem;
+    }
+    .search-wrap {
+        top: 8rem;
+
+        padding: 0 1rem;
+        width: 25rem;
+    }
+
+    .search-bt {
+        top: 45px;
+        right: 2rem;
+
+        font-size: 3rem;
+    }
+}
+
 </style>

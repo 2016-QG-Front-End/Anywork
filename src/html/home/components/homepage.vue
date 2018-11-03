@@ -82,7 +82,7 @@
 				<div v-if="showAll" v-on:click="changeNews">收起<Icon type="ios-arrow-up" /></div>
 			</section>
 		</div>
-		<div class="news-container">
+		<div class="news-container" v-if="rank.length > 0">
 			<h2>排行榜</h2>
 			<section class="rank-container">
 				<!-- <section class="rank-left">
@@ -167,31 +167,7 @@
 				allnews: [
 
 				],
-				rank: [{
-					imagePath: '../../../assets/images/first@1x.png',
-					username: '黄海景',
-					studentId: "3116004777"
-				},{
-					imagePath: '../../../assets/images/first@1x.png',
-					username: '黄海景',
-					studentId: "3116004777"
-				},{
-					imagePath: '../../../assets/images/first@1x.png',
-					username: '黄海景',
-					studentId: "3116004777"
-				},{
-					imagePath: '../../../assets/images/first@1x.png',
-					username: '黄海景',
-					studentId: "3116004777"
-				},{
-					imagePath: '../../../assets/images/first@1x.png',
-					username: '黄海景',
-					studentId: "3116004777"
-				},{
-					imagePath: '../../../assets/images/first@1x.png',
-					username: '黄海景',
-					studentId: "3116004777"
-				}]
+				rank: []
 			}
 		},
 		components: {
@@ -534,54 +510,65 @@
 
 <style scoped>
 .background {
-	position: absolute;
-    /* right: 0px; */
+    position: absolute;
+
+/* right: 0px; */
     top: -114px;
     right: -327px;
     z-index: -1;
+
     width: 1010px;
     height: 891px;
+
     pointer-events: none;
 }
-.rank-choose-item, 
+.rank-choose-item,
 .rank-choose-item-down {
-	color: #548cfe;
-	font-size: 1.3em;
+    font-size: 1.3em;
+
+    color: #548cfe;
 }
 .font-weight {
-	font-weight:600
-}
-.rank-choose-item {
-	height: 30px;
-    line-height: 30px;
-    width: 116px;
-    display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-shadow: 0 0 24px 4px #dedbdb;
-    box-shadow: 0 0 8px 1px #dedbdb;
-    border-radius: 1em;
     font-weight: 600;
 }
+.rank-choose-item {
+    display: flex;
+
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+
+    border-radius: 1em;
+    width: 116px;
+    height: 30px;
+
+    font-weight: 600;
+    line-height: 30px;
+
+    -webkit-box-shadow: 0 0 24px 4px #dedbdb;
+            box-shadow: 0 0 8px 1px #dedbdb;
+
+    align-items: center;
+    -ms-flex-align: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
 .choose-rank {
-	position: absolute;
-	top: 0;
+    position: absolute;
+    top: 0;
     right: 32px;
 }
 .margin-top {
-	margin-top: 212px;
+    margin-top: 212px;
 }
 .number-score {
-	margin: 0 70px;
-	min-width: 54px;
+    overflow: hidden;
+
+    margin: 0 70px;
+    min-width: 54px;
     max-width: 54px;
-	overflow: hidden;
-	text-overflow:ellipsis;
-	white-space: nowrap;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .show-all {
     padding: 10px 20px;
@@ -607,8 +594,9 @@
     /* background-color: white; */
 }
 .news-container {
+    position: relative;
+
     margin: 40px 0;
-	    position: relative;
 }
 .news-container h2 {
     font-size: 2.5em;
@@ -662,36 +650,41 @@
 .rank-item {
     display: flex;
 
+    margin: 10px 0;
+    border-radius: 4em !important;
+
     font-size: 18px;
 
     align-items: center;
-	margin: 10px 0;
-	justify-content: space-between;
-	    border-radius: 4em !important;
+    justify-content: space-between;
 }
 .number-name {
-	max-width:150px;
-	min-width: 150px;
-	overflow: hidden;
-	text-overflow:ellipsis;
-	white-space: nowrap;
+    overflow: hidden;
+
+    min-width: 150px;
+    max-width: 150px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .number-students {
+    overflow: hidden;
     /* position: relative; */
     /* right: 0; */
+
     margin: 0 0 0 422px;
-	overflow: hidden;
-	max-width:150px;
-	min-width: 150px;
-	text-overflow:ellipsis;
-	white-space: nowrap;
+    min-width: 150px;
+    max-width: 150px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .rank-item img {
+    margin: 0 50px 0 88px;
     /* margin: 0 50px 0 0; */
     border-radius: 4em;
     width: 60px;
     height: 60px;
-	margin: 0 50px 0 88px;
 }
 .rank-left {
     display: flex;
@@ -708,10 +701,10 @@
     display: flex;
 
     padding: 0  88px 0 22px;
+/* flex-grow: 1; */
+    width: 100%;
 
     flex-direction: column;
-    /* flex-grow: 1; */
-	width: 100%;
     justify-content: space-between;
 }
 .choose-container {
@@ -741,11 +734,11 @@
 
     box-shadow: 0 0 24px 4px #dedbdb;
 
+    cursor: pointer;
+
     align-items: center;
     flex-direction: column;
     justify-content: center;
-
-	cursor: pointer;
 }
 .choose-container > div > div {
     margin: 12px 0;
@@ -778,7 +771,7 @@
 .main {
     position: relative;
     position: absolute;
-	top: 280px;
+    top: 280px;
     left: -2324px;
 
     margin: 20px 0;
@@ -830,11 +823,12 @@
     0% {
         opacity: 1;
     }
-	70% {
-		opacity: 0.7;
-	}
-	100% {
+    70% {
+        opacity: .7;
+    }
+    100% {
         opacity: 0;
     }
 }
+
 </style>

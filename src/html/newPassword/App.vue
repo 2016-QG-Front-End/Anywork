@@ -1,6 +1,6 @@
 <template>
 	<center class="contain">
-		<img class="logo" src="../../assets/images/logo.png">
+		<!-- <img class="logo" src="../../assets/images/logo.png"> -->
 		<div class="form" @keyup.enter="toLogin">
 			<Mytip content="密码" :info="emailInfo">
 				<Input class="input" type="password" v-model="email" placeholder="密码" icon="ios-email-outline"></Input>
