@@ -2,7 +2,7 @@ import types from '../types/organization'
 import { myAxios } from 'src/utils/interaction'
 
 const state = {
-	organizationId: undefined,
+	organizationId: 15,
 	organName: '',
 	teacherId: undefined,   /*no info*/
 	teacherName: '',
@@ -15,7 +15,9 @@ const state = {
     studentTestList: [],  // 学生在该组织下完成过的考试试卷
     studentPracticeList: [],
     organTestList: [],     //组织下的所有考试
-    organPracticeList: []
+    organPracticeList: [],
+    organPaperList: [],
+    testId: undefined
 }
 
 const actions = {
@@ -356,27 +358,37 @@ const actions = {
             })
         })
     },
-    [types.actions.getOrganationNostice]: (context, data) => {
-        return new Promise((resolve, reject) => {
-            myAxios({
-                method: 'POST',
-                url: '/organization/myOrganization',
-                // data: data
-            }).then(function(res){
-                 if(res.data.state.toString()==="1"){
-                    resolve(
-                        res.data.data
-                    )
-                }else{
-                    resolve(
-                        res.data.data
-                    )
-                }
-            }).catch(function(err){
-                reject('服务器出现错误：' + err)
+
+    [types.actions.getMyPapers]: (context) => {
+      //context: commit,dispatch,getters,state
+      let id = context.state.organizationId
+      return new Promise((resolve, reject) => {
+        myAxios({
+          method: 'POST',
+          url: '/paper/' + id + '/list'
+        }).then(function (res) {
+          if (res.data.state.toString() === "1") {
+            context.commit(types.mutations.setInfo, {
+              organPaperList: res.data.data
             })
+            resolve({
+              state: true,
+              info: res.data.stateInfo
+            })
+          } else {
+            resolve({
+              state: false,
+              info: res.data.stateInfo
+            })
+          }
+        }).catch(function (err) {
+          reject(err)
         })
+      })
     },
+     [types.actions.setTestId]: (context, data) => {
+       context.commit(types.mutations.setInfo, data)
+     },
 }
 
 const mutations = {

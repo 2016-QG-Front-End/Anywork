@@ -6,9 +6,11 @@ export default namespace('paper', {
         'getPaperInfo',
         'setPaperInfo',
         'submitPaper',
-
+        'getMyOrganizations',
+        
         'getChapterList',
         'addChapter',
+        'updateChapter',
         'deleteChapter',
         'getPaperAnswerById',
 
@@ -19,6 +21,13 @@ export default namespace('paper', {
         'parseFile',
         'createPaper',
         'deletePaper',
+        'previewPaper',
+        'analyzePaper',
+        'updatePaper',
+        'checkProgress',
+        'testDetail',
+        'checkSubject',
+        'submitSubjectScore',
         'downloadPaper',
         'getExPracticeList'
     ],

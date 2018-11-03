@@ -5,6 +5,7 @@ import user from './modules/user'
 import organization from './modules/organization'
 import paper from './modules/paper'
 import student from './modules/student'
+import leaderBoard from './modules/leaderBoard'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
 		user,
 		organization,
 		paper,
-		student
+		student,
+		leaderBoard
 	}
 })

@@ -19,7 +19,7 @@
 				refresh: ''
 			}
 		},
-		props: ['userName', 'userId', 'email', 'phone', 'organizationId'],
+		props: ['userName', 'userId', 'email', 'phone', 'organizationId', 'studentId'],
 		methods: {
 			...mapActions(student.actions),
 

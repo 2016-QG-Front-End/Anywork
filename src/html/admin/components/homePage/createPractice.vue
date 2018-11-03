@@ -1,13 +1,22 @@
 <template>
 	<section>
 		<div class="info-wrap">
-			<div>
+			<!-- <div>
 				<span>出卷老师</span>
 				<Input type="text" class="input" disabled :value="user.userName"></Input>
-			</div>
+			</div> -->
+			<practiceHistory></practiceHistory>
 			<div>
 				<span>试卷标题</span>
 				<Input type="text" class="input" v-model="testpaperTitle"></Input>
+			</div>
+			<div class="chapter-wrap">
+				<span>试卷类型</span>
+				<Select v-model="paperType" class="select-type" @on-change="choosePaperType">
+					<Option value="1">考试</Option>
+					<Option value="2">预习题</Option>
+					<Option value="3">课后复习题</Option>
+				</Select>
 			</div>
 			<br/>
 			<div>
@@ -149,6 +158,7 @@
 		data() {
 			return {
 				chapterId: 1,
+				paperType:0,
 				testpaperType: 0,
 				testpaperTitle: '',
 				date: [],

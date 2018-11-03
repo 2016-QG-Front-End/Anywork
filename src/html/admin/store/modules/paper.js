@@ -15,7 +15,8 @@ const state = {
     paperQuestionList: [],     
     questionAnswerInfo: {},
     testChapterList: [],
-    studentList: []
+    studentList: [],
+    myOrganizationList: []
 }
 
 const actions = {
@@ -54,13 +55,10 @@ const actions = {
                 data: data
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
-                    context.commit(types.mutations.setInfo,{
-                        allPracticePaperList: res.data.data,
-                    })
-                    resolve({
-                        state: true,
-                        info: res.data.stateInfo}
-                    )
+                    // context.commit(types.mutations.setInfo,{
+                    //     allPracticePaperList: res.data.data,
+                    // })
+                    resolve(res.data.data)
                 }else{
                     resolve({
                         state: false,
@@ -107,7 +105,8 @@ const actions = {
             myAxios({
                 method: 'POST',
                 url: '/test/submit',
-                data: data
+                data: data,
+                headers: { 'Content-Type': 'multipart/form-data' },
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
                     context.commit(types.mutations.setInfo,{
@@ -202,6 +201,32 @@ const actions = {
             })
         })
     },
+    [types.actions.updateChapter]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/test/chapter/update',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "1") {
+                    resolve({
+                        state: true,
+                        info: res.data.stateInfo,
+                        chapterId: res.data.data.chapterId
+                    })
+                    // [types.actions.getChapterList]();
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
     [types.actions.deleteChapter]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
@@ -210,11 +235,6 @@ const actions = {
                 data: data
             }).then(function (res) {
                 if (res.data.state.toString() === "1") {
-                    var arr = context.state.testChapterList
-                    arr.pop(res.data.data)
-                    context.commit(types.mutations.setInfo, {
-                        testChapterList: arr
-                    })
                     resolve({
                         state: true,
                         info: res.data.stateInfo,
@@ -308,43 +328,12 @@ const actions = {
             })
         })
     },
-
-    [types.actions.parseFile]: (context, data) => {
-        return new Promise((resolve, reject) => {
-            myAxios({
-                method: 'POST',
-                url: 'paper/publish',
-                data: data
-            }).then(function(res){
-                 if(res.data.state.toString()==="1"){
-                    context.commit(types.mutations.setInfo,{
-                        paperQuestionList: res.data.data || [],
-                    })
-                    resolve({
-                        state: true,
-                        info: res.data.stateInfo}
-                    )
-                }else{
-                    context.commit(types.mutations.setInfo,{
-                        paperQuestionList: [],
-                    })
-                    resolve({
-                        state: false,
-                        info: res.data.stateInfo}
-                    )
-                }
-            }).catch(function(err){
-                reject(err)
-            })
-        })
-    },
-
     [types.actions.createPaper]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
                 method: 'POST',
-                url: 'quest/'+ data.organizationId +'/submit',
-                data: data
+                url: 'paper/publish',
+                data: data,
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
                     context.commit(types.mutations.setInfo,{
@@ -369,11 +358,35 @@ const actions = {
         })
     },
 
-    [types.actions.deletePaper]: (context, data) => {
+    // [types.actions.deletePaper]: (context, data) => {
+    //     return new Promise((resolve, reject) => {
+    //         myAxios({
+    //             method: 'POST',
+    //             url: 'paper/delete',
+    //             data:data
+    //         }).then(function(res){
+    //              if(res.data.state.toString()==="1"){
+    //                 resolve({
+    //                     state: true,
+    //                     info: res.data.stateInfo}
+    //                 )
+    //             }else{
+    //                 resolve({
+    //                     state: false,
+    //                     info: res.data.stateInfo}
+    //                 )
+    //             }
+    //         }).catch(function(err){
+    //             reject(err)
+    //         })
+    //     })
+    // },
+     [types.actions.deletePaper]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
-                method: 'GET',
-                url: 'quest/'+ data.testpaperId +'/delete',
+                method: 'POST',
+                url: 'paper/delete',
+                data:data
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
                     resolve({
@@ -391,7 +404,182 @@ const actions = {
             })
         })
     },
-
+    [types.actions.previewPaper]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/show',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "1") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.analyzePaper]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/analyse',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "1") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.updatePaper]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/update',
+                headers: { 'Content-Type': 'application/json' },
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "0") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.checkProgress]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/student/list',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "0") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.testDetail]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/student/testDetail',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "0") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.checkSubject]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/student/subject',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "0") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
+    [types.actions.submitSubjectScore]: (context, data) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: 'paper/teacher/judge',
+                data: data
+            }).then(function (res) {
+                if (res.data.state.toString() === "0") {
+                    resolve({
+                        state: true,
+                        info: res.data
+                    }
+                    )
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
+    },
     [types.actions.downloadPaper]: (context, data) => {
         return new Promise((resolve, reject) => {
             myAxios({
@@ -413,7 +601,28 @@ const actions = {
                 reject(err)
             })
         })
+    }, 
+    [types.actions.getMyOrganizations]: (context) => {
+        return new Promise((resolve, reject) => {
+            myAxios({
+                method: 'POST',
+                url: '/organization/myOrganization',
+            }).then(function (res) {
+                if (res.data.state.toString() === "1") {
+                    resolve(res.data)
+                } else {
+                    resolve({
+                        state: false,
+                        info: res.data.stateInfo
+                    }
+                    )
+                }
+            }).catch(function (err) {
+                reject(err)
+            })
+        })
     },
+
 }
 
 const mutations = {

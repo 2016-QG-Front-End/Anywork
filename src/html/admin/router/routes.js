@@ -43,6 +43,7 @@ const routes = [
         createTest: '/homePage/createTest',
         createPractice: '/homePage/createPractice',
         createChapter:'/homePage/createChapter',
+        createPaper :'/homepage/createPaper',
         sendNotice: '/homePage/sendNotice',
         noticeHistory: '/homePage/noticeHistory',
         score: '/homePage/tests/completeStatus/score',
@@ -95,6 +96,15 @@ const routes = [
         path: 'createChapter',
         name: 'createChapter',
         component: require('../components/homePage/createChapter.vue'),
+      },
+      {
+        path: 'createPaper',
+        name: 'createPaper',
+        component: require('../components/homePage/createPaper.vue'),
+      }, {
+        path: 'checkPaper',
+        name: 'checkPaper',
+        component: require('../components/homePage/checkPaper.vue'),
       },
       {
         path: 'createTest',
