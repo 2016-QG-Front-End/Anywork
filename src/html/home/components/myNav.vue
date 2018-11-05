@@ -29,7 +29,7 @@
 			<div class="container-nav">
 				<img class="new-img" :src="userPhoto">
 				<li class="photo" :class="{select: personNav}" @click="togglePersonNav" @mouseleave="hidePersonNav">
-					<img src="../../../assets/images/anywork@1x.png">
+					<img src="../../../assets/images/gg.png">
 					<ul class="person-info" v-show="personNav">
 						<li @click="toPersonPage">个人主页</li>
 						<li @click="toFeedback">修改密码</li>
@@ -155,13 +155,13 @@
 				// 		isChangeI: true
 				// 	}
 				// })
-				location.href='http://localhost:8080/html/home.html#/personPage/baseInfo?isChangeI=true'
+				location.href='https://qgstudio.org/anywork/html/home.html#/personPage/baseInfo?isChangeI=true'
 			},
 			toFeedback() {
 				// this.$router.push({
 				// 	name: 'feedback'
 				// })
-				location.href='http://localhost:8080/html/home.html#/personPage/changePassword'
+				location.href='https://qgstudio.org/anywork/html/home.html#/personPage/changePassword'
 			},
 			toExit () {
 				this.exit().then((data) => {
@@ -305,7 +305,7 @@
     border-radius: 50%;
     border-radius: 5em;
     width: 30px;
-    height: 30px;
+    height: 16px;
 
     vertical-align: middle;
 }

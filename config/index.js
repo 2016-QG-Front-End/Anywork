@@ -35,7 +35,7 @@ module.exports = {
             // target: 'http://10.21.48.11:8080',
             changeOrigin: true,
             pathRewrite: {
-                '^/anywork': ''
+                '^/anywork': '/anywork'
             }
         }
     },

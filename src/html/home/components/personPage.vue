@@ -40,7 +40,7 @@
 		            <!-- </div>
 		        </Menu> -->
 				<img class="logo" src="~assets/images/draw@2x.png">
-				<img class="logo-small" src="~assets/images/anywork@2x.png"/>
+				<img class="logo-small" src="~assets/images/anywork@2x.png" @click="toHomepage"/>
 				<div class="change-photo" v-if="isChangeI">
 					<img class="photo" :src="imageP ? imageP : this.userPhoto">
 					<upload class="upload" v-show="avataredit" :server="upload.server" :api="upload.api" :filename="upload.filename" :params="upload.params" @success="upsuccess" v-model="newavatar" :crop="upload.crop" :width="upload.width" :height="upload.height" :ok="upload.ok" :cancel="upload.cancel">
@@ -105,6 +105,9 @@
 					name: 'baseInfo'
 				})
 				this.activeName = "baseInfo"
+			},
+			toHomepage () {
+				location.href = 'https://qgstudio.org/anywork/html/home.html#/homepage'
 			},
 			updatePassword () {
 				this.$router.push({

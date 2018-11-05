@@ -41,7 +41,7 @@
             ...mapActions(user.actions),
             confirm: function () {
                 let that = this
-                this.forgetPassword({
+                this.updatePassword({
 					oldPassword: this.oldPassword,
 					newPassword: this.newPassword
                 }).then(data => {

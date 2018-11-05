@@ -189,7 +189,12 @@
 				'noJoinOrganizationList' : state => {
 					return state.organization.noJoinOrganizationList
 				}
-			})
+			}),
+			...mapState({
+				'user': state => {
+					return state.user
+				}
+			}),
 		},
 		methods: {
 			...mapActions(organization.actions),
@@ -198,7 +203,7 @@
 				this.showAll = !this.showAll
 			},
 			initWebSocket: function () {
-				const wsuri = 'ws://10.21.56.107:8080' + "/websocket/" + this.user.userId;//ws地址
+				const wsuri = 'wss://39.98.41.126:443' + "/websocket/" + this.user.userId;//ws地址
 				// console.log(this.user)
 				// console.log(this.userId)
 	　　		this.websock = new WebSocket(wsuri); 
@@ -264,14 +269,14 @@
 			},
 			toPath (indexNumber) {
 				if (indexNumber == 1) {
-					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=2'
+					location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=2'
 				} else if (indexNumber == 2) {
-					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=3'
+					location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=3'
 				} else if (indexNumber == 3) {
-					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=1'
+					location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=1'
 				} else {
 					// location.href = 'http://localhost:8080/html/home.html#/'
-					location.href = 'http://localhost:8080/html/home.html#/paperPage/lookAnswer?isCollect=true'
+					location.href = 'https://qgstudio.org/anywork/html/home.html#/paperPage/lookAnswer?isCollect=true'
 				}
 			},
 			chooseOrgination () {
@@ -500,6 +505,7 @@
 			})
 			this.$bus.$on('search-organ', this.toGetSearchResultList)
 			this.initWebSocket()
+			this.getAllNews()
 		},
 		beforeDestroy () {
 			  this.$bus.$off('search-organ', this.toGetSearchResultList)
