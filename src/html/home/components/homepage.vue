@@ -207,7 +207,7 @@
 				this.showAll = !this.showAll
 			},
 			initWebSocket: function () {
-				const wsuri = 'wss://39.98.41.126:443' + "/websocket/" + this.user.userId;//ws地址
+				const wsuri = 'ws://39.98.41.126:443' + "/websocket/" + this.user.userId;//ws地址
 				// console.log(this.user)
 				// console.log(this.userId)
 	　　		this.websock = new WebSocket(wsuri); 
