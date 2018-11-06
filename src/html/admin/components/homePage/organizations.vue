@@ -41,6 +41,7 @@
 					:count = "organ.count" 
 					:token = "organ.token"
 					:index = "index"
+					:img = "organ.imagePath == null ? defaultImg : organ.imagePath"
 					@upload-organ = "uploadOrganization"
 					@chooseOrgan = "enterOrgan"
 				/>
@@ -77,8 +78,9 @@
 					:userName = "item.userName" 
 					:email = "item.email" 
 					:phone = "item.phone"
-					:student = "item.studentId"
+					:studentId = "item.studentId"
 					:organizationId = "organization.organizationId"
+					:studentImg = "item.imagePath == null ? defaultImg : item.imagePath"
 				/>
 			</div>
 			<div class="pages">
@@ -118,7 +120,7 @@
 				organizationName: '',
 				description: '',
 				file: null,
-				imgSrc: '',
+				imgSrc: require('@/assets/images/noimage.png'),
 				modalTitle: '',
 				token: '',
 				alterOrganId : undefined,
@@ -129,7 +131,8 @@
 				selected: false,
 				testIndex: 0,
 				selectTest: false,
-				havePaper: false
+				havePaper: false,
+				defaultImg: require('@/assets/images/noimage.png')
 			}		
 		},
 		components: {
@@ -196,7 +199,7 @@
 				this.organizationName = organ.organizationName,
 				this.description = organ.description,
 				this.imgSrc = organ.imgSrc
-				this.modalTitle = '修改组织'
+				this.modalTitle = '修改组织（组织名不能相同）'
 				this.showModel = true;
 			},
 			addFile() {
@@ -378,6 +381,7 @@
 
 	.ranking-part {
 		min-height: 200px;
+		padding-bottom: 30px;
 	}
 
 	.member-part::before {

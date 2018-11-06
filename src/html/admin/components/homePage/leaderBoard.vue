@@ -15,7 +15,7 @@
 				v-for="(item, index) in leaderBoardList" 
 				 
 			>
-				<img :src="item.imgPath" alt="头像">
+				<img :src="item.imagePath == null ? defaultImg : item.imagePath" alt="头像">
 				<p class="user-name">{{item.username}}</p>
 				<p class="student-id">{{item.studentId}}</p>
 			</li>
@@ -34,7 +34,7 @@ import organization from '../../store/types/organization';
 	export default {
 		data () {
 			return {		
-				
+				defaultImg: require('@/assets/images/noimage.png')
 			}		
 		},
 		props: ['testpaperId', 'total', 'organizationId'],
@@ -139,6 +139,8 @@ import organization from '../../store/types/organization';
 		height: 65px;
 		line-height: 65px;
 
+		// vertical-align: middle;
+
 	}
 
 	.rank-right li img{
@@ -151,6 +153,8 @@ import organization from '../../store/types/organization';
 	}
 	
 	.user-name {
+		position: relative;
+		top: -20px;
 		display: inline-block;
 
 		width: 200px;
@@ -158,6 +162,8 @@ import organization from '../../store/types/organization';
 	}
 	
 	.student-id {
+		position: relative;
+		top: -20px;
 		display: inline-block;
 
 	}

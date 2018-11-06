@@ -5,12 +5,16 @@ import { myAxios, IP } from 'src/utils/interaction'
 const state = {
    	studentName: '',
     studentId: undefined,
-    refresh: new Date().getTime()
+    refresh: new Date().getTime(),
+    studentImg: ''
 }
 
 const getters = {
-    studentPhoto (state) {
-        return   IP + 'picture/' + state.studentId +'.jpg?' + state.refresh
+    // studentPhoto (state) {
+    //     return   IP + 'picture/' + state.studentId +'.jpg?' + state.refresh
+    // }
+    studentPhoto(state) {
+        return IP + state.studentImg
     }
 }
 

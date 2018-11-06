@@ -1,6 +1,6 @@
 <template>
 	<center class="organ-item" @click="this.handel" v-if="!hasExit">
-		<img class="organ-img" :src="organImg">
+		<img class="organ-img" :src="img">
 		<h2>{{organizationName}}</h2>
 		<p class="title" >组织</p>
 		<p class="teacher"><strong>教师：</strong>{{teacherName}}</p>
@@ -22,13 +22,14 @@
 	export default {
 		data () {
 			return {
-				organImg : IP + "picture/organization/"+ this.organizationName + ".jpg?" + ( new Date().getTime() - new Date().getTime() % 60000 ),  //以一分钟刷新一次
+				// organImg : IP + "picture/organization/"+ this.organizationName + ".jpg?" + ( new Date().getTime() - new Date().getTime() % 60000 ),  //以一分钟刷新一次
+				// organImg: require('@/assets/images/noimage.png'),
 				hasExit: false,
 				showTip: false,
 				// index: 
 			}
 		},
-		props: ['organizationId', 'teacherId', 'teacherName', 'organizationName', 'description', 'count', 'token', 'index'],
+		props: ['organizationId', 'teacherId', 'teacherName', 'organizationName', 'description', 'count', 'token', 'index', 'img'],
 		computed: {
 			isEllipsis (state) {
 				return state.description.length >= 12 ? true : false

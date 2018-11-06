@@ -1,6 +1,7 @@
 <template>
 	<div class="student-item" @click="handel">
-		<img :src=" '/anywork/picture/' + userId + '.jpg?' + refresh ">
+		<!-- <img :src=" '/anywork/picture/' + userId + '.jpg?' + refresh "> -->
+		<img :src="studentImg">
 		<div>
 			<p>{{userName}}</p>
 			<p>{{studentId}}</p> 
@@ -18,19 +19,27 @@
 				refresh: ''
 			}
 		},
-		props: ['userName', 'userId', 'email', 'phone', 'organizationId', 'studentId'],
+		props: ['userName', 'userId', 'email', 'phone', 'organizationId', 'studentId', 'studentImg'],
+		computed: {
+			...mapState({
+				'studentPhoto': state => {
+					return state.student.studentPhoto
+				},
+			}),
+		},
 		methods: {
 			...mapActions(student.actions),
 
 			handel() {
 				this.setStudentInfo({
 					studentName: this.userName,
-					studentId: this.studentId
+					studentId: this.studentId,
+					studentImg: this.studentImg
 				}).then((data) => {
 					if(data.state){
-						this.$router.push({
-							name: 'studentDownPaper'
-						})
+						// this.$router.push({
+						// 	name: 'studentDownPaper'
+						// })
 					}else{
 						this.$Message.error(data.info)
 					}
