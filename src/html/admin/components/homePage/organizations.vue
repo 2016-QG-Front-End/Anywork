@@ -91,10 +91,11 @@
 		<div class="ranking-part">
 			<div class="header">
 				<h2>排行榜</h2>
-				<leader-board :testpaperId = "papersList[testIndex].testpaperId"
+			</div>
+			<leader-board v-if="havePaper" :testpaperId = "papersList[testIndex].testpaperId"
 				:total = "!selected"
 				:organizationId = "myOrganizationList[organIndex].organizationId"></leader-board>
-			</div>
+			<p class="no-data" v-if="!havePaper">暂无数据</p>
 		</div>
 	</section>
 
@@ -128,6 +129,7 @@
 				selected: false,
 				testIndex: 0,
 				selectTest: false,
+				havePaper: false
 			}		
 		},
 		components: {
@@ -342,9 +344,10 @@
 			})
 			this.getMyPapers().then((data) => {
 				if(data.state){
-
+					this.havePaper = true
 				}else{
-					this.$Message.error(data.info)
+					// this.$Message.error(data.info)
+					this.havePaper = false
 				}
 			}).catch((err) => {
 				this.$Message.error(err)
@@ -371,6 +374,10 @@
 	    background: white;
 
 
+	}
+
+	.ranking-part {
+		min-height: 200px;
 	}
 
 	.member-part::before {
@@ -557,6 +564,13 @@
 	}
 
 /** end 翻页 **/
+
+.no-data {
+	text-align: center;
+	margin: 30px auto;
+
+	font-size: 20px;
+}
 
 
 </style>
