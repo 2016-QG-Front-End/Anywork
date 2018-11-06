@@ -206,9 +206,10 @@
 				let that = this
 				this.getMyInfo().then((data) => {
 					if(data.state && !that.questionNumbers){
-						this.$router.push('homepage')
 						this.setPhoto()
 						// that.initWebSocket()
+						this.$emit('use-websock')
+						this.$router.push('homepage')
 					}
 				}).catch((err) => {
 					window.location.href = "./login.html"			

@@ -7,7 +7,7 @@
            	 	<Menu-item name="noJoinOrganization" >未加入组织</Menu-item>
             </div>
         </Menu> -->
-		<mynav/> 
+		<mynav v-on:use-websock="initWebSocket"/> 
 		<img  class="background" src="../../../assets/images/draw@2x.png">
 		<div class="login-title margin-top">Welcome To Anywork   	&nbsp;: )</div>
 		<div class="login-title margin-chinese">日拱一猝无有尽</div>
@@ -60,7 +60,8 @@
 			<section class="news-all-container"  v-if="showAll || news.length <= 0">
 				<div class="news-item-container"  v-for="item in pagenews[pageNum - 1]" v-bind:key="item.messageId" @on-click='beReaded(item.messageId, item.status, item)'>
 					<div  class="news-img">
-						<img src="../../../assets/images/read@1x.png" />
+						<img src="../../../assets/images/unread@1x.png" v-if="!item.state"/>
+						<img src="../../../assets/images/read@1x.png" v-if="item.state"/>
 					</div>
 
 					<div class="news-title">{{item.content}}</div>
@@ -117,7 +118,8 @@
 						<i style="    min-width: 70px;">
 							NO.{{index + 1}}
 						</i>
-						<img :src=item.imagePath />
+						<img :src=item.imagePath v-if="item.imagePath"/>
+						<img src="../../../assets/images/noimage.png" v-if="!item.imagePath"/>
 						<div class="number-name">{{ item.username }}</div>
 						<div class="number-name">{{ item.organizationName }}</div>
 						<!-- <div >{{ item.studentId }}</div> -->
@@ -151,7 +153,9 @@
 				orginationName: '',
 				websock: null,
 				pageNum: 1,
-				pagenews: [],
+				pagenews: [
+					
+				],
 				news:[
 					// {
 					// 	title: '第一张练习已经发布',
@@ -407,33 +411,10 @@
 				})
 			},
 			getAllNews () {
-				let page = 0
-				// this.getNews({
-				// 	status: 1,
-				// 	pageNum: page,
-				// 	pageSize: 10
-				// }).then(data => {
-				// 	for (let i = 0; i < data.list.length; i++) {
-				// 		this.news.push(data.list)
-				// 	}
-				// 	if (!data.isLastPage) {
-
-				// 	}
-				// 	// this.news = data.list
-				// }).catch(err => {
-				// 	this.$Message.error("请重新刷新！")
-				// })
-				while (true) {
-					if (this.getUnkonwnNews(page++)) {
-						break
-					}
-				}
-				page = 0
-				while (true) {
-					if (this.getkonwnNews(page++)) {
-						break
-					}
-				}
+		
+				this.getUnkonwnNews(0)
+				
+				this.getkonwnNews(0)
 				// this.getNews({
 				// 	status: 0,
 				// 	pageNum: 0,
@@ -444,41 +425,65 @@
 				// 	this.$Message.error("请重新刷新！")
 				// })
 				// 将所有消息进行分组
-				for (let j = 0; j < this.allnews.length; j += 10) {
-					let arr = []
-					for(let i = j; i < j + 10; i++) {
-						arr.push(this.allnews)
-					}
-					this.pagenews.push(arr)
-				}
+
 			},
 			getUnkonwnNews (page) {
+				let that = this
 				this.getNews({
 					status: 1,
 					pageNum: page,
 					pageSize: 10
 				}).then(data => {
+					if (!data.state && data.state === false) {
+						return
+					}
 					for (let i = 0; i < data.list.length; i++) {
 						this.news.push(data.list)
-						this.allnews.push(data.list)
+						this.allnews.push(data.list[i])
 					}
-					return data.isLastPage
+					if (!data.isLastPage) {
+						that.getUnkonwnNews(++page)
+					}
+					that.pagenews = []
+					for (let j = 0; j < that.allnews.length; j += 10) {
+						let arr = []
+						for(let i = j; i < j + 10; i++) {
+							arr.push(that.allnews[i])
+						}
+						that.pagenews.push(arr)
+					}
+					console.log(that.pagenews)
 					// this.news = data.list
 				}).catch(err => {
 					this.$Message.error("请重新刷新！")
 				})
 			},
 			getkonwnNews (page) {
+				let that = this
 				this.getNews({
 					status: 0,
 					pageNum: page,
 					pageSize: 10
 				}).then(data => {
+					if (!data.state && data.state === false) {
+						return
+					}
 					for (let i = 0; i < data.list.length; i++) {
 						// this.news.push(data.list)
-						this.allnews.push(data.list)
+						this.allnews.push(data.list[i])
 					}
-					return data.isLastPage
+					if (!data.isLastPage) {
+						that.getkonwnNews(++page)
+					}
+					that.pagenews = []
+					for (let j = 0; j < that.allnews.length; j += 10) {
+						let arr = []
+						for(let i = j; i < j + 10 && i < that.allnews.length; i++) {
+							arr.push(that.allnews[i])
+						}
+						that.pagenews.push(arr)
+					}
+					console.log(that.pagenews)
 					// this.news = data.list
 				}).catch(err => {
 					this.$Message.error("请重新刷新！")
@@ -504,7 +509,7 @@
 				this.$Message.error("请重新刷新！")
 			})
 			this.$bus.$on('search-organ', this.toGetSearchResultList)
-			this.initWebSocket()
+			// this.initWebSocket()
 			this.getAllNews()
 		},
 		beforeDestroy () {
@@ -678,7 +683,7 @@
     /* position: relative; */
     /* right: 0; */
 
-    margin: 0 0 0 422px;
+    margin: 0 0 0 86px;
     min-width: 150px;
     max-width: 150px;
 
