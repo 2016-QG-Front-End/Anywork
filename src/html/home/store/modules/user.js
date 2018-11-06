@@ -43,6 +43,9 @@ const actions = {
                 url: '/user/info',
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
+                     if (!res.data.data.imagePath) {
+                        res.data.data.imagePath = '../../../../assets/images/noimage.png'
+                     }
                     context.commit(types.mutations.setInfo,res.data.data)
                     resolve({
                         state: true,

@@ -565,12 +565,12 @@
 
 /** end 翻页 **/
 
-.no-data {
-	text-align: center;
-	margin: 30px auto;
+	.no-data {
+		text-align: center;
 
-	font-size: 20px;
-}
+		margin: 30px auto;
+		font-size: 18px;
+	}
 
 
 </style>

@@ -9,7 +9,7 @@
 		<div class="time-choose">12:11:11</div> -->
 		<div class="paper-nav" v-if="!isColl">
 			<div>
-				<img src="../../../assets/images/preview@1x.png"/>
+				<img src="../../../assets/images/preview@1x.png" @click="toHomepage"/>
 				<div>{{testName}}</div>
 			</div>
 			<img src="../../../assets/images/anywork@2x.png" @click="toHomepage"/>
@@ -23,10 +23,10 @@
 		</div>
 		<div class="tools-choose" v-if="!isColl">
 			<div class="answer-card" v-if="isAnswer">{{hour}}:{{min}}:{{sec}}</div>
-			<div class="answer-card" v-if="isAnswer">
+			<!-- <div class="answer-card" v-if="isAnswer">
 				<img src="../../../assets/images/papre.png" />
 				答题卡
-			</div>
+			</div> -->
 			<div class="answer-card" v-on:click="toTop">回到<br/>顶部</div>
 		</div>
 		<router-view class="main"></router-view>
@@ -121,7 +121,7 @@
 
 			},
 			toHomepage () {
-				location.href = 'http://localhost:8080/html/home.html#/homepage'
+				location.href = 'https://qgstudio.org/anywork/html/home.html#/homepage'
 			},
 			getQueryStringArgs(url){
 				url = url == null ? window.location.href : url;
@@ -161,7 +161,7 @@
 			setInterval(()=>{//钩子函数，在实例创建的时候运行定时器，我们只需要动态刷新当前的日期对象即可
 				that.secs++
 			},1000)
-			if (location.href =='http://localhost:8080/html/home.html#/paperPage/lookAnswer') {
+			if (location.href =='https://qgstudio.org/anywork/html/home.html#/paperPage/lookAnswer') {
 				this.isAnswer = false
 			}
 				if (this.$route.params.testPaperType == 1) {
