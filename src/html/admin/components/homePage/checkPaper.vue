@@ -45,9 +45,6 @@
       <h2>题目:{{item.question.content}}({{item.question.socre}}分)</h2>
       <p><span>正确答案:</span>{{item.question.key}}</p>
       <p><span>学生答案:</span>{{item.studentAnswer}}</p>
-      <P>{{item.studentId}}</p>学生编号
-      <P>{{item.question.testpaperId}}</p>卷子编号
-      <P>{{item.question.questionId}}</p>题目编号 
       <Input-number :max="item.question.socre" :min="1" :value="1" v-model="subjectScore"></Input-number>分
       <Button type="success" @click="toSubmitSubjectScore(item.studentId,item.question.testpaperId,item.question.questionId,subjectScore)">提交</Button>
       <hr>
@@ -465,5 +462,9 @@ i {
 }
 .subjectAnswer span {
   font-weight: bold;
+}
+hr{
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 </style>
