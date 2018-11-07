@@ -15,9 +15,10 @@
 				v-for="(item, index) in leaderBoardList" 
 				 
 			>
-				<img :src="item.imagePath == null ? defaultImg : item.imagePath" alt="头像">
+				<img :src="studentPhoto" alt="头像">
 				<p class="user-name">{{item.username}}</p>
 				<p class="student-id">{{item.studentId}}</p>
+				<p class="score">{{item.score}} 分</p>
 			</li>
 		</div>
 		<div class="clear"></div>
@@ -28,7 +29,7 @@
 <script>
 	import { mapState, mapActions} from 'vuex';
 	import leaderBoard from  '../../store/types/leaderBoard'
-
+	import student from  '../../store/types/student'
 	import loading from '../item/loading'
 import organization from '../../store/types/organization';
 	export default {
@@ -46,8 +47,14 @@ import organization from '../../store/types/organization';
 				'leaderBoardList': state => {
 					return state.leaderBoard.leaderBoardList.slice(0, 6)
 				},
+				'studentPhoto': state => {
+					return state.student.studentPhoto
+				},
 
-			})
+			}),
+			'studentPhoto' : function() {
+				return this.$store.getters.studentPhoto
+			}
 		},
 		methods: {
 			...mapActions(leaderBoard.actions),
@@ -158,7 +165,7 @@ import organization from '../../store/types/organization';
 		display: inline-block;
 
 		width: 200px;
-		margin: 0 200px 0 60px;
+		margin: 0 80px 0 130px;
 	}
 	
 	.student-id {
@@ -166,6 +173,18 @@ import organization from '../../store/types/organization';
 		top: -20px;
 		display: inline-block;
 
+	}
+
+	.score {
+		
+		position: relative;
+		top: -20px;
+		display: inline-block;
+
+		margin-left: 160px;
+
+		font-size: 25px;
+		color: #2d8cf0;
 	}
 
 	.clear {

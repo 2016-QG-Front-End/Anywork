@@ -15,7 +15,7 @@
 			</DropdownMenu>
 		</Dropdown>
 		<Dropdown style="margin-left: 20px" trigger="click">
-			<Button type="primary" ghost>
+			<Button type="primary" ghost >
 				{{ selectTest ? papersList[testIndex].testpaperTitle : "选择试卷" }}
 				<Icon type="ios-arrow-down"></Icon>
 			</Button>
@@ -81,6 +81,7 @@
 					:studentId = "item.studentId"
 					:organizationId = "organization.organizationId"
 					:studentImg = "item.imagePath == null ? defaultImg : item.imagePath"
+					
 				/>
 			</div>
 			<div class="pages">
@@ -314,7 +315,16 @@
 				}
 			},
 			getPapers(id) {
-				this.getMyPapers(id)
+				this.getMyPapers(id).then((data) => {
+				if(data.state){
+					this.havePaper = true
+				}else{
+					// this.$Message.error(data.info)
+					this.havePaper = false
+				}
+			}).catch((err) => {
+				this.$Message.error(err)
+			})
 			},
 			setCurrentTest (index, id) {
 				if(index >= 0) this.testIndex = index
@@ -345,7 +355,25 @@
 			}).catch((err) => {
 				this.$Message.error(err)
 			})
-			this.getMyPapers().then((data) => {
+			// this.getMyPapers().then((data) => {
+			// 	if(data.state){
+			// 		this.havePaper = true
+			// 	}else{
+			// 		// this.$Message.error(data.info)
+			// 		this.havePaper = false
+			// 	}
+			// }).catch((err) => {
+			// 	this.$Message.error(err)
+			// })
+			
+			// this.toGetStudentsByOrganId()
+			this.refresh = new Date().getTime() - new Date().getTime() % 60000
+		},
+
+		watch: {
+			myOrganizationList: function() {
+				this.$nextTick(function() {
+					this.getMyPapers().then((data) => {
 				if(data.state){
 					this.havePaper = true
 				}else{
@@ -355,8 +383,8 @@
 			}).catch((err) => {
 				this.$Message.error(err)
 			})
-			// this.toGetStudentsByOrganId()
-			this.refresh = new Date().getTime() - new Date().getTime() % 60000
+				})
+			}
 		}
 	}
 </script>

@@ -1,7 +1,7 @@
 <template>
 	<div class="student-item" @click="handel">
 		<!-- <img :src=" '/anywork/picture/' + userId + '.jpg?' + refresh "> -->
-		<img :src="studentImg">
+		<img :src="studentPhoto">
 		<div>
 			<p>{{userName}}</p>
 			<p>{{studentId}}</p> 
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-	import { mapState, mapActions} from 'vuex';
+	import { mapState, mapActions, mapGetters} from 'vuex';
 	import student from  '../../store/types/student'
 
 	export default {
@@ -21,16 +21,16 @@
 		},
 		props: ['userName', 'userId', 'email', 'phone', 'organizationId', 'studentId', 'studentImg'],
 		computed: {
-			...mapState({
-				'studentPhoto': state => {
-					return state.student.studentPhoto
-				},
-			}),
+			'studentPhoto' : function() {
+				return this.$store.getters.studentPhoto
+			}
+			
 		},
 		methods: {
 			...mapActions(student.actions),
 
 			handel() {
+				console.log("touxiang: " + this.studentImg)
 				this.setStudentInfo({
 					studentName: this.userName,
 					studentId: this.studentId,
