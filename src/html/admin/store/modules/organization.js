@@ -2,7 +2,7 @@ import types from '../types/organization'
 import { myAxios } from 'src/utils/interaction'
 
 const state = {
-	organizationId: 15,
+	organizationId: '',
 	organName: '',
 	teacherId: undefined,   /*no info*/
 	teacherName: '',
@@ -18,6 +18,12 @@ const state = {
     organPracticeList: [],
     organPaperList: [],
     testId: undefined
+}
+
+const getter = {
+    organId(state) {
+      return myOrganizationList[0].organizationId
+    }
 }
 
 const actions = {
@@ -359,9 +365,9 @@ const actions = {
         })
     },
 
-    [types.actions.getMyPapers]: (context) => {
+    [types.actions.getMyPapers]: (context, data) => {
       //context: commit,dispatch,getters,state
-      let id = context.state.organizationId
+      let id = context.state.myOrganizationList[0].organizationId
       return new Promise((resolve, reject) => {
         myAxios({
           method: 'POST',
