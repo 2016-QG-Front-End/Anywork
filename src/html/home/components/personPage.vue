@@ -39,7 +39,7 @@
 		                <!-- </Submenu> -->
 		            <!-- </div>
 		        </Menu> -->
-				<img class="logo" src="~assets/images/draw@2x.png">
+				<img class="logo" src="~assets/images/draw@2x.png" @click="toHomepage">
 				<img class="logo-small" src="~assets/images/anywork@2x.png" @click="toHomepage"/>
 				<div class="change-photo" v-if="isChangeI">
 					<img class="photo" :src="imageP ? imageP : this.userPhoto">

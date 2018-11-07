@@ -180,7 +180,7 @@
 						this.paperList = this.allTestPaperList
 						this.title = "考试"
 					}else{
-						this.$Message.error(data.info)
+						// this.$Message.error(data.info)
 					}
 				}).catch((err) => {
 					this.$Message.error(err)
@@ -197,7 +197,7 @@
 							that.selectChapter(that.testChapterList[i].chapterId)
 						}
 					}else{
-						this.$Message.error(data.info)
+						// this.$Message.error(data.info)
 					}
 				}).catch((err) => {
 					this.$Message.error(err)
@@ -216,7 +216,7 @@
 						this.paperList = this.allPracticePaperList
 						this.title = "练习"
 					}else{
-						this.$Message.error(data.info)
+						// this.$Message.error(data.info)
 					}
 				}).catch((err) => {
 					this.$Message.error(err)

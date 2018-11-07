@@ -16,7 +16,7 @@ const state = {
 
 const getters = {
     userPhoto (state) {
-        return state.imagePP ? state.imagePP : '/anywork' + state.imagePath
+        return state.imagePP ? state.imagePP : 'https://qgstudio.org/anywork' + state.imagePath
         // return state.imagePP ? state.imagePP : '' + state.imagePath
     }
 }
@@ -44,7 +44,7 @@ const actions = {
             }).then(function(res){
                  if(res.data.state.toString()==="1"){
                      if (!res.data.data.imagePath) {
-                        res.data.data.imagePath = '../../../../assets/images/noimage.png'
+                        // res.data.data.imagePath = '~assets/images/noimage.png'
                      }
                     context.commit(types.mutations.setInfo,res.data.data)
                     resolve({

@@ -39,9 +39,10 @@
 		<div class="news-container" v-if="allnews.length > 0">
 			<h2>公告</h2>
 			<section class="news-all-container"  v-if="!showAll">
-				<div class="news-item-container"  v-for="item in news" v-bind:key="item.messageId" @on-click='beReaded(item.messageId, item.status, item)'>
+				<div class="news-item-container"  v-for="item in news" v-bind:key="item.messageId" @click='beReaded(item.messageId, item.status, item)'>
 					<div  class="news-img">
-						<img src="../../../assets/images/read@1x.png" />
+						<img src="../../../assets/images/unread@1x.png" v-if="!item.state"/>
+						<img src="../../../assets/images/read@1x.png" v-if="item.state"/>
 					</div>
 
 					<div class="news-title">{{item.content}}</div>
@@ -58,7 +59,7 @@
 				</div>
 			</section>
 			<section class="news-all-container"  v-if="showAll || news.length <= 0">
-				<div class="news-item-container"  v-for="item in pagenews[pageNum - 1]" v-bind:key="item.messageId" @on-click='beReaded(item.messageId, item.status, item)'>
+				<div class="news-item-container"  v-for="item in pagenews[pageNum - 1]" v-bind:key="item.messageId" @click='beReaded(item.messageId, item.status, item)'>
 					<div  class="news-img">
 						<img src="../../../assets/images/unread@1x.png" v-if="!item.state"/>
 						<img src="../../../assets/images/read@1x.png" v-if="item.state"/>
@@ -78,7 +79,7 @@
 				</div>
 				<Page :total="allnews.length" :current="pageNum" page-size="10" @on-change="handlePage" class="page-news"/>
 			</section>
-			<section class="show-all">
+			<section class="show-all" v-if="news.length <= 0">
 				<div v-if="!showAll" v-on:click="changeNews">展开<Icon type="ios-arrow-down" /></div>
 				<div v-if="showAll" v-on:click="changeNews">收起<Icon type="ios-arrow-up" /></div>
 			</section>
@@ -207,7 +208,7 @@
 				this.showAll = !this.showAll
 			},
 			initWebSocket: function () {
-				const wsuri = 'ws://39.98.41.126:443' + "/websocket/" + this.user.userId;//ws地址
+				const wsuri = 'ws://39.98.41.126' + "/anywork/websocket/" + this.user.userId;//ws地址
 				// console.log(this.user)
 				// console.log(this.userId)
 	　　		this.websock = new WebSocket(wsuri); 
@@ -274,16 +275,16 @@
 			toPath (indexNumber) {
 				if (indexNumber == 1) {
 					// location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=2'
-					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=2'
+					location.href = 'https://qgstudio.org/html/home.html#/organizationPage?test=2'
 				} else if (indexNumber == 2) {
 					// location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=3'
-					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=3'
+					location.href = 'https://qgstudio.org/html/home.html#/organizationPage?test=3'
 				} else if (indexNumber == 3) {
 					// location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=1'
-					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=1'
+					location.href = 'https://qgstudio.org/html/home.html#/organizationPage?test=1'
 				} else {
 					// location.href = 'https://qgstudio.org/anywork/html/home.html#/paperPage/lookAnswer?isCollect=true'
-					location.href = 'http://localhost:8080/html/home.html#/paperPage/lookAnswer?isCollect=true'
+					location.href = 'https://qgstudio.org/html/home.html#/paperPage/lookAnswer?isCollect=true'
 				}
 			},
 			chooseOrgination () {
@@ -333,8 +334,9 @@
 					this.$Message.error(err)
 				})
 			},
-			beReaded (massageId, status, item) {
+			beReaded (massageIds, status, item) {
 				let newss = this.allnews
+				let isok = false
 				this.$Modal.confirm({
                     title: item.title,
                     content: '<p>' + item.content + '</p><p>' + item.createTime + '</p>',
@@ -345,23 +347,33 @@
                        
                     }
                 });
-				if (status) {
+				if (!status) {
 					return 
 				}
 				for (let i = 0; i < newss.length; i++) {
-					if (newss[i].massageId == massageId) {
+					if (newss[i].massageId == massageIds) {
+						this.allnews[i].status = 0
+					}
+				}
+				for (let fg = 0; fg < newss.length; fg++) {
+					if (news[fg].massageId == massageIds) {
 						this.allnews[i].status = 1
 					}
 				}
-				for (let i = 0; i < pagenews.length; i++) {
-					for (let j = 0; j < pagenews[i].length; j++) {
-						if (pagenews[i][j].massageId == massageId) {
-							this.pagenews[i][j].status = 1
+				for (let k = 0; k < this.pagenews.length; k++) {
+					for (let j = 0; j < this.pagenews[k].length; j++) {
+						if (this.pagenews[k][j].messageId == massageIds) {
+							this.pagenews[k][j].status = 0
+							isok = true
+							break
 						}
+					}
+					if (isok) {
+						break
 					}
 				}
 				this.readMessage({
-					messageId: messageId
+					messageId: massageIds
 				}).then(data => {
 					console.log(data)
 				}).catch(err => {
@@ -441,7 +453,7 @@
 						return
 					}
 					for (let i = 0; i < data.list.length; i++) {
-						this.news.push(data.list)
+						this.news.push(data.list[i])
 						this.allnews.push(data.list[i])
 					}
 					if (!data.isLastPage) {
