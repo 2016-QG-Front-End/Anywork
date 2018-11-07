@@ -144,8 +144,9 @@ export default {
 
       columns1: [
         {
-          title: "学生ID",
-          key: "studentId"
+          title: "学号",
+          key: "studentNum",
+          width: 120
         },
         {
           title: "学生姓名",

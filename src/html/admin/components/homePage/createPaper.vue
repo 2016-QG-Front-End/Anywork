@@ -48,10 +48,17 @@
   
 			<Modal
 		        :title="previewPaperTitle+'__'+previewPaperType"
-		        v-model="previewDialog" >
+		        v-model="previewDialog" 
+            width="700">
+   <p slot="header" style="color:#6297fc;height:50px;padding-top:10px">
+            <img  v-bind:src="eyeUrl" style="height:30px;vertical-align:middle">
+            <span style="font-size:30px;font-weight:300;vertical-align:middle">{{previewPaperType}}</span>
+        </p>
+
+
             <div class="answer" v-for="item in previewpaperContent" v-bind:key="item.questionId">
 
-                   <h3 v-if="item.type==1">选择题</h3>
+              <h3 v-if="item.type==1">选择题</h3>
               <h3 v-if="item.type==2">判断题</h3>
               <h3 v-if="item.type==3">填空题</h3>
               <h3 v-if="item.type==4">问答题</h3>
@@ -72,9 +79,26 @@
 
 			<Modal
 		        :title="analyzePaperTitle+'__'+previewPaperType"
-		        v-model="analyzeDialog" >
+		        v-model="analyzeDialog" 
+            width="700"
+            >
+            <p slot="header" style="color:#6297fc;height:50px;padding-top:10px">
+            <img  v-bind:src="eyeUrl" style="height:30px;vertical-align:middle">
+            <span style="font-size:30px;font-weight:300;vertical-align:middle">{{previewPaperType}}</span>
+            <span style="color:red;font-weight:bolder;margin-left:30px">平均分:{{averageScore}}</span>
+        </p>
+
+           
                 <div class="answer" v-for="item in analyzepaperContent" v-bind:key="item.questionId">
-             <h3> {{item.content}}</h3>
+                  <div class="question-type">
+              <h3 v-if="item.type==1">选择题</h3>
+              <h3 v-if="item.type==2">判断题</h3>
+              <h3 v-if="item.type==3">填空题</h3>
+              <h3 v-if="item.type==4">问答题</h3>
+              <span>错误率:{{item.errorRate}}</span>
+</div>
+             <h4> {{item.content}}</h4>
+                  
 
              <!-- 选择题 -->
             <ul v-if="item.type==1">
@@ -176,7 +200,9 @@ export default {
 
       analyzeDialog: false,
       analyzePaperTitle: "",
+      eyeUrl: require('@/assets/images/preview@1x.png'),
       analyzepaperContent: "分析试卷内容",
+      averageScore:0,
 
       updateDialog: false,
       updatePaperTitle: "",
@@ -499,7 +525,7 @@ export default {
                 this.previewPaperType = "考试";
                 break;
               case 2:
-                this.previewPaperType = "预习题";
+                this.previewPaperType = "课前预习";
                 break;
               case 3:
                 this.previewPaperType = "课后复习题";
@@ -527,12 +553,13 @@ export default {
         .then(data => {
           if (data.info.state) {
             this.analyzepaperContent = data.info.data.questions;
+            this.averageScore = data.info.data.averageScore;
             switch (data.info.data.testpaperType) {
               case 1:
                 this.previewPaperType = "考试";
                 break;
               case 2:
-                this.previewPaperType = "预习题";
+                this.previewPaperType = "课前预习";
                 break;
               case 3:
                 this.previewPaperType = "课后复习题";
@@ -682,12 +709,16 @@ section {
   text-align: center;
   margin: 10px 10px;
 }
+.answer{
+  font-size: 15px;
+}
 
 .answer h3 {
   margin-top: 10px;
   margin-bottom: 10px;
   color: #2d8cf0;
 }
+
 .answer li {
   list-style: none;
 }
@@ -707,5 +738,21 @@ section {
   border: solid #2d8cf0 1px;
   color: #2d8cf0;
   border-radius: 50%;
+}
+
+
+.question-type{
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+}
+.question-type h3{
+  display: inline;
+}
+
+.question-type span{
+  color: red;
+  float: right;
 }
 </style>
