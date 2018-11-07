@@ -87,18 +87,18 @@
 
             <!-- 判断题 -->
             <div v-if="item.type==2">
-              正确答案:<span>{{item.key}}</span>
+              解析:正确答案:<span>{{item.key}}</span>
             </div>
 
             <!-- 填空题 -->
             <div v-if="item.type==3">
-             正确答案: <span>{{item.key}}</span>
+             解析:正确答案: <span>{{item.key}}</span>
               </div>
 
 
               <!-- 问答题 -->
               <div v-if="item.type==4">
-              正确答案:<span>{{item.key}}</span>
+              解析:正确答案:<span>{{item.key}}</span>
               </div>
             </div>
     		</Modal>

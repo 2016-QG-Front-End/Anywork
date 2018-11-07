@@ -29,7 +29,7 @@
             <li><span class="abc">D</span>{{item.question.d}}</li>
             </ul>
 
-    <p>标准答案:{{item.question.key}}</p>
+    <p>标准答案:{{item.question.key}}</p>   
     <p>学生答案:{{item.studentAnswer}}</p>
     <i>解析:{{item.question.analysis}}</i>
     <p style="color:red">得分:{{item.socre}}</p>
@@ -155,8 +155,15 @@ export default {
           key: "studentName"
         },
         {
-          title: "是否评卷",
-          key: "ifCheck"
+          title: "是否评",
+          key: "ifCheck",
+          render: (h, params) => {
+            if (params.row.ifCheck == 0) {
+              return h("div", [h("span", "否")]);
+            } else {
+              return h("div", [h("span", "是")]);
+            }
+          }
         },
         {
           title: "客观题分数",
@@ -168,7 +175,14 @@ export default {
         },
         {
           title: "是否参加考试",
-          key: "ifAttend"
+          key: "ifAttend",
+             render: (h, params) => {
+            if (params.row.ifAttend == 0) {
+              return h("div", [h("span", "否")]);
+            } else {
+              return h("div", [h("span", "是")]);
+            }
+          }
         },
         {
           title: "考试总分",
@@ -384,12 +398,12 @@ export default {
         .then(data => {
           if (data.info.state) {
             this.$Message.success(data.info.stateInfo);
-          }else {
+          } else {
             this.$Message.error(data.info.stateInfo);
           }
         })
         .catch(err => {
-           this.$Message.error(err);
+          this.$Message.error(err);
         });
     },
     changeNum(value) {
