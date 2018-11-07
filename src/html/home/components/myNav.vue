@@ -25,7 +25,7 @@
 			<div class="people-number">在线人数：{{ poepleNumber }}人</div>
 		</div>
 		<div class="new-container">
-			<img src="../../../assets/images/anywork@1x.png" />
+			<img src="../../../assets/images/anywork@1x.png" @click="toHomepage"/>
 			<div class="container-nav">
 				<img class="new-img" :src="userPhoto">
 				<li class="photo" :class="{select: personNav}" @click="togglePersonNav" @mouseleave="hidePersonNav">
@@ -87,6 +87,9 @@
 　　　　　　 websocketonerror: function (e) { //错误
  　　　　　　 console.log("WebSocket连接发生错误");
 　　　　　　 },
+			toHomepage() {
+				location.href = 'https://qgstudio.org/anywork/html/home.html#/homepage'
+			},
 　　　　　　websocketonmessage: function (e){ //数据接收 
 　　　　　　　　const redata = JSON.parse(e.data);
 　　　　　　　　console.log(redata);

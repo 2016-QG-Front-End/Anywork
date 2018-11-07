@@ -273,14 +273,17 @@
 			},
 			toPath (indexNumber) {
 				if (indexNumber == 1) {
-					location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=2'
+					// location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=2'
+					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=2'
 				} else if (indexNumber == 2) {
-					location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=3'
+					// location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=3'
+					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=3'
 				} else if (indexNumber == 3) {
-					location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=1'
+					// location.href = 'https://qgstudio.org/anywork/html/home.html#/organizationPage?test=1'
+					location.href = 'http://localhost:8080/html/home.html#/organizationPage?test=1'
 				} else {
-					// location.href = 'http://localhost:8080/html/home.html#/'
-					location.href = 'https://qgstudio.org/anywork/html/home.html#/paperPage/lookAnswer?isCollect=true'
+					// location.href = 'https://qgstudio.org/anywork/html/home.html#/paperPage/lookAnswer?isCollect=true'
+					location.href = 'http://localhost:8080/html/home.html#/paperPage/lookAnswer?isCollect=true'
 				}
 			},
 			chooseOrgination () {
