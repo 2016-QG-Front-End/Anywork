@@ -15,7 +15,7 @@
 				v-for="(item, index) in leaderBoardList" 
 				 
 			>
-				<img :src="studentPhoto" alt="头像">
+				<img :src="'https://qgstudio.org/anywork' + item.imagePath" alt="头像">
 				<p class="user-name">{{item.username}}</p>
 				<p class="student-id">{{item.studentId}}</p>
 				<p class="score">{{item.score}} 分</p>

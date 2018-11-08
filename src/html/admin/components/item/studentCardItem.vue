@@ -1,7 +1,7 @@
 <template>
 	<div class="student-item" @click="handel">
 		<!-- <img :src=" '/anywork/picture/' + userId + '.jpg?' + refresh "> -->
-		<img :src="studentPhoto">
+		<img :src="'https://qgstudio.org/anywork' + studentImg">
 		<div>
 			<p>{{userName}}</p>
 			<p>{{studentId}}</p> 

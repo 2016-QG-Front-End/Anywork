@@ -2,7 +2,7 @@
   	<div class="layout">
         <div class="layout-header">
             <div class="layout-ceiling-main">
-				<img class="avator" :src="userPhoto">
+				<!-- <img class="avator" :src="this.user.imagePath"> -->
             	<span class="user-name">{{this.user.userName}}</span>
                 <a @click.prevent="toExit">注销</a>
             </div>

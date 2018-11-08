@@ -84,21 +84,21 @@
 		},
 		created () {
 			let that = this
-			this.getOrganationNostice().then(data=> {
-				if (!data) {
-					that.$Notice.error({
-                    	title: '没有你创建的组织',
+			// this.getOrganationNostice().then(data=> {
+			// 	if (!data) {
+			// 		that.$Notice.error({
+            //         	title: '没有你创建的组织',
                     
-					});
-					return
-				}
-				that.organiazations = data
-			}).catch(err => {
-				that.$Notice.error({
-                    title: '请求组织失败，请刷新',
+			// 		});
+			// 		return
+			// 	}
+			// 	that.organiazations = data
+			// }).catch(err => {
+			// 	that.$Notice.error({
+            //         title: '请求组织失败，请刷新',
                     
-                });
-			})
+            //     });
+			// })
 		}
 	}
 </script>

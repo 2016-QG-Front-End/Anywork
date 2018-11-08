@@ -119,7 +119,7 @@
 						<i style="    min-width: 70px;">
 							NO.{{index + 1}}
 						</i>
-						<img :src=item.imagePath v-if="item.imagePath"/>
+						<img :src="'https://qgstudio.org/anywork' + item.imagePath" v-if="item.imagePath"/>
 						<img src="../../../assets/images/noimage.png" v-if="!item.imagePath"/>
 						<div class="number-name">{{ item.username }}</div>
 						<div class="number-name">{{ item.organizationName }}</div>
@@ -222,6 +222,7 @@
 					this.getRank({
 						leaderboardType: parseInt(index)
 					}).then(data => {
+						
 						that.rank = data
 					}).catch(err => {
 						this.$Message.error("请重新刷新！")

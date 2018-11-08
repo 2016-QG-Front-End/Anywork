@@ -5,7 +5,7 @@
 		</div>
 		
 		<section>
-			<Table :columns="columns1" :data="data1"></Table>
+			<Table :columns="columns1" :data="datahist"></Table>
 			<!-- <Page :total="data1.endRow" :style="{textAlign:'center',margin:'10px 20px'}"/> -->
 		</section>
 	</section>
@@ -92,7 +92,7 @@
                         }
                     }
                 ],
-                data1: [],
+                datahist: [],
 				pages: 0
 			}		
 		},
@@ -115,7 +115,7 @@
 				let i = 0;
 				let hasNextPage = false
 				
-				// this.getNo(0)
+				this.getNo(0)
 					
 				
 			},
@@ -125,8 +125,9 @@
 						pageNum: index,
 						pageSize: 20,
 				}).then(data => {
+					that.datahist = []
 						for (let l in data.list) {
-							that.data1.push = data.list[l]
+							that.datahist.push(data.list[l])
 						}
 						// th at.data1 = data
 						if (data.hasNextPage) {
