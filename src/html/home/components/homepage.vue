@@ -10,7 +10,7 @@
 		<mynav v-on:use-websock="initWebSocket"/> 
 		<img  class="background" src="../../../assets/images/draw@2x.png">
 		<div class="login-title margin-top">Welcome To Anywork   	&nbsp;: )</div>
-		<div class="login-title margin-chinese">日拱一猝无有尽</div>
+		<div class="login-title margin-chinese">日拱一卒无有尽</div>
 		<Button  v-on:click="chooseOrgination" v-if="!this.orginationName" class="choose-orgination" :style=buttonStyle >{{this.orginationName ? this.orginationName : '选择你的组织'}} > </Button>
 		<Button disabled="false" v-on:click="chooseOrgination" v-if="this.orginationName" class="choose-orgination" :style=buttonStyle >{{this.orginationName ? this.orginationName : '选择你的组织'}} > </Button>
 		<div class="main" :style=origanitionStyle>

@@ -48,7 +48,7 @@
 				}).then((data) => {
 					if(data.state){
 						this.$Message.success(data.info)
-						window.location = '../../../html/login.html'		
+						window.location = 'https://qgstudio.org/anywork/html/login.html'		
 					}else{
 						this.$Message.error(data.info + ",请稍后重试！")
 					}

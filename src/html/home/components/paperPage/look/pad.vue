@@ -84,7 +84,7 @@
 			}
 		},
 		created () {
-			if (isCollect) {
+			if (this.isCollect) {
 				this.showCollection = 'ios-star'
 			}
 		}
@@ -116,7 +116,7 @@
 	.content {
         width: 100%;
 	    padding: 10px 10px 0;
-	    margin-bottom: 10px;
+	    margin-bottom: 10x;
 	    /* border: 0 rgba(255, 255, 255, 0); */
 	    /* border-bottom: 1px solid #dedede; */
 	    font-size: 20px;
