@@ -10,13 +10,13 @@ const state = {
 }
 
 const getters = {
-    studentPhoto (state) {
-        return   IP + state.studentImg
-    }
+    myIP (state) {
+        return   IP 
+    },
     
-    // studentPhoto: state => {
-    //   return IP + state.studentImg
-    // }
+    studentPhoto: state => {
+      return IP + state.studentImg
+    }
 }
 
 const actions = {

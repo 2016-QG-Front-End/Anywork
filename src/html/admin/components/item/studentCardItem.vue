@@ -1,7 +1,7 @@
 <template>
 	<div class="student-item" @click="handel">
-		<!-- <img :src=" '/anywork/picture/' + userId + '.jpg?' + refresh "> -->
-		<img :src="'https://qgstudio.org/anywork' + studentImg">
+		<img :src=" studentPhoto ">
+		<!-- <img :src="studentPhoto"> -->
 		<div>
 			<p>{{userName}}</p>
 			<p>{{studentId}}</p> 
@@ -49,7 +49,23 @@
 			}
 		},
 		created () {
-			this.refresh = new Date().getTime() - new Date().getTime() % 60000
+			// this.refresh = new Date().getTime() - new Date().getTime() % 60000
+			this.setStudentInfo({
+					studentName: this.userName,
+					studentId: this.studentId,
+					studentImg: this.studentImg
+				}).then((data) => {
+					if(data.state){
+						// this.$router.push({
+						// 	name: 'studentDownPaper'
+						// })
+					}else{
+						this.$Message.error(data.info)
+					}
+				}).catch((err) => {
+					this.$Message.error(err)
+				})
+			console.log()
 		}
 	}
 

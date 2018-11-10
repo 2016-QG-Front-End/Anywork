@@ -51,11 +51,11 @@ const actions = {
 
   [types.actions.getOrganLeaderBoard]: (context, data) => {
     //context: commit,dispatch,getters,state
-    let organId = context.state.testOrganId
+    var id = context.state.testOrganId
     return new Promise((resolve, reject) => {
       myAxios({
         method: 'POST',
-        url: '/leaderboard/teacher/show/' + organId,
+        url: '/leaderboard/teacher/show/' + id,
         data: data
       }).then(function (res) {
         if (res.data.state.toString() === "1") {
