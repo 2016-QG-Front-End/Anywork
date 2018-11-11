@@ -15,7 +15,7 @@
 		 	</div>
 			 <div  class="commom-info-input">
 		 		<span class="text">再次输入密码</span>
-				<Input class="input" type="password" v-model="newPassword" placeholder="请输入你的新密码"></Input> 
+				<Input class="input" type="password" v-model="newPasswords" placeholder="请输入你的新密码"></Input> 
 		 	</div>
 			 <div class="commom-info-button">
 				 <Button class="save-info" type="success" @click="changePassword">保存</Button>
@@ -31,16 +31,20 @@
 		data () {
 			return {
 				newPassword: '',
-				oldPassword: ''
+				oldPassword: '',
+				newPasswords: ''
 			}
 		},
 		methods: {
 			...mapActions(user.actions),
 
 			changePassword () {
-				if (!this.newPassword.length || !this.oldPassword.length) {
+				if (!this.newPassword.length || !this.oldPassword.length || !this.newPasswords.length) {
 					this.$Message.error('请填写完整的信息进行修改密码')
 					return 
+				}
+				if (this.newPasswords != this.newPassword) {
+					this.$Message.error('密码不相同')
 				}
 				this.updatePassword({
 					newPassword: this.newPassword,
