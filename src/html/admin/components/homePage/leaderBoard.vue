@@ -15,7 +15,8 @@
 				v-for="(item, index) in leaderBoardList" 
 				 
 			>
-				<img :src="'https://qgstudio.org/anywork' + item.imagePath" alt="头像">
+				<img :src="IP + item.imagePath" alt="头像">
+				<!-- <img :src="studentPhoto" alt=""> -->
 				<p class="user-name">{{item.username}}</p>
 				<p class="student-id">{{item.studentId}}</p>
 				<p class="score">{{item.score}} 分</p>
@@ -31,14 +32,16 @@
 	import leaderBoard from  '../../store/types/leaderBoard'
 	import student from  '../../store/types/student'
 	import loading from '../item/loading'
-import organization from '../../store/types/organization';
+	import organization from '../../store/types/organization';
+	
+
 	export default {
 		data () {
 			return {		
 				defaultImg: require('@/assets/images/noimage.png')
 			}		
 		},
-		props: ['testpaperId', 'total', 'organizationId'],
+		props: ['testpaperId', 'totalOrgan', 'organizationId'],
 		components: {
 			loading,
 		},
@@ -47,13 +50,11 @@ import organization from '../../store/types/organization';
 				'leaderBoardList': state => {
 					return state.leaderBoard.leaderBoardList.slice(0, 6)
 				},
-				'studentPhoto': state => {
-					return state.student.studentPhoto
-				},
+				
 
 			}),
-			'studentPhoto' : function() {
-				return this.$store.getters.studentPhoto
+			'IP' : function() {
+				return this.$store.getters.myIP
 			}
 		},
 		methods: {
@@ -67,23 +68,23 @@ import organization from '../../store/types/organization';
 				})
 			},
 			getLeaderBoard() {
-				if(this.total) { 
-
+				if(this.totalOrgan) {
 					this.getTotalLeaderBoard({
 						testpaperId: this.testpaperId
 					})
 				} else {
 					this.getOrganLeaderBoard({
-						testpaperId: this.testpaperId
+						testpaperId: this.testpaperId,
 					})
 				}
+				
 			}
 			
 		},
 		watch: {
 			organizationId: function (val) {
 				console.log(this.organizationId)
-				console.log(this.total)
+				console.log(this.totalPaper)
 				this.toSetBoardInfo()
 				this.getLeaderBoard()
 			},
@@ -91,13 +92,15 @@ import organization from '../../store/types/organization';
 				this.toSetBoardInfo()
 				this.getLeaderBoard()
 			},
-			total: function() {
+			totalOrgan: function() {
 				this.getLeaderBoard()
 			}
 		},
 		created () {
 			this.setLeaderBoardInfo()
 			this.getLeaderBoard()
+			// console.log(this.IP)
+			console.log(this.IP)
 		}
 	}
 </script>

@@ -16,14 +16,15 @@
 		</Dropdown>
 		<Dropdown style="margin-left: 20px" trigger="click">
 			<Button type="primary" ghost >
-				{{ selectTest ? papersList[testIndex].testpaperTitle : "选择试卷" }}
+				{{ selectTest ? testpaperTitle : "选择试卷" }}
 				<Icon type="ios-arrow-down"></Icon>
 			</Button>
 			<DropdownMenu slot="list">
+				<!-- <DropdownItem @click.native="setCurrentTest(-1, null);">全部试卷</DropdownItem> -->
 				<DropdownItem v-for="(paper, index) in papersList" :key="papersList.testpaperId"
 				:testpaperId = "paper.testpaperId"
 				:testpaperTitle = "paper.testpaperTitle"
-				@click.native="setCurrentTest(index, paper.testpaperId)">{{paper.testpaperTitle}}</DropdownItem>
+				@click.native="setCurrentTest(index, paper)">{{paper.testpaperTitle}}</DropdownItem>
 			</DropdownMenu>
 		</Dropdown>
 		<Button type="primary" class="create-bt" v-show="!selected" @click="createOrgan">创建新组织</Button>
@@ -95,9 +96,10 @@
 			<div class="header">
 				<h2>排行榜</h2>
 			</div>
-			<leader-board v-if="havePaper" :testpaperId = "papersList[testIndex].testpaperId"
-				:total = "!selected"
-				:organizationId = "myOrganizationList[organIndex].organizationId"></leader-board>
+			<leader-board v-if="havePaper" :testpaperId = "testpaperId"
+				:totalOrgan = "!selected"
+				:organizationId = "organizationId"
+				></leader-board>
 			<p class="no-data" v-if="!havePaper">暂无数据</p>
 		</div>
 	</section>
@@ -119,13 +121,13 @@
 				hasExit: false,
 				showModel: false,
 				organizationName: '',
+				organizationId: 0,
 				description: '',
 				file: null,
 				imgSrc: require('@/assets/images/noimage.png'),
 				modalTitle: '',
 				token: '',
 				alterOrganId : undefined,
-				optionsOpen: false,
 				organIndex: 0,
 				currentPage: 0,
 				// pageCount: 5,
@@ -133,7 +135,9 @@
 				testIndex: 0,
 				selectTest: false,
 				havePaper: false,
-				defaultImg: require('@/assets/images/noimage.png')
+				defaultImg: require('@/assets/images/noimage.png'),
+				testpaperTitle: '',
+				testpaperId: 0
 			}		
 		},
 		components: {
@@ -156,6 +160,7 @@
 				'organization': state => state.organization,
 			}),
 			pageCount : function() {
+				if(this.organIndex == 0) return 0
 				var len = this.studentsList.length
 				if((len % 14) != 0) {
 					return (len - (len % 14)) / 14 + 1
@@ -269,19 +274,19 @@
 			modelCancel() {
 				this.showModel = false;
 			},
-			toggleTag() {
-				this.optionsOpen = !this.optionsOpen;
-			},
+
 			changeIndex(index, organ) {
 				
-				this.optionsOpen = false
 				if(index == -1) {
+					this.organizationId = ''
 					this.selected = false
 					this.pageCount = 0
 					this.setOrganizationInfo({
 						organName: '',
+						organizationId: ''
 					})
 				} else {
+					this.organizationId = organ.organizationId
 					this.organIndex = index
 					this.setOrganizationInfo({
 						organizationId: organ.organizationId,
@@ -326,12 +331,23 @@
 				this.$Message.error(err)
 			})
 			},
-			setCurrentTest (index, id) {
-				if(index >= 0) this.testIndex = index
-				this.selectTest = true
-				this.setTestId({
-					teatId: id,
-				})
+			setCurrentTest (index, paper) {
+				
+				if(index == -1) {
+					this.selectTest = false
+					this.testIndex = 0
+				}
+				else {
+					this.testIndex = index + 1
+					this.testpaperId = paper.testpaperId
+					this.testpaperTitle = paper.testpaperTitle
+					this.selectTest = true
+					this.setTestId({
+						teatId: paper.testpaperId,
+					})
+				}
+				console.log(this.testIndex + "+" + this.testpaperId)
+				
 			},
 
 			enterOrgan(index) {
