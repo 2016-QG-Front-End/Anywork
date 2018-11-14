@@ -206,13 +206,13 @@
 				this.submitPaper(datas).then((data) => {
 					if(data.state){
 						this.$Message.success(data.info)
-						this.$router.push({
-							name: 'lookAnswer',
-							params: {
-								handel: 'submit'
-							}
-						})
-						
+						// this.$router.push({
+						// 	name: 'lookAnswer',
+						// 	params: {
+						// 		handel: 'submit'
+						// 	}
+						// })
+						location.href = 'https://qgstudio.org/anywork/html/home.html#/homepage'
 					}else{
 						this.$Message.error(data.info)
 					}
